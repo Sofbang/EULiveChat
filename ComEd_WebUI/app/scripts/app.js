@@ -34,7 +34,7 @@ function loadChat(e){
     if(e != null) e.preventDefault(); /* CUSTOM - Added if(e != null) */
     console.log('Init Bots SDK');
     var appId = window.localStorage.getItem("appId");
-//	Bots.destroy();
+	Bots.destroy();
     initBots(appId)
         .then(function () {
             console.log("init complete");
@@ -63,6 +63,7 @@ function clearChat(e){
 function initBots(appId){
     return Bots.init({
         appId: '5d5fd13042bd3f0010a71603',
+
         // locale: 'en-US',
         // soundNotificationEnabled: true,
         // imageUploadEnabled: true,
@@ -83,7 +84,7 @@ function initBots(appId){
 
         menuItems: {
             imageUpload: true,
-            fileUpload: false,
+            fileUpload: true,
             shareLocation: false
         },
 

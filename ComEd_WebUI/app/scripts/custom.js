@@ -3,27 +3,33 @@ function sendMessage(t) {
 }
 
 function powerLine() {
-    Bots.sendMessage('Downed Power Line'); 
+    Bots.sendMessage('Downed Power Line');
+    document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
 }
 
 function outage() {
-    Bots.sendMessage('Outage'); 
+    Bots.sendMessage('Outage');
+    document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
 }
 
 function billing() {    
-    Bots.sendMessage('Billing'); 
+    Bots.sendMessage('Billing');
+    document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
 }
 
 function accountNumber() {
-    Bots.sendMessage('Find Account Number'); 
+    Bots.sendMessage('Find Account Number');
+    document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
 }
 
 function startStop() {
-    Bots.sendMessage('Start, Stop, or Move Service'); 
+    Bots.sendMessage('Start, Stop, or Move Service');
+    document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none"; 
 }
 
 function recycling() {
-    Bots.sendMessage('Recycling, Appliances, and Ways to Save'); 
+    Bots.sendMessage('Recycling, Appliances, and Ways to Save');
+    document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none"; 
 }
 
 function enableComments(comments) {
@@ -146,7 +152,19 @@ function CloseNo()
 function minimize()
 {
     Bots.close();
-}  
+}
+
+function menuItems() {   
+    var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
+    var k = messengerDocument.getElementById("menu-items");
+    console.log(k)
+    if(k.style.display == "" || k.style.display == "none"){
+         k.style.display = "block"    
+    }else{
+        k.style.display = "none"
+    } 
+}
+
 // to get the url paramters
 function getUrlData() {
     var vars = {};
@@ -187,7 +205,7 @@ function customUI() {
 
     // Add the custom CSS to the message container frame.
     messengerDocument.head.innerHTML += "\n<link rel='stylesheet' href='./styles/customUI.css' type='text/css'></link>\n";
-
+    messengerDocument.head.innerHTML += "\n<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css' type='text/css'></link>\n";
     var headerElement = messengerDocument.getElementById('header');
     var introElement = messengerDocument.querySelector('.intro-pane');
     
@@ -206,12 +224,11 @@ function customUI() {
     //headerElement.insertAdjacentHTML("afterend", "<div id='cslider'> <div class='slideshow-container'> <div class='mySlides fade'> <div class='numbertext'>1 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(1)' ;><img src='./images/slider/slider-1.png' style='width:100%'><span class='tooltiptext'>ODA Enablement</span></a> <div class='text'></div></div><div class='mySlides fade'> <div class='numbertext'>2 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(2);'> <img class='simg' src='./images/slider/slider-2.jpg' style='width:100%'> <span class='tooltiptext'>Tutorials</span></a> <div class='text'></div></div><div class='mySlides fade'> <div class='numbertext'>3 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(3);'> <img class='simg' src='./images/slider/slider-3.jpg' style='width:100%'><span class='tooltiptext'>ODA Advanced Training</span> </a> <div class='text'></div></div><div class='mySlides fade'> <div class='numbertext'>4 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(4);'> <img class='simg' src='./images/slider/slider-4.jpg' style='width:100%'><span class='tooltiptext'>Agent Integration</span> </a> <div class='text'></div></div><div class='mySlides fade'> <div class='numbertext'>5 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(5);'> <img class='simg' src='./images/slider/slider-5.jpg' style='width:100%'> <span class='tooltiptext'>ODA Documentation</span></a> <div class='text'></div></div><a  class='prev' href='javascript:window.parent.plusSlides(-1);'>&#10094;</a><a class='next' href='javascript:window.parent.plusSlides(1);'>&#10095;</a></div><br><div style='text-align:center'> </div></div>");
     headerElement.insertAdjacentHTML("afterend", "<div id='cslider'> <div class='slideshow-container'> <div class='mySlides fade'>  <div class='text'></div></div><!--<a  class='prev' href='javascript:window.parent.plusSlides(-1);'>&#10094;</a><a class='next' href='javascript:window.parent.plusSlides(1);'>&#10095;</a>--></div><br><div style='text-align:center'> </div></div>");
     //our customized header
-    headerElement.insertAdjacentHTML("afterend","<div id='headerEl' class='header-wrapper' style='background-color: #FFFFFF;'><img class='app-icon' alt='App icon' src='./images/Smile.png'><div class='app-name'>Let's Chat</div><div class='intro-text'>ComEd's bot is Active</div><div><div id='min' class='close-handle close-hidden'><a href='javascript:window.parent.minimize();'><i class='fa fa-minus'></i></a>&emsp;<a href='javascript:window.parent.Close();'><i class='fa fa-times'></i></a></div></div></div>")
+    headerElement.insertAdjacentHTML("afterend","<div id='headerEl' class='header-wrapper' style='background-color: #FFFFFF;'><img class='app-icon' alt='App icon' src='./images/Smile.png'><div class='app-name'>Let's Chat</div><div class='intro-text'>ComEd's bot is Active</div><div><div id='min' class='close-handle close-hidden'><a href='javascript:window.parent.menuItems();' class='menu-icon'><i class='fas fa-chevron-circle-down'></i></a>&emsp;<a href='javascript:window.parent.minimize();'><i class='fa fa-minus'></i></a>&emsp;<a href='javascript:window.parent.Close();'><i class='fa fa-times'></i></a></div></div></div>")
     window.parent.currentSlide(1);
     headerElement.insertAdjacentHTML("afterend","<div id='prompt'>Do you want to end the conversation? <br><br>This will clear your chat history.<a class='selfin-style' href='javascript:window.parent.CloseYes();'>Yes</a><a class='selfin-style' href='javascript:window.parent.CloseNo();'>No</a></div>");
-    
     //The sample demo shipped with the Web SDK (app.js) can be modified to include this
-    
+    headerElement.insertAdjacentHTML("afterend","<div id='menu-items'><ul><li><a href='javascript:window.parent.powerLine();'>Downed Power Line</a></li><li><img src='../images/outage.png'><a  href='javascript:window.parent.outage();'>Outage</a></li><li><a  href='javascript:window.parent.billing();'>Billing</a></li><li><a href='javascript:window.parent.accountNumber();'>Find Account Number</a></li><li><a  href='javascript:window.parent.startStop();'>Start, Stop, or Move Service</a></li><li><a href='javascript:window.parent.recycling();'>Recycling, Appliances, and Ways to Save</a></li></ul></div>")
     Bots.setDelegate({
     beforeDisplay: (message) => {
       // if message contains something specific about web view.
