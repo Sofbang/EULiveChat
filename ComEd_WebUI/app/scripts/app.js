@@ -63,7 +63,6 @@ function clearChat(e){
 function initBots(appId){
     return Bots.init({
         appId: '5d5fd13042bd3f0010a71603',
-
         // locale: 'en-US',
         // soundNotificationEnabled: true,
         // imageUploadEnabled: true,
@@ -82,18 +81,19 @@ function initBots(appId){
             
         },*/
 
-        menuItems: {
-            imageUpload: true,
-            fileUpload: true,
-            shareLocation: false
-        },
+	menuItems: {
+      imageUpload: false,
+      fileUpload: false,
+      shareLocation: false
+    },
+
 
         customText: {
             // actionPostbackError: 'An error occurred while processing your action. Please try again.',
             // clickToRetry: 'Message not delivered. Click to retry.',
             // conversationTimestampHeaderFormat: 'MMMM D YYYY, h:mm A',
             // fetchHistory: 'Load more',
-            // fetchingHistory: 'Retrieving history...',
+            fetchingHistory: 'Retrieving history...',
             headerText: 'OMCE, How can we help?',
             // inputPlaceholder: 'Type a message...',
             // invalidFileError: 'Only images are supported. Choose a file with a supported extension (jpg, jpeg, png, gif, or bmp).',
@@ -140,7 +140,7 @@ function initBots(appId){
             var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
             messengerDocument.getElementById("conversation").style.visibility="visible";
             messengerDocument.getElementById("selfin").style.display = "none";
-            messengerDocument.getElementById("textintro").style.display = "none";
+           messengerDocument.getElementById("textintro").style.display = "none";
             messengerDocument.getElementById("footer").style.visibility = "visible";
             messengerDocument.getElementById("cslider").style.display = "none";
 
@@ -152,6 +152,7 @@ function initBots(appId){
             }
                         
             });
+
         /* CUSTOM - END*/
     //});
     }).then(customUI); /* CUSTOM - */

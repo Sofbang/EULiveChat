@@ -1405,13 +1405,13 @@
     background-color: #E5EEF5;
     border-color: #0059A4;
     /* CUSTOM - This is for the buttons to wrap around */
-    height:25px;
+    height:32px;
     font-size:13px;
     padding: 5px 10px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 10px;
+    font-size: 14px;
     margin: 3px 3px;
   }
   
@@ -4174,11 +4174,12 @@
     display: block;
     white-space: inherit;
     transition: width .1s;
-    border-radius: 15px;
+    border-radius: 7px;
     margin-right: 8px;
     margin-left: 8px;
-    /* CUSTOM - Allows buttons to wrap around */
-    float: left;
+    font-size: 14px;
+    /* CUSTOM - Allows buttons to wrap around 
+    float: left;*/
   }
   
   #container #conversation .row .msg-wrapper .action:last-child {
