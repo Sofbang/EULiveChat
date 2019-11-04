@@ -41,6 +41,7 @@ function loadChat(e){
             document.getElementById("loader").style.display = "none";
             Bots.open();
             document.getElementById("openChatButton1").style.display = "none";//setAttribute("disabled", true)
+            //document.getElementById("openChatButton").setAttribute("disabled", true)
         })
         .catch(function (err) {
             console.log(err);
@@ -61,6 +62,7 @@ function clearChat(e){
 
 
 function initBots(appId){
+    var messageBody = {text: 'Hi',type: 'text',metadata: {isHidden: true}};
     return Bots.init({
         appId: '5d5fd13042bd3f0010a71603',
         // locale: 'en-US',
@@ -134,26 +136,40 @@ function initBots(appId){
             console.error(err);
         });
         */
+        Bots.on('widget:opened', function() {
+            if(Bots.getConversation().messages != null && Bots.getConversation().messages.length < 1) {
+                Bots.setDelegate({
+                    beforeDisplay(messageBody) {
+                        if (messageBody.metadata && messageBody.metadata.isHidden) {
+                            return null;
+                        }
+                        return messageBody;
+                    }
+                });
+                Bots.sendMessage(messageBody);
+            }
+        })
+
        console.log('calling Bots.on message');
         /* CUSTOM - START*/
         Bots.on('message', function(message) {
             var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
             messengerDocument.getElementById("conversation").style.visibility="visible";
-            messengerDocument.getElementById("selfin").style.display = "none";
-           messengerDocument.getElementById("textintro").style.display = "none";
+            /*messengerDocument.getElementById("selfin").style.display = "none";
+            messengerDocument.getElementById("textintro").style.display = "none";
             messengerDocument.getElementById("footer").style.visibility = "visible";
-            messengerDocument.getElementById("cslider").style.display = "none";
+            messengerDocument.getElementById("cslider").style.display = "none";*/
 
             var cdescItems = messengerDocument.querySelectorAll('.carousel-description');
             if(cdescItems != null) {
                 cdescItems.forEach(function(singleCDesc) {
                     singleCDesc.style="margin: 0px 8px 13px; font-size: 13px; color: rgb(179, 179, 179); white-space: pre-wrap; flex: 2 1";
                 });
-            }
-                        
-            });
+            }                
+        });
 
         /* CUSTOM - END*/
     //});
     }).then(customUI); /* CUSTOM - */
+
 }
