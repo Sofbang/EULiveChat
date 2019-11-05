@@ -5494,11 +5494,11 @@
 }
 
 #menu-items{
-    position: absolute;
-    top: 65px;
+    position: fixed;
+    top: 88px;
     width: 200px;
     background: #ffffff;
-    right: 110px;
+    left: 120px;
     display: none;
     box-shadow: rgba(51, 51, 51, 0.3) 0px 0px 10px;
     border-radius: 5px;
@@ -5553,4 +5553,16 @@ color:#78be20 !important;
 .fa-repeat:before {
   content: "\f01e";
   color: #0059A4;
+}
+
+.widget-xs #menu-items{
+    position: fixed;
+    top: 75px;
+    width: 200px;
+    background: #ffffff;
+    left: 110px;
+    display: none;
+    box-shadow: rgba(51, 51, 51, 0.3) 0px 0px 10px;
+    border-radius: 5px;
+    z-index: 9999;
 }
