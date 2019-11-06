@@ -1405,7 +1405,7 @@
     background-color: #E5EEF5;
     border-color: #0059A4;
     /* CUSTOM - This is for the buttons to wrap around */
-    height:32px;
+    height:auto;
     font-size:13px;
     padding: 5px 10px;
     text-align: center;
@@ -2144,7 +2144,7 @@
   
   #footer .send {
     margin-top: 1px;
-    color: #b2b2b2;
+    color: #0059A4;
     font-weight: 600;
     position: relative;
     height: 45px;
@@ -5495,15 +5495,16 @@
 
 #menu-items{
     position: fixed;
-    top: 88px;
-    width: 200px;
+    top: 58px;
+    width: 250px;
     background: #ffffff;
-    left: 120px;
+    left: 55px;
     display: none;
     box-shadow: rgba(51, 51, 51, 0.3) 0px 0px 10px;
-    border-radius: 5px;
+    border-radius: 2px;
     z-index: 9999;
 }
+
 #menu-items::before {
   content: '';
   position: absolute;
@@ -5522,21 +5523,27 @@
     padding: 0px;
     margin:0px;
 }
-#menu-items ul li{
-  padding:10px;
-  border-bottom: 1px solid #cccccc47;
+#menu-items ul li:first-child a {
+color: #4A4A4A;
+    font-weight: normal;
+
 }
 #menu-items ul li img{
   margin-right:10px;
 }
 #menu-items ul li:hover{
- background-color: rgb(234, 234, 234);
+ background-color: #E5EEF5;
 }
 #menu-items ul li a{
     font-size: 14px;
-    font-weight: 400;
-    line-height: 1.4;
+    font-weight: 600;
     color: #0059A4;
+    display: block;
+    padding:10px;
+    border-bottom: 1px solid #cccccc47;
+    margin: 0 20px;
+    color: #0059A4; 
+    line-height: 20px;
 }
 .menu-icon {
   color:#0059A4;
@@ -5544,7 +5551,19 @@
   padding:0px 10px;
   margin-left:10px;
   font-weight:bold;
+  font-size: 16px;
 }
+
+.menu-icon:hover {
+  color:#0059A4;
+  border-left: 1px solid #cccccc;
+  padding:0px 10px;
+  margin-left:10px;
+  font-weight:bold;
+  font-size: 16px;
+  text-decoration: underline;
+}
+
 .intro-text span i{
 font-size: 10px !important;
 margin-right: 5px;
@@ -5557,10 +5576,10 @@ color:#78be20 !important;
 
 .widget-xs #menu-items{
     position: fixed;
-    top: 75px;
-    width: 200px;
+    top: 45px;
+    width: 250px;
     background: #ffffff;
-    left: 110px;
+    left: 45px;
     display: none;
     box-shadow: rgba(51, 51, 51, 0.3) 0px 0px 10px;
     border-radius: 5px;

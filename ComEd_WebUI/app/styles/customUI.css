@@ -119,7 +119,8 @@ padding: 0px;
     font-weight: bold;
 }
 #headerEl{
-    height: 70px;
+    /*height: 70px;*/
+    height: 48px;
     text-align: left;
 }
 #conversation .intro-section{
@@ -139,7 +140,7 @@ padding: 0px;
     padding-top: 5px;
 }
 #headerEl .app-name {
-    margin-top: 2px;
+    margin-top: 4px;
     color: #4a4a4a;
     font-size: 21px;
     font-weight: 700;
@@ -295,12 +296,32 @@ transition: transform 0.4s ease;
     right: 5%;
     left: 5%;
     font-size: 15px;
-    background:#E5EEF5;
-    border: 1px solid #0059A4;
-    padding: 10px;
-    box-shadow: 2px 2px 2px #E5EEF5;
+    background-color: #FFFFFF;
+    /*border: 1px solid #0059A4;*/
+    padding: 20px;
+    /*box-shadow: 2px 2px 2px #E5EEF5;*/
+    box-shadow: 0 1px 8px 0 rgba(0,0,0,0.19);
     font-family: Arial, Helvetica, sans-serif;
     text-align: -webkit-center;
+}
+.prompt-btn-sec{
+    display:inline;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+.prompt-btn-outline{
+    width:130px;
+    background: #ffffff !important;
+    border:1px solid #0059A4 !important;
+    color: #0059A4;
+    font-weight: bold;
+}
+.prompt-btn-fill{
+    width:130px;
+    background: #0059A4 !important;
+    border:1px solid #0059A4 ;
+    color: #ffffff !important;
+    font-weight: bold;
 }
 .confirmbutton
 {
