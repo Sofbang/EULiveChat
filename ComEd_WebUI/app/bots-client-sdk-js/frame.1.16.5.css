@@ -5495,7 +5495,7 @@
 
 #menu-items{
     position: fixed;
-    top: 58px;
+    top: 55px;
     width: 250px;
     background: #ffffff;
     left: 55px;
@@ -5576,7 +5576,7 @@ color:#78be20 !important;
 
 .widget-xs #menu-items{
     position: fixed;
-    top: 45px;
+    top: 43px;
     width: 250px;
     background: #ffffff;
     left: 45px;
