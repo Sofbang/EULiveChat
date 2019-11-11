@@ -4000,6 +4000,8 @@
     -webkit-overflow-scrolling: touch;
     background: #F7F7F7;
     transition: padding-top .5s;
+   font-family: 'Open Sans', sans-serif !important;
+
   }
   
   .widget-xs #container #conversation {
@@ -4317,7 +4319,7 @@
   
   /*changed color to Yellow for customer message*/
   #container #conversation .row.right-row .msg-wrapper .msg,#container #conversation .row.right-row .msg-wrapper .msg-image {
-    background-color:  #d2d2d2 !important; /*#0073a8*/
+    background-color:  #ECECEC !important; /*#0073a8*/
     float: right;
     color: #4A4A4A;
     max-width: 70%;
@@ -5534,6 +5536,9 @@ color: #4A4A4A;
 #menu-items ul li:hover{
  background-color: #E5EEF5;
 }
+#menu-items ul li:first-child:hover {
+    background-color: transparent;
+}
 #menu-items ul li a{
     font-size: 14px;
     font-weight: 600;
@@ -5584,4 +5589,8 @@ color:#78be20 !important;
     box-shadow: rgba(51, 51, 51, 0.3) 0px 0px 10px;
     border-radius: 5px;
     z-index: 9999;
+}
+#container #conversation .row .msg-wrapper .action .btn.btn-primary:hover{
+  font-weight: normal !important;
+  opacity: 1;
 }
