@@ -4200,7 +4200,8 @@
   
   #container #conversation .row .msg-wrapper .message-item {
     /* CUSTOM - Commented out messages to not crop */
-    /*padding:8px 13px 0;*/
+    /*commented code removed for equal padding for message*/
+    padding:8px 13px 0;
     line-height: 1.3;
   }
   
