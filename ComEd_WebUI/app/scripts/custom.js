@@ -13,7 +13,7 @@ function outage() {
 }
 
 function billing() {    
-    Bots.sendMessage('Billing');
+    Bots.sendMessage('Billing and Payment');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
 }
 
@@ -23,7 +23,7 @@ function accountNumber() {
 }
 
 function startStop() {
-    Bots.sendMessage('Start, Stop, or Move Service');
+    Bots.sendMessage('Start Stop or Move Service');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none"; 
 }
 
@@ -104,8 +104,6 @@ function Close()
     var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
     messengerDocument.getElementById("prompt").style.display="grid";
     messengerDocument.getElementById("conversation").style.opacity="0.2";
-    messengerDocument.getElementById("selfin").style.opacity="0.2";
-    messengerDocument.getElementById("textintro").style.opacity="0.2";
     messengerDocument.getElementById("cslider").style.opacity="0.2";
     messengerDocument.getElementById("footer").style.opacity="0.2";
     messengerDocument.getElementById("headerEl").style.opacity="0.2";
@@ -138,7 +136,6 @@ function CloseNo()
     var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
     messengerDocument.getElementById("prompt").style.display="none";
     messengerDocument.getElementById("conversation").style.opacity="1";
-    messengerDocument.getElementById("selfin").style.opacity="1";
     messengerDocument.getElementById("textintro").style.opacity="1";
     messengerDocument.getElementById("cslider").style.opacity="1";
     messengerDocument.getElementById("footer").style.opacity="1";
@@ -151,22 +148,13 @@ function CloseNo()
     messengerDocument.getElementById("headerEl").style.pointerEvents ="all";
 }
 
-function minimize()
-{
+function minimize(){
     Bots.close();
-    //document.getElementById("openChatButton1").style.display = "block";
 }
 
 function menuItems() {   
     var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
     var k = messengerDocument.getElementById("menu-items").style.display = "block";
-    console.log(k)
-    /*console.log(k)
-    if(k.style.display == "" || k.style.display == "none"){
-          k.style.display = "block"    
-     }else{
-         k.style.display = "none"
-     }*/
 }
 
 function menuMouseOut() {   
@@ -195,7 +183,7 @@ function showChatButton() {
 
     console.log('Show Bot');
     
-  clearChat();
+    clearChat();
     if (window.sessionStorage.getItem('chatEnabled') === null) {
         clearChat();
     }
@@ -239,14 +227,7 @@ function customUI() {
     headerElement.innerText = '';
 
     // DO NOT ADD the buttons to the intro section.
-    //headerElement.innerHTML = introElement.innerHTML + headerElement.innerHTML;
-    
-    //quick response button
-    //headerElement.insertAdjacentHTML("afterend", "<div id='selfin'><left><p id='spara'></p><a class='selfin-style' href='javascript:window.parent.powerLine();'>Downed Power Line</a><a class='selfin-style' href='javascript:window.parent.outage();'>Outage</a><a class='selfin-style' href='javascript:window.parent.billing();'>Billing</a><a class='selfin-style' href='javascript:window.parent.accountNumber();'>Find Account Number</a><a class='selfin-style' href='javascript:window.parent.startStop();'>Start, Stop, or Move Service</a><a class='selfin-style' href='javascript:window.parent.recycling();'>Recycling, Appliances, and Ways to Save</a></div>");
-    //conversation intro text
-    //headerElement.insertAdjacentHTML("afterend", "<div id='textintro'>Hi! How can I help you today? You can choose a topic to get started, or type in a direct question.</div>");
-    //with next prev button slider
-    //headerElement.insertAdjacentHTML("afterend", "<div id='cslider'> <div class='slideshow-container'> <div class='mySlides fade'> <div class='numbertext'>1 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(1)' ;><img src='./images/slider/slider-1.png' style='width:100%'><span class='tooltiptext'>ODA Enablement</span></a> <div class='text'></div></div><div class='mySlides fade'> <div class='numbertext'>2 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(2);'> <img class='simg' src='./images/slider/slider-2.jpg' style='width:100%'> <span class='tooltiptext'>Tutorials</span></a> <div class='text'></div></div><div class='mySlides fade'> <div class='numbertext'>3 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(3);'> <img class='simg' src='./images/slider/slider-3.jpg' style='width:100%'><span class='tooltiptext'>ODA Advanced Training</span> </a> <div class='text'></div></div><div class='mySlides fade'> <div class='numbertext'>4 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(4);'> <img class='simg' src='./images/slider/slider-4.jpg' style='width:100%'><span class='tooltiptext'>Agent Integration</span> </a> <div class='text'></div></div><div class='mySlides fade'> <div class='numbertext'>5 / 5</div><a class='tooltip' href='javascript:window.parent.imgurl(5);'> <img class='simg' src='./images/slider/slider-5.jpg' style='width:100%'> <span class='tooltiptext'>ODA Documentation</span></a> <div class='text'></div></div><a  class='prev' href='javascript:window.parent.plusSlides(-1);'>&#10094;</a><a class='next' href='javascript:window.parent.plusSlides(1);'>&#10095;</a></div><br><div style='text-align:center'> </div></div>");
+
     headerElement.insertAdjacentHTML("afterend", "<div id='cslider'> <div class='slideshow-container'> <div class='mySlides fade'>  <div class='text'></div></div><!--<a  class='prev' href='javascript:window.parent.plusSlides(-1);'>&#10094;</a><a class='next' href='javascript:window.parent.plusSlides(1);'>&#10095;</a>--></div><br><div style='text-align:center'> </div></div>");
     //our customized header
     headerElement.insertAdjacentHTML("afterend","<div id='headerEl' class='header-wrapper' style='background-color: #FFFFFF;'><div class='app-name'><span>Let's Chat!</span><a onmouseover='javascript:window.parent.menuItems();' onmouseout='javascript:window.parent.menuMouseOut();' class='menu-icon'>Menu</a></div><div><div id='min' class='close-handle close-hidden'><a href='javascript:window.parent.minimize();'><i class='fa fa-minus'></i></a>&emsp;<a href='javascript:window.parent.Close();'><i class='fa fa-times'></i></a></div></div></div>")

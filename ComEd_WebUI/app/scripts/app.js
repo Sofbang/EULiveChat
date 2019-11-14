@@ -64,7 +64,7 @@ function clearChat(e){
 function initBots(appId){
     var messageBody = {text: 'Hi',type: 'text',metadata: {isHidden: true}};
     return Bots.init({
-        appId: '5d5fd13042bd3f0010a71603',
+        appId: '5dc46a0f1ff5280010702576',
         // locale: 'en-US',
         // soundNotificationEnabled: true,
         // imageUploadEnabled: true,

@@ -5605,8 +5605,7 @@ color:#78be20 !important;
 }
 #messenger-button .messenger-button-icon:hover{
    /*content: url(../images/chat-hover.svg);*/
-      background: url(../images/chat-hover.svg) no-repeat !important;
-
+     background: url(../images/chat-hover.svg) no-repeat !important;
 }
 #messenger-button{
   width:69px !important;
