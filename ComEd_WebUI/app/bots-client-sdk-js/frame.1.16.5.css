@@ -933,6 +933,7 @@
   #messenger-button .unread-badge {
     position: absolute;
     top: 0;
+    left:6px;
   }
   
   #header .unread-badge {
@@ -5594,4 +5595,20 @@ color:#78be20 !important;
 #container #conversation .row .msg-wrapper .action .btn.btn-primary:hover{
   font-weight: normal !important;
   opacity: 1;
+}
+#messenger-button .messenger-button-icon img{
+  display:none;
+}
+#messenger-button .messenger-button-icon{
+    background: url(../images/chat-launch.png) no-repeat!important;
+
+}
+#messenger-button .messenger-button-icon:hover{
+   /*content: url(../images/chat-hover.svg);*/
+      background: url(../images/chat-hover.svg) no-repeat !important;
+
+}
+#messenger-button{
+  width:69px !important;
+  height: 69px !important;
 }

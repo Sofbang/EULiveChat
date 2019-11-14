@@ -40,8 +40,8 @@ function loadChat(e){
             console.log("init complete");
             document.getElementById("loader").style.display = "none";
             Bots.open();
-            document.getElementById("openChatButton1").style.display = "none";//setAttribute("disabled", true)
-            //document.getElementById("openChatButton").setAttribute("disabled", true)
+           // document.getElementById("openChatButton1").style.display = "none";//setAttribute("disabled", true)
+            document.getElementById("openChatButton").setAttribute("disabled", true)
         })
         .catch(function (err) {
             console.log(err);

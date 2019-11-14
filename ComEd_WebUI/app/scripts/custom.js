@@ -126,7 +126,7 @@ function CloseYes()
     initBots(appId)
         .then(function() {
             window.sessionStorage.setItem('chatEnabled', 'true');
-		    document.getElementById("openChatButton1").style.display = "block";
+		    //document.getElementById("openChatButton1").style.display = "block";
         })
         .catch(function(err) {
             console.log(err);
