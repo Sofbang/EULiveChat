@@ -48,22 +48,26 @@ function initbots() {
         console.log('calling Bots.on message');
         /* CUSTOM - START*/
         Bots.on('message', function(message) {
-            console.log('message >>' + message.text);
-            if(!initialBotMessage && message.equals('Hi')){
-            Bots.setDelegate({
-                beforeDisplay(message) {
-                    if (message.text.includes('Ask ComEd')) {
-                        let displayText = message.text.replace('Ask ComEd', '');
-                        message.text = displayText;
-                        return message;
-                    } else{
-                        initialBotMessage=false;
-                       // console.log('message >>' + message.text +initialBotMessage );
-                    }
+            
+          
+            console.log('message >>' + message.text +initialBotMessage );
+        Bots.setDelegate({
+            beforeDisplay(message) {
+                if (message.text.includes('Ask ComEd')) {
+                    let displayText = message.text.replace('Ask ComEd', '');
+                    message.text = displayText;
                     return message;
+                } else{
+                    if(initialBotMessage){
+                    initialBotMessage=false;
+                    message.text=''
+                    console.log('message >>' + message.text +initialBotMessage );
+                    return message;
+                    }
                 }
-            });
-        }
+                return message;
+            }
+        });
           //  console.log("message"+JSON.stringify(Bots.getConversation().messages));
             var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
             messengerDocument.getElementById("conversation").style.visibility = "visible";
