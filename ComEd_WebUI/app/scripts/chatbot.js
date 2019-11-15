@@ -56,7 +56,10 @@ function initbots() {
                         let displayText = message.text.replace('Ask ComEd', '');
                         message.text = displayText;
                         return message;
-                    } 
+                    } else{
+                        initialBotMessage=false;
+                       // console.log('message >>' + message.text +initialBotMessage );
+                    }
                     return message;
                 }
             });
