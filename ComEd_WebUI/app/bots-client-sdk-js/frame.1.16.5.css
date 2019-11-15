@@ -5600,7 +5600,7 @@ color:#78be20 !important;
   display:none;
 }
 #messenger-button .messenger-button-icon{
-    background: url(../images/chat-launch.png) no-repeat!important;
+    background: url(../images/chat-launch.svg) no-repeat!important;
 
 }
 #messenger-button .messenger-button-icon:hover{
