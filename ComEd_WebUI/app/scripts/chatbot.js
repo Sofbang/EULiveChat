@@ -49,7 +49,7 @@ function initbots() {
         /* CUSTOM - START*/
         Bots.on('message', function(message) {
             console.log('message >>' + message.text);
-            if(!initialBotMessage){
+            if(!initialBotMessage && message.equals('Hi')){
             Bots.setDelegate({
                 beforeDisplay(message) {
                     if (message.text.includes('Ask ComEd')) {
