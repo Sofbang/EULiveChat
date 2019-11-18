@@ -29,13 +29,13 @@ function initbots() {
             introductionText: 'Mobile Cloud Enterprise'
         }
     }).then(function (res) {
-        var initialBotMessage=false;
+
         Bots.on('widget:opened', function () {
             if (Bots.getConversation().messages != null && Bots.getConversation().messages.length < 1) {
                 Bots.setDelegate({
+
                     beforeDisplay(messageBody) {
                         if (messageBody.metadata && messageBody.metadata.isHidden) {
-                            initialBotMessage=true;
                             return null;
                         }
                         return messageBody;
@@ -45,30 +45,26 @@ function initbots() {
             }
         })
 
-        console.log('calling Bots.on message');
-        /* CUSTOM - START*/
-        Bots.on('message', function(message) {
-            
-          
-            console.log('message >>' + message.text +initialBotMessage );
-        Bots.setDelegate({
-            beforeDisplay(message) {
-                if (message.text.includes('Ask ComEd')) {
-                    let displayText = message.text.replace('Ask ComEd', '');
-                    message.text = displayText;
-                    return message;
-                } else{
-                    if(initialBotMessage){
-                    initialBotMessage=false;
-                    message.text=''
-                    console.log('message >>' + message.text +initialBotMessage );
-                    return message;
+        //console.log('calling Bots.on message');
+
+        Bots.on('message:received', function (message) {
+            Bots.setDelegate({
+                beforeDisplay(message) {
+                    if (message.text.includes('Ask ComEd')) {
+                        let displayText = message.text.replace('Ask ComEd', '');
+                        message.text = displayText;
+                        return message;
                     }
+                    return message;
                 }
-                return message;
-            }
+            });
+          //  console.log('the user received a message', JSON.stringify(message) + "initial bot message flag " + initialBotMessage);
         });
-          //  console.log("message"+JSON.stringify(Bots.getConversation().messages));
+
+        /* CUSTOM - START*/
+        Bots.on('message', function (message) {
+
+            //  console.log("message"+JSON.stringify(Bots.getConversation().messages));
             var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
             messengerDocument.getElementById("conversation").style.visibility = "visible";
             var cdescItems = messengerDocument.querySelectorAll('.carousel-description');
@@ -84,6 +80,7 @@ function initbots() {
     }).then(customUI); /* CUSTOM - */
 
 }
+
 
 function clearChat(e) {
     if (e != null) e.preventDefault(); /* CUSTOM - Added if(e != null) */
@@ -102,6 +99,7 @@ function sendMessage(t) {
 }
 
 function powerLine() {
+
     Bots.sendMessage('Ask ComEd Downed Power Line');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
 }
@@ -122,7 +120,7 @@ function accountNumber() {
 }
 
 function startStop() {
-    Bots.sendMessage('Ask ComEd Start Stop or Move Service');
+    Bots.sendMessage('Ask ComEd Start, Stop or Move Service');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
 }
 
@@ -133,20 +131,6 @@ function recycling() {
 
 function enableComments(comments) {
     comments.style.display = 'inline'
-}
-
-// Slider Images
-function imgurl(n) {
-    if (n == 1)
-        window.open("http://bit.ly/ODAEnablement");
-    else if (n == 2)
-        window.open("https://fnimphiu.github.io/OracleTechExchange/#Tutorials");
-    else if (n == 3)
-        window.open("hhttps://fnimphiu.github.io/OracleTechExchange/#AdvancedTraining2018");
-    else if (n == 4)
-        window.open("https://fnimphiu.github.io/OracleTechExchange/tutorials/agentIntegration_032019_1/index.html");
-    else if (n == 5)
-        window.open("https://docs.oracle.com/en/cloud/paas/digital-assistant/use-chatbot/overview-digital-assistants-and-skills.html#GUID-386AB33B-C131-4A0A-9138-6732AE841BD8");
 }
 
 
@@ -184,7 +168,7 @@ function Close() {
 
     Bots.destroy();
     clearChat();
-   
+
     initbots()
         .then(function () {
             window.sessionStorage.setItem('chatEnabled', 'true');
@@ -202,8 +186,6 @@ function Close() {
     messengerDocument.getElementById("footer").style.opacity = "0.2";
     messengerDocument.getElementById("headerEl").style.opacity = "0.2";
     messengerDocument.getElementById("conversation").style.pointerEvents = "none";
-   // messengerDocument.getElementById("selfin").style.pointerEvents = "none";
-    messengerDocument.getElementById("textintro").style.pointerEvents = "none";
     messengerDocument.getElementById("cslider").style.pointerEvents = "none";
     messengerDocument.getElementById("footer").style.pointerEvents = "none";
     messengerDocument.getElementById("headerEl").style.pointerEvents = "none";
@@ -212,8 +194,9 @@ function Close() {
 function CloseYes() {
     Bots.destroy();
     clearChat();
-   
-
+    initialBotMessage = false;
+    counter = 0;
+    console.log("Close yes" + initialBotMessage);
     initbots()
         .then(function () {
             window.sessionStorage.setItem('chatEnabled', 'true');
@@ -232,8 +215,6 @@ function CloseNo() {
     messengerDocument.getElementById("footer").style.opacity = "1";
     messengerDocument.getElementById("headerEl").style.opacity = "1";
     messengerDocument.getElementById("conversation").style.pointerEvents = "all";
-    messengerDocument.getElementById("selfin").style.pointerEvents = "all";
-    messengerDocument.getElementById("textintro").style.pointerEvents = "all";
     messengerDocument.getElementById("cslider").style.pointerEvents = "all";
     messengerDocument.getElementById("footer").style.pointerEvents = "all";
     messengerDocument.getElementById("headerEl").style.pointerEvents = "all";
@@ -251,8 +232,8 @@ function menuItems() {
 function menuMouseOut() {
     var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
     var k = messengerDocument.getElementById("menu-items");
-    console.log("On Mouse Out")
-    console.log(k)
+ // console.log("On Mouse Out")
+  //  console.log(k)
     if (k.style.display == "" || k.style.display == "none") {
         k.style.display = "block"
     } else {
@@ -278,7 +259,7 @@ function showChatButton() {
     if (window.sessionStorage.getItem('chatEnabled') === null) {
         clearChat();
     }
-    console.log('calling initBots');
+  //  console.log('calling initBots');
     Bots.destroy();
     initbots()
         .then(function () {
