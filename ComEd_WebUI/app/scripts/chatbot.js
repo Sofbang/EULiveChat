@@ -210,7 +210,6 @@ function CloseNo() {
     var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
     messengerDocument.getElementById("prompt").style.display = "none";
     messengerDocument.getElementById("conversation").style.opacity = "1";
-    messengerDocument.getElementById("textintro").style.opacity = "1";
     messengerDocument.getElementById("cslider").style.opacity = "1";
     messengerDocument.getElementById("footer").style.opacity = "1";
     messengerDocument.getElementById("headerEl").style.opacity = "1";
