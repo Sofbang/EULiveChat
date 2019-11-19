@@ -47,22 +47,28 @@ function initbots() {
 
         //console.log('calling Bots.on message');
 
-        Bots.on('message:received', function (message) {
-            Bots.setDelegate({
-                beforeDisplay(message) {
-                    if (message.text.includes('Ask ComEd')) {
-                        let displayText = message.text.replace('Ask ComEd', '');
-                        message.text = displayText;
-                        return message;
-                    }
-                    return message;
-                }
-            });
-          //  console.log('the user received a message', JSON.stringify(message) + "initial bot message flag " + initialBotMessage);
-        });
-
-        /* CUSTOM - START*/
         Bots.on('message', function (message) {
+            console.log('ON message >>' + message.text);
+                Bots.setDelegate({
+                    beforeDisplay(message) {
+                        let shouldDisplay = false;
+                        ////console.log('ON message beforeDisplay >>' + JSON.stringify(message));
+                        try {
+                            shouldDisplay = message.metadata.isHidden;
+                            return null;
+                        } catch (error) {
+                            //console.log("ON message message.metadata.isHidden error = " + error);
+                            if (message.text.includes('Ask ComEd')) {
+                                let displayText = message.text.replace('Ask ComEd', '');
+                                message.text = displayText;
+                                return message;
+                            } else {
+                                return message;
+                            }
+                        }
+                    }
+                });
+         
 
             //  console.log("message"+JSON.stringify(Bots.getConversation().messages));
             var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
@@ -80,6 +86,7 @@ function initbots() {
     }).then(customUI); /* CUSTOM - */
 
 }
+
 
 
 function clearChat(e) {
