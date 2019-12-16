@@ -2,6 +2,7 @@
 
 var request = require('request');
 var cheerio = require('cheerio');
+let hostName = process.env.HostName !== undefined ? process.env.HostName : "https://exeloneumobileapptest-a453576.mobileenv.us2.oraclecloud.com";
 
 
 var log_mode = (process.env.LOG_MODE != null) ? process.env.LOG_MODE : 'debug';
@@ -12,9 +13,7 @@ function httpservice() {
     var req = request.defaults({
         jar: request.jar(),                // save cookies to jar
         headers: {
-            //'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36', // optional headers
             'Connection': 'keep-alive',
-            //'Upgrade-Insecure-Requests': 1,
             'Content-Type': 'application/json',
             'Authorization': 'Basic YW5vbl90c3Q6NkclUXViQGxaQm1vZ09xJFc4Qlg=',
             'oracle-mobile-backend-id': '09282f50-ed11-4d68-b5cb-20bbed263373'
@@ -26,8 +25,7 @@ function httpservice() {
         try {
             let form = {};
             let reqOptions = {
-                url: stepMetadata.url,
-                //timeout: 120000
+                url: stepMetadata.url.replace('?url',hostName),
             };
 
             this.prepareGet(reqOptions, session, stepMetadata);

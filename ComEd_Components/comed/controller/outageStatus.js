@@ -1,4 +1,4 @@
-let metaData = require('../config/outageStatus');
+let metaData = require('../config/config');
 let httpService = require('../../services/httpservice');
 
 function outageStatus() {

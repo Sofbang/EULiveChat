@@ -1,0 +1,21 @@
+{
+  "name": "ComED Services",
+  "findAccountNumberPost": {
+    "name": "findAccNum",
+    "url": "?url/mobile/custom/anon/Comed/account/lookup",
+    "method": "Post",
+    "postParams": {
+      "identifier": "?identifier",
+      "phone": "?phone"
+    }
+  },
+  "outagePost": {
+    "name": "outageApi",
+    "url": "?url/mobile/custom/anon/ComEd/outage/query",
+    "method": "Post",
+    "postParams": {
+      "phone": "?phone",
+      "account_number": "?account_number"
+    }
+  }
+}
