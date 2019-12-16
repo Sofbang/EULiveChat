@@ -48,7 +48,6 @@ function initbots() {
         //console.log('calling Bots.on message');
 
         Bots.on('message', function (message) {
-            console.log('ON message >>' + message.text);
                 Bots.setDelegate({
                     beforeDisplay(message) {
                         let shouldDisplay = false;
@@ -238,13 +237,12 @@ function menuItems() {
 function menuMouseOut() {
     var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
     var k = messengerDocument.getElementById("menu-items");
- // console.log("On Mouse Out")
-  //  console.log(k)
-    if (k.style.display == "" || k.style.display == "none") {
+    //console.log(k.style.display)
+    /*if (k.style.display == "" || k.style.display == "none") {
         k.style.display = "block"
-    } else {
-        k.style.display = "none"
-    }
+    } else {*/
+    k.style.display = "none"
+    //}
 }
 
 // to get the url paramters

@@ -1,0 +1,12 @@
+{
+  "name": "findAccountNumber",
+  "findAccountNumberPost": {
+    "name": "findAccNum",
+    "url": "https://exeloneumobileapptest-a453576.mobileenv.us2.oraclecloud.com/mobile/custom/anon/Comed/account/lookup",
+    "method": "Post",
+    "postParams": {
+      "identifier": "?identifier",
+      "phone": "?phone"
+    }
+  }
+}
