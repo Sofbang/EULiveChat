@@ -2,8 +2,6 @@
 
 var request = require('request');
 var cheerio = require('cheerio');
-let hostName = process.env.HostName !== undefined ? process.env.HostName : "https://exeloneumobileapptest-a453576.mobileenv.us2.oraclecloud.com";
-
 
 var log_mode = (process.env.LOG_MODE != null) ? process.env.LOG_MODE : 'debug';
 
@@ -21,11 +19,11 @@ function httpservice() {
         followAllRedirects: true
     });
 
-    this.httpRequest = function (stepMetadata, session, callback) {
+    this.httpRequest = function (stepMetadata,hostName, session, callback) {
         try {
             let form = {};
             let reqOptions = {
-                url: stepMetadata.url.replace('?url',hostName),
+                url: stepMetadata.url.replace('?hostName',hostName),
             };
 
             this.prepareGet(reqOptions, session, stepMetadata);

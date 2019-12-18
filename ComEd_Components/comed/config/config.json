@@ -1,8 +1,9 @@
 {
   "name": "ComED Services",
+  "hostName": "exeloneumobileapptest-a453576.mobileenv.us2.oraclecloud.com",
   "findAccountNumberPost": {
     "name": "findAccNum",
-    "url": "?url/mobile/custom/anon/Comed/account/lookup",
+    "url": "https://?hostName/mobile/custom/anon/Comed/account/lookup",
     "method": "Post",
     "postParams": {
       "identifier": "?identifier",
@@ -11,11 +12,21 @@
   },
   "outagePost": {
     "name": "outageApi",
-    "url": "?url/mobile/custom/anon/ComEd/outage/query",
+    "url": "https://?hostName/mobile/custom/anon/ComEd/outage/query",
     "method": "Post",
     "postParams": {
       "phone": "?phone",
       "account_number": "?account_number"
+    }
+  },
+  "accountBalancePost": {
+    "name": "accountBalanceApi",
+    "url": "https://?hostName/mobile/custom/anonbots/Comed/bill/lookup",
+    "method": "Post",
+    "postParams": {
+      "phone": "?phone",
+      "identifier": "?identifier",
+      "account_num": "?account_num"
     }
   }
 }

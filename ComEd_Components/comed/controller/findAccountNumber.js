@@ -30,7 +30,7 @@ function findAccNumStatus() {
     };
 
     this.run = function (session, callback) {
-        HttpService.httpRequest(metaData.findAccountNumberPost, session, function (session) {
+        HttpService.httpRequest(metaData.findAccountNumberPost,metaData.hostName, session, function (session) {
             this.checkInformation(session, function (session) {
                 callback(session)
             }.bind(this));

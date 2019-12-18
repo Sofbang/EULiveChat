@@ -49,7 +49,7 @@ function outageStatus() {
 
     this.run = function (session, callback) {
         session.phone == "" ? delete metaData.outagePost.postParams.phone : delete metaData.outagePost.postParams.account_number
-        HttpService.httpRequest(metaData.outagePost, session, function (session) {
+        HttpService.httpRequest(metaData.outagePost,metaData.hostName, session, function (session) {
             this.omsStatus(session, function (session) {
                 callback(session)
             }.bind(this));
