@@ -10,7 +10,7 @@ module.exports = {
             fanResult: {required: true, type: 'string'},
             accountnumber: {required: true, type: 'string'}
         },
-        supportedActions: ['Success','MultiAccounts','AccountBalance']
+        supportedActions: ['Success','MultiAccounts','WrongInformation']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -37,8 +37,7 @@ module.exports = {
                     conversation.transition('MultiAccounts');
                     done();
                 } else if(session.balance == "closed"){
-                    conversation.reply("Account Closed, Please try with different information")
-                    .keepTurn(true).transition('AccountBalance');
+                    conversation.transition('WrongInformation');
                     done();
                 } else {
                     conversation.reply("Server not responding, Please try again later");

@@ -28,5 +28,15 @@
       "identifier": "?identifier",
       "account_num": "?account_num"
     }
+  },
+  "budgetBillingGet": {
+    "name": "getBudgetBillingApi",
+    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/billing/budget",
+    "method": "Get"
+  },
+  "budgetEnrollmentPut": {
+    "name": "budgetEnrollmentPutApi",
+    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/billing/budget",
+    "method": "Put"
   }
 }
