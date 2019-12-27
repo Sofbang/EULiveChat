@@ -19,6 +19,11 @@
       "account_number": "?account_number"
     }
   },
+  "outageAuthenticatedGet": {
+    "name": "outageAuthenticatedGetApi",
+    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/outage",
+    "method": "Get"
+  },
   "accountBalancePost": {
     "name": "accountBalanceApi",
     "url": "https://?hostName/mobile/custom/anonbots/Comed/bill/lookup",
@@ -38,5 +43,25 @@
     "name": "budgetEnrollmentPutApi",
     "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/billing/budget",
     "method": "Put"
+  },
+  "reportOutagePost": {
+    "name": "reportOutagePostApi",
+    "url": "https://?hostName/mobile/custom/anon/ComEd/outage/",
+    "method": "Post",
+    "postParams": {
+      "phone": "?phone",
+      "outageIssue": "?outageIssue",
+      "unusual": "?unusual"
+    }
+  },
+  "reportOutageAuthenticatedPost": {
+    "name": "reportOutageAuthenticatedPost",
+    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/outage",
+    "method": "Post",
+    "postParams": {
+      "phone": "?phone",
+      "outageIssue": "?outageIssue",
+      "unusual": "?unusual"
+    }
   }
 }

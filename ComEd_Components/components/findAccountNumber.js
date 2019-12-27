@@ -14,15 +14,10 @@ module.exports = {
     invoke: (conversation, done) => {
         // perform conversation tasks.
 
-        const phoneNumber = conversation.properties().phonenumber;
-        const ssn = conversation.properties().ssn;
-
-        conversation.logger().info("Input parameter values: phoneNumber: " + phoneNumber);
-        conversation.logger().info("Input parameter values: ssn: " + ssn);
-
         let session = {};
-        session.phone = phoneNumber;//'(312) 282-1570';
-        session.identifier = ssn;
+        session.phone = conversation.properties().phonenumber;//'(312) 282-1570';
+        session.identifier = ssconversation.properties().ssn;
+       
         new FindAccNumController().run(session, function (session) {
             if(session.checkString === "Retry"){
                 console.log(session.accountNum);

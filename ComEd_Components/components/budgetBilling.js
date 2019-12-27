@@ -14,13 +14,10 @@ let budgetBillingController = require("../comed/controller/budgetBilling");
      invoke: (conversation, done) => {
          // perform conversation tasks.
 
-         const accountNumber = conversation.properties().accountnumber;
-         const enrollment = conversation.properties().enrollment;
-         conversation.logger().info("Input parameter values: accountNumber: " + accountNumber);
-         conversation.logger().info("Input parameter values: enrollment: " + enrollment);
         let session = {};
-        session.account_num = accountNumber;
-        session.enrollment = enrollment;
+        session.account_num = conversation.properties().accountnumber;
+        session.enrollment = conversation.properties().enrollment;
+        
         new budgetBillingController().run(session, function (session) {
             if(!session.enrollment){
                 if(session.budgetEligible == 'AlreadyEnrolled'){

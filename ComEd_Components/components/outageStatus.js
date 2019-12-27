@@ -7,20 +7,24 @@ module.exports = {
         properties: {
             phonenumber: { required: true, type: 'string' },
             accountnumber: { required: true, type: 'string' },
+            loginAuthenticated: { required: true, type: 'string' }
         },
         supportedActions: ['Yes', 'No']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
-
-        const phoneNumber = conversation.properties().phonenumber;
-        const accountNumber = conversation.properties().accountnumber;
-        conversation.logger().info("Input parameter values: phoneNumber: " + phoneNumber);
-        conversation.logger().info("Input parameter values: accountNumber: " + accountNumber);
         let session = {};
-        session.phone = phoneNumber;
-        session.account_number = accountNumber;
+        session.phone = conversation.properties().phonenumber;
+        session.account_number = conversation.properties().accountnumber;
+        session.loginAuthenticated = conversation.properties().loginAuthenticated;
+        conversation.logger().info("Input parameter values: phoneNumber: " + session.phone);
+        conversation.logger().info("Input parameter values: accountNumber: " + session.account_number);
+        conversation.logger().info("Input parameter values: loginAuthenticated: " + session.loginAuthenticated);
+    
         new OutageController().run(session,function (session) {
+            conversation.variable('phonenumber',session.phone)
+            conversation.variable('accountnumber',session.account_number)
+            conversation.variable('loginAuthenticated',session.loginAuthenticated)
             conversation.reply(session.val).keepTurn(true).transition(session.checkString === 'Yes' ? "Yes" : "No");
             done();
         });

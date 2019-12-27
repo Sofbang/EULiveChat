@@ -15,18 +15,11 @@ module.exports = {
     invoke: (conversation, done) => {
         // perform conversation tasks.
 
-        const phoneNumber = conversation.properties().phonenumber;
-        const ssn = conversation.properties().ssn;
-        const accountNumber = conversation.properties().accountnumber;
-
-        conversation.logger().info("Input parameter values: phoneNumber: " + phoneNumber);
-        conversation.logger().info("Input parameter values: ssn: " + ssn);
-        conversation.logger().info("Input parameter values: accountNumber: " + accountNumber);
-
         let session = {};
-        session.phone = phoneNumber;//'(312) 282-1570';
-        session.identifier = ssn;
-        session.account_num = accountNumber;
+        session.phone = conversation.properties().phonenumber;//'(312) 282-1570';
+        session.identifier = conversation.properties().ssn;
+        session.account_num = conversation.properties().accountnumber;
+      
         new accountBalanceController().run(session, function (session) {
             if(session.checkString == "success"){
                 conversation.variable("fanResult",session.balance);

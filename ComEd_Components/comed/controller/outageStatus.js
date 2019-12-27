@@ -6,33 +6,12 @@ function outageStatus() {
 
 
     this.omsStatus = function (session, callback) {
-        /*session.content = {
-            "success": true,
-            "data": [
-                {
-                    "accountNumber": "6908215007",
-                    "maskedAccountNumber": "******5007",
-                    "contactHomeNumber": "(630) 323-2189",
-                    "flagGasOnly": false,
-                    "accounts": null,
-                    "address": "148 TOMLIN CIR BURR RIDGE IL 60527",
-                    "maskedAddress": "148 TOML",
-                    "addressNumber": "148",
-                    "addressName": "TOMLIN",
-                    "isPasswordProtected": false,
-                    "isUserAuthenticated": true,
-                    "outageReported": "As of 3:33 AM on 12/12/2019 we indicate that 1 customer(s) are affected by a power outageStatus in your area. The cause of your outageStatus is under investigation. We apologize for any inconvenience it may have caused you. We are currently in the process of estimating when service will be restored.",
-                    "status": "NOT_ACTIVE",
-                    "plannedOutages": null,
-                    "smartMeterStatus": true,
-                    "flagFinaled": false,
-                    "flagNoPay": false
-                }
-            ]
-        };*/
-        let data = JSON.parse(session.content).data[0];
-        if(JSON.parse(session.content).success){
-            if (data.status === "ACTIVE") {
+        let content = JSON.parse(session.content)
+        let data = content.data != undefined && content.data.length > 0 ? content.data[0] : content;
+        if(content.success){
+            session.phone = data.contactHomeNumber;
+            if (data.status === "NOT ACTIVE") {
+                data.outageReported = null;
                 if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
                     session.val = data.outageReported;
                     session.checkString = 'Yes'
@@ -48,12 +27,21 @@ function outageStatus() {
     };
 
     this.run = function (session, callback) {
-        session.phone == "" ? delete metaData.outagePost.postParams.phone : delete metaData.outagePost.postParams.account_number
-        HttpService.httpRequest(metaData.outagePost,metaData.hostName, session, function (session) {
-            this.omsStatus(session, function (session) {
-                callback(session)
+        if(session.loginAuthenticated == 'Yes'){
+            metaData.outageAuthenticatedGet.url = metaData.outageAuthenticatedGet.url.replace("?accountNumber",session.account_number);
+            HttpService.httpRequest(metaData.outageAuthenticatedGet,metaData.hostName, session, function (session) {
+                this.omsStatus(session, function (session) {
+                    callback(session)
+                }.bind(this));
             }.bind(this));
-        }.bind(this));
+        } else {
+            session.phone == "" ? delete metaData.outagePost.postParams.phone : delete metaData.outagePost.postParams.account_number;
+            HttpService.httpRequest(metaData.outagePost,metaData.hostName, session, function (session) {
+                this.omsStatus(session, function (session) {
+                    callback(session)
+                }.bind(this));
+            }.bind(this));
+        }    
     }
 }
 
