@@ -5555,12 +5555,16 @@ color: #4A4A4A;
 .menu-icon {
   color:#0059A4;
   border-left: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
   padding:0px 10px;
   margin-left:10px;
+  margin-right:10px;
   font-weight:bold;
   font-size: 16px;
 }
-
+.mail-icon{
+  color:#0059A4 !important;
+}
 .menu-icon:hover {
   color:#0059A4;
   border-left: 1px solid #cccccc;

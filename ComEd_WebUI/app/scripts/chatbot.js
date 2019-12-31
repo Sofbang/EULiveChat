@@ -108,31 +108,38 @@ function powerLine() {
 
     Bots.sendMessage('Ask ComEd Downed Power Line');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
+    document.getElementById('pdfLoader').style.visibility = "hidden";
 }
 
 function outage() {
     Bots.sendMessage('Ask ComEd Outage');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
+    document.getElementById('pdfLoader').style.visibility = "hidden";
+    
 }
 
 function billing() {
     Bots.sendMessage('Ask ComEd Billing and Payment');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
+    document.getElementById('pdfLoader').style.visibility = "hidden";
 }
 
 function accountNumber() {
     Bots.sendMessage('Ask ComEd Find Account Number');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
+    document.getElementById('pdfLoader').style.visibility = "hidden";
 }
 
 function startStop() {
     Bots.sendMessage('Ask ComEd Start, Stop or Move Service');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
+    document.getElementById('pdfLoader').style.visibility = "hidden";
 }
 
 function recycling() {
     Bots.sendMessage('Ask ComEd Ways to Save');
     document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
+    document.getElementById('pdfLoader').style.visibility = "hidden";
 }
 
 function enableComments(comments) {
@@ -195,6 +202,7 @@ function Close() {
     messengerDocument.getElementById("cslider").style.pointerEvents = "none";
     messengerDocument.getElementById("footer").style.pointerEvents = "none";
     messengerDocument.getElementById("headerEl").style.pointerEvents = "none";
+    document.getElementById('pdfLoader').style.visibility = "hidden";
 }
 
 function CloseYes() {
@@ -223,10 +231,13 @@ function CloseNo() {
     messengerDocument.getElementById("cslider").style.pointerEvents = "all";
     messengerDocument.getElementById("footer").style.pointerEvents = "all";
     messengerDocument.getElementById("headerEl").style.pointerEvents = "all";
+    document.getElementById('pdfLoader').style.visibility = "hidden";
 }
 
 function minimize() {
+    document.getElementById('pdfLoader').style.visibility = "hidden";
     Bots.close();
+    
 }
 
 function menuItems() {
@@ -275,6 +286,21 @@ function showChatButton() {
         });
 }
 
+function pdfLoader(){
+    var messengerDocument = document.getElementById('pdfLoader');
+    messengerDocument.style.visibility = 'visible';
+}
+
+function closePdfLoader(){
+    var messengerDocument = document.getElementById('pdfLoader');
+    messengerDocument.style.visibility = 'hidden';
+}
+
+function sendEmail(){
+    Bots.sendMessage('Ask ComEd Send an Email');
+    var messengerDocument = document.getElementById('pdfLoader');
+    messengerDocument.style.visibility = 'hidden';
+}
 
 
 function customUI() {
@@ -295,7 +321,7 @@ function customUI() {
 
     headerElement.insertAdjacentHTML("afterend", "<div id='cslider'> <div class='slideshow-container'> <div class='mySlides fade'>  <div class='text'></div></div><!--<a  class='prev' href='javascript:window.parent.plusSlides(-1);'>&#10094;</a><a class='next' href='javascript:window.parent.plusSlides(1);'>&#10095;</a>--></div><br><div style='text-align:center'> </div></div>");
     //our customized header
-    headerElement.insertAdjacentHTML("afterend", "<div id='headerEl' class='header-wrapper' style='background-color: #FFFFFF;'><div class='app-name'><span>Let's Chat!</span><a onmouseover='javascript:window.parent.menuItems();' onmouseout='javascript:window.parent.menuMouseOut();' class='menu-icon'>Menu</a></div><div><div id='min' class='close-handle close-hidden'><a href='javascript:window.parent.minimize();'><i class='fa fa-minus'></i></a>&emsp;<a href='javascript:window.parent.Close();'><i class='fa fa-times'></i></a></div></div></div>")
+    headerElement.insertAdjacentHTML("afterend", "<div id='headerEl' class='header-wrapper' style='background-color: #FFFFFF;'><div class='app-name'><span>Let's Chat!</span><a onmouseover='javascript:window.parent.menuItems();' onmouseout='javascript:window.parent.menuMouseOut();' class='menu-icon'>Menu</a><a class='mail-icon' onClick='javascript:window.parent.sendEmail();'><i class='fa fa-envelope' aria-hidden='true'></i></a></div><div><div id='min' class='close-handle close-hidden'><a href='javascript:window.parent.minimize();'><i class='fa fa-minus'></i></a>&emsp;<a href='javascript:window.parent.Close();'><i class='fa fa-times'></i></a></div></div></div>")
     window.parent.currentSlide(1);
     headerElement.insertAdjacentHTML("afterend", "<div id='prompt'>Do you want to end the conversation?<br>This will clear your chat history.<div class='prompt-btn-sec'><a class='btn btn-primary prompt-btn-outline' style='border-color: rgb(0, 153, 255); background-color: rgb(0, 153, 255);' href='javascript:window.parent.CloseNo();'>No</a><a class='btn btn-primary prompt-btn-fill' style='border-color: rgb(0, 153, 255); background-color: rgb(0, 153, 255);' href='javascript:window.parent.CloseYes();'>Yes</a></div>");
     //The sample demo shipped with the Web SDK (app.js) can be modified to include this

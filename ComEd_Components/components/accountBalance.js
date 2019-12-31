@@ -20,7 +20,9 @@ module.exports = {
         session.identifier = conversation.properties().ssn;
         session.account_num = conversation.properties().accountnumber;
       
-        new accountBalanceController().run(session, function (session) {
+        //new accountBalanceController().run(session, function (session) {
+            session.checkString = 'success'
+            session.balance = '$5'
             if(session.checkString == "success"){
                 conversation.variable("fanResult",session.balance);
                 conversation.transition('Success');
@@ -37,6 +39,6 @@ module.exports = {
                     done();
                 }
             }
-        });
+        //});
     }
 };

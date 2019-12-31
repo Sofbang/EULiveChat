@@ -26,7 +26,7 @@ customized header
 
 #headerEl .fa {
     line-height: 28px;
-    color: #333;
+    color: #0158a3;
     font-size: 15px
 }
 
@@ -389,4 +389,14 @@ opacity: .8;
 -moz-box-shadow:    3px 3px 5px 6px #ccc;
 -webkit-box-shadow: 3px 3px 5px 6px #ccc;
 box-shadow:         3px 3px 5px 6px #ccc;
+}
+#pdfLoader{
+    position: fixed;
+    visibility: hidden;
+    height: 478px;
+    bottom: 32px;
+    right: 380px;
+    border-radius: 5px;
+    padding: 10px;
+    background: #ffffff;
 }
