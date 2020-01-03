@@ -5,13 +5,13 @@ let utility = require('../../utilities/utility');
 function accountBalance() {
     let HttpService = new httpService();
     let Utility = new utility();
-    let metaData1 = JSON.parse(JSON.stringify(metaData))
+    let meta = JSON.parse(JSON.stringify(metaData))
 
     this.balStatus = function (session, callback) {
         let content = JSON.parse(session.content);
         if (content.success){
-            session.balance = "Your current balance is " + "$" + content.data.remainingBalanceDue + ", due on "
-            + Utility.dateFormat(content.data.dueByDate,'YYYY-MM-DD') + ".\n\nWould you like to pay your bill today? You can also download a PDF copy of your paper bill.";
+            session.actBalance = content.data.BillingInfo.netDueAmount;
+            session.actDueDate =  Utility.dateFormat(content.data.BillingInfo.dueByDate,'YYYY-MM-DD');
             session.checkString = "success"
         } else {
             session.checkString = "fail"
@@ -27,9 +27,10 @@ function accountBalance() {
     };
 
     this.run = function (session, callback) {
-        if(session.account_num === "${accountnumber.value}")
-             delete metaData1.accountBalancePost.postParams.account_num
-        HttpService.httpRequest(metaData1.accountBalancePost,metaData1.hostName, session, function (session) {
+        // if(session.account_num === "${accountnumber.value}")
+        //      delete metaData1.accountBalancePost.postParams.account_num
+        meta.accountBalanceGet.url = meta.accountBalanceGet.url.replace("?accountNumber",session.account_num);
+        HttpService.httpRequest(meta.accountBalanceGet,meta.hostName, session, function (session) {
             this.balStatus(session, function (session) {
                 callback(session)
             }.bind(this));

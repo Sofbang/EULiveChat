@@ -5,7 +5,8 @@ let utility = require('../../utilities/utility');
 function accountBalance() {
     let HttpService = new httpService();
     let Utility = new utility();
-
+    let meta = JSON.parse(JSON.stringify(metaData))
+    
     this.budgetBilling = function (session, callback) {
         let content = JSON.parse(session.content);
         content.data.enrolled = true;
@@ -36,16 +37,16 @@ function accountBalance() {
     };
 
     this.run = function (session, callback) {
-        metaData.budgetBillingGet.url = metaData.budgetBillingGet.url.replace("?accountNumber",session.account_num);
+        meta.budgetBillingGet.url = meta.budgetBillingGet.url.replace("?accountNumber",session.account_num);
         if(!session.enrollment){
-            HttpService.httpRequest(metaData.budgetBillingGet,metaData.hostName, session, function (session) {
+            HttpService.httpRequest(meta.budgetBillingGet,meta.hostName, session, function (session) {
                 this.budgetBilling(session, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
         } else {
-            metaData.budgetEnrollmentPut.url = metaData.budgetEnrollmentPut.url.replace("?accountNumber",session.account_num);
-            HttpService.httpRequest(metaData.budgetEnrollmentPut,metaData.hostName, session, function (session) {
+            meta.budgetEnrollmentPut.url = meta.budgetEnrollmentPut.url.replace("?accountNumber",session.account_num);
+            HttpService.httpRequest(meta.budgetEnrollmentPut,meta.hostName, session, function (session) {
                 this.budgetEnroll(session, function (session) {
                     callback(session)
                 }.bind(this));

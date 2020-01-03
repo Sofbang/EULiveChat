@@ -3,7 +3,7 @@ let httpService = require('../../services/httpservice');
 
 function reportOutage() {
     let HttpService = new httpService();
-
+    let meta = JSON.parse(JSON.stringify(metaData))
 
     this.reportStatus = function (session, callback) {
         let content = JSON.parse(session.content)
@@ -26,15 +26,15 @@ function reportOutage() {
 
     this.run = function (session, callback) {
         if(session.loginAuthenticated == 'Yes'){
-            metaData.reportOutageAuthenticatedPost.url = metaData.reportOutageAuthenticatedPost.url.replace("?accountNumber",session.account_number);
-            HttpService.httpRequest(metaData.reportOutageAuthenticatedPost,metaData.hostName, session, function (session) {
+            meta.reportOutageAuthenticatedPost.url = meta.reportOutageAuthenticatedPost.url.replace("?accountNumber",session.account_number);
+            HttpService.httpRequest(meta.reportOutageAuthenticatedPost,meta.hostName, session, function (session) {
                 this.reportStatus(session, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
         } else {
             console.log("Hello")
-            HttpService.httpRequest(metaData.reportOutagePost,metaData.hostName, session, function (session) {
+            HttpService.httpRequest(meta.reportOutagePost,meta.hostName, session, function (session) {
                 this.reportStatus(session, function (session) {
                     callback(session)
                 }.bind(this));

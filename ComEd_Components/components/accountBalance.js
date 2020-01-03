@@ -5,27 +5,27 @@ module.exports = {
     metadata: () => ({
         name: 'accountBalance',
         properties: {
-            phonenumber: {required: true, type: 'string'},
-            ssn: {required: true, type: 'string'},
-            fanResult: {required: true, type: 'string'},
-            accountnumber: {required: true, type: 'string'}
+            actBalance: {required: true, type: 'string'},
+            actDueDate: {required: true, type: 'string'},
+            accountnumber: {required: true, type: 'string'},
+            payBillAccountBalanceFlag:  {required: true, type: 'string'}
         },
-        supportedActions: ['Success','MultiAccounts','WrongInformation']
+        supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
 
         let session = {};
-        session.phone = conversation.properties().phonenumber;//'(312) 282-1570';
-        session.identifier = conversation.properties().ssn;
+        session.actBalance = conversation.properties().actBalance;
+        session.actDueDate = conversation.properties().actDueDate;
         session.account_num = conversation.properties().accountnumber;
-      
-        //new accountBalanceController().run(session, function (session) {
-            session.checkString = 'success'
-            session.balance = '$5'
+        let payBillAccountBalanceFlag = conversation.properties().payBillAccountBalanceFlag;
+        
+        new accountBalanceController().run(session, function (session) {
             if(session.checkString == "success"){
-                conversation.variable("fanResult",session.balance);
-                conversation.transition('Success');
+                conversation.variable("actBalance",session.actBalance);
+                conversation.variable("actDueDate",session.actDueDate);
+                payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
                 done();
             } else {
                 if (session.balance == "MultipleAccounts"){
@@ -39,6 +39,6 @@ module.exports = {
                     done();
                 }
             }
-        //});
+        });
     }
 };

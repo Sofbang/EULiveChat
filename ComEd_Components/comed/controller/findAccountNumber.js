@@ -3,7 +3,7 @@ let httpService = require('../../services/httpservice');
 
 function findAccNumStatus() {
     let HttpService = new httpService();
-
+    let meta = JSON.parse(JSON.stringify(metaData))
 
     this.checkInformation = function (session, callback) {
         let content = JSON.parse(session.content)
@@ -30,7 +30,7 @@ function findAccNumStatus() {
     };
 
     this.run = function (session, callback) {
-        HttpService.httpRequest(metaData.findAccountNumberPost,metaData.hostName, session, function (session) {
+        HttpService.httpRequest(meta.findAccountNumberPost,meta.hostName, session, function (session) {
             this.checkInformation(session, function (session) {
                 callback(session)
             }.bind(this));

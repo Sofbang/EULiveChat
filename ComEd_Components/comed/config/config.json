@@ -34,6 +34,11 @@
       "account_num": "?account_num"
     }
   },
+  "accountBalanceGet": {
+    "name": "accountBalanceGet",
+    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber",
+    "method": "Get"
+  },
   "budgetBillingGet": {
     "name": "getBudgetBillingApi",
     "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/billing/budget",
@@ -63,5 +68,15 @@
       "outageIssue": "?outageIssue",
       "unusual": "?unusual"
     }
+  },
+  "idcsOauthTokenApi":{
+    "idcsHostName" : "https://idcs-789cabb071e14f17a08c2d19babd0539.identity.oraclecloud.com",
+    "clientId" : "175f9203bda542e782bb6520ed2871ed",
+    "clientSecret" : "61f7d5f7-a3e6-407f-a58d-2276d7600075",
+    "contentType" : "application/x-www-form-urlencoded; charset=utf-8",
+    "scopeUrl" : "https://1B1638B25CB34E89BFF480641076EE29.botmxp.ocp.oraclecloud.com:443/api",
+    "idcsAuthorizationURI" : "/oauth2/v1/token",
+    "odaHostName" : "https://sofbangtempoda-sofbangucc.botmxp.ocp.oraclecloud.com",
+    "conversationUri": "/api/v1/bots/sessions/?sessionId/log"   
   }
 }

@@ -3,7 +3,7 @@ let httpService = require('../../services/httpservice');
 
 function outageStatus() {
     let HttpService = new httpService();
-
+    let meta = JSON.parse(JSON.stringify(metaData))
 
     this.omsStatus = function (session, callback) {
         let content = JSON.parse(session.content)
@@ -28,15 +28,15 @@ function outageStatus() {
 
     this.run = function (session, callback) {
         if(session.loginAuthenticated == 'Yes'){
-            metaData.outageAuthenticatedGet.url = metaData.outageAuthenticatedGet.url.replace("?accountNumber",session.account_number);
-            HttpService.httpRequest(metaData.outageAuthenticatedGet,metaData.hostName, session, function (session) {
+            meta.outageAuthenticatedGet.url = meta.outageAuthenticatedGet.url.replace("?accountNumber",session.account_number);
+            HttpService.httpRequest(meta.outageAuthenticatedGet,meta.hostName, session, function (session) {
                 this.omsStatus(session, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
         } else {
-            session.phone == "" ? delete metaData.outagePost.postParams.phone : delete metaData.outagePost.postParams.account_number;
-            HttpService.httpRequest(metaData.outagePost,metaData.hostName, session, function (session) {
+            session.phone == "" ? delete meta.outagePost.postParams.phone : delete meta.outagePost.postParams.account_number;
+            HttpService.httpRequest(meta.outagePost,meta.hostName, session, function (session) {
                 this.omsStatus(session, function (session) {
                     callback(session)
                 }.bind(this));
