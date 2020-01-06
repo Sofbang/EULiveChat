@@ -7,17 +7,29 @@ function outageStatus() {
 
     this.omsStatus = function (session, callback) {
         let content = JSON.parse(session.content)
-        let data = content.data != undefined && content.data.length > 0 ? content.data[0] : content;
+        let data = content.meta != undefined && content.meta.code == "FN-ACCT-MULTIPLE" ? content.data : content.data != undefined && content.data.length > 0 ? content.data[0] : content;
+        console.log(data)
         if(content.success){
             session.phone = data.contactHomeNumber;
-            if (data.status === "NOT ACTIVE") {
-                data.outageReported = null;
-                if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
-                    session.val = data.outageReported;
-                    session.checkString = 'Yes'
-                } else {
-                    session.val = 'Power is out at ' + data.address;
-                    session.checkString = 'No'
+            if(data.length > 1){
+                session.multipleAcc = "Yes";
+                session.accountNum = "";
+                for (let i in data){
+                    let d = data[i].accountNumber;
+                    session.accountNum += d + ","
+                }
+                session.accountNum = session.accountNum.slice(0,-1)
+            } else {
+                session.multipleAcc = "No";
+                if (data.status === "NOT ACTIVE") {
+                    data.outageReported = null;
+                    if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
+                        session.val = data.outageReported;
+                        session.checkString = 'Yes'
+                    } else {
+                        session.val = 'Power is out at ' + data.address;
+                        session.checkString = 'No'
+                    }
                 }
             }
         } else {

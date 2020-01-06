@@ -142,6 +142,18 @@ function recycling() {
     document.getElementById('pdfLoader').style.visibility = "hidden";
 }
 
+function moreMenu() {
+    Bots.sendMessage('Ask ComEd More');
+    document.getElementById('web-messenger-container').contentDocument.getElementById("menu-items").style.display = "none";
+    document.getElementById('pdfLoader').style.visibility = "hidden";
+}
+
+function downloadPDF(pdf) {
+    var dlnk = document.getElementById('dwnldLnk');
+    dlnk.href = pdf;
+    dlnk.click();
+}
+
 function enableComments(comments) {
     comments.style.display = 'inline'
 }
@@ -325,6 +337,6 @@ function customUI() {
     window.parent.currentSlide(1);
     headerElement.insertAdjacentHTML("afterend", "<div id='prompt'>Do you want to end the conversation?<br>This will clear your chat history.<div class='prompt-btn-sec'><a class='btn btn-primary prompt-btn-outline' style='border-color: rgb(0, 153, 255); background-color: rgb(0, 153, 255);' href='javascript:window.parent.CloseNo();'>No</a><a class='btn btn-primary prompt-btn-fill' style='border-color: rgb(0, 153, 255); background-color: rgb(0, 153, 255);' href='javascript:window.parent.CloseYes();'>Yes</a></div>");
     //The sample demo shipped with the Web SDK (app.js) can be modified to include this
-    headerElement.insertAdjacentHTML("afterend", "<div id='menu-items' onmouseover='javascript:window.parent.menuItems();'  onmouseout='javascript:window.parent.menuMouseOut();'><ul><li><a>I can help you with:</a></li><li><a  href='javascript:window.parent.billing();'>Billing and Payment</a></li><li><a  href='javascript:window.parent.outage();'>Outage</a></li><li><a href='javascript:window.parent.powerLine();'>Downed Power Line</a></li><li><a href='javascript:window.parent.accountNumber();'>Find Account Number</a></li><li><a  href='javascript:window.parent.startStop();'>Start, Stop or Move Service</a></li><li><a href='javascript:window.parent.recycling();'>Ways to Save</a></li></ul></div>")
+    headerElement.insertAdjacentHTML("afterend", "<div id='menu-items' onmouseover='javascript:window.parent.menuItems();'  onmouseout='javascript:window.parent.menuMouseOut();'><ul><li><a>I can help you with:</a></li><li><a  href='javascript:window.parent.billing();'>Billing and Payment</a></li><li><a  href='javascript:window.parent.outage();'>Outage</a></li><li><a href='javascript:window.parent.powerLine();'>Downed Power Line</a></li><li><a href='javascript:window.parent.accountNumber();'>Find Account Number</a></li><li><a  href='javascript:window.parent.startStop();'>Start, Stop or Move Service</a></li><li><a href='javascript:window.parent.recycling();'>Ways to Save</a></li><li><a href='javascript:window.parent.moreMenu();'>More</a></li></ul></div>")
 
 }

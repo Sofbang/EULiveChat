@@ -9,7 +9,7 @@ module.exports = {
             accountnumber: { required: true, type: 'string' },
             loginAuthenticated: { required: true, type: 'string' }
         },
-        supportedActions: ['Yes', 'No']
+        supportedActions: ['Yes', 'No', 'MultipleAccounts']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -22,11 +22,19 @@ module.exports = {
         conversation.logger().info("Input parameter values: loginAuthenticated: " + session.loginAuthenticated);
     
         new OutageController().run(session,function (session) {
-            conversation.variable('phonenumber',session.phone)
-            conversation.variable('accountnumber',session.account_number)
-            conversation.variable('loginAuthenticated',session.loginAuthenticated)
-            conversation.reply(session.val).keepTurn(true).transition(session.checkString === 'Yes' ? "Yes" : "No");
-            done();
+
+            if(session.multipleAcc == 'Yes'){
+                conversation.variable("fanResult",session.accountNum);
+                conversation.transition('MultipleAccounts');
+                done();
+            }else{
+                conversation.variable('phonenumber',session.phone);
+                conversation.variable('accountnumber',session.account_number);
+                conversation.variable('loginAuthenticated',session.loginAuthenticated);
+                conversation.reply(session.val).keepTurn(true).transition(session.checkString === 'Yes' ? "Yes" : "No");
+                done();
+            }
+            
         });
     }
 };

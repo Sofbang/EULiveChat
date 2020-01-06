@@ -56,7 +56,8 @@
     "postParams": {
       "phone": "?phone",
       "outageIssue": "?outageIssue",
-      "unusual": "?unusual"
+      "unusual": "?unusual",
+      "account_number": "?account_number"
     }
   },
   "reportOutageAuthenticatedPost": {

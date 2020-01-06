@@ -22,7 +22,7 @@ module.exports = {
             done();
         } else {
             //conversation.transition("PayBillUserActSetup");
-            session.userAccountBackendCheck = true;
+            session.userAccountBackendCheck = false;
             session.userAccountBackendCheck ? conversation.transition("PayBillUserActSetupYes") : conversation.transition("PayBillUserActSetupNo");
             done();
         } 
