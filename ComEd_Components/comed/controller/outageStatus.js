@@ -10,7 +10,7 @@ function outageStatus() {
         let data = content.meta != undefined && content.meta.code == "FN-ACCT-MULTIPLE" ? content.data : content.data != undefined && content.data.length > 0 ? content.data[0] : content;
         console.log(data)
         if(content.success){
-            session.phone = data.contactHomeNumber;
+            session.phoneAccCheck = true;
             if(data.length > 1){
                 session.multipleAcc = "Yes";
                 session.accountNum = "";
@@ -20,20 +20,25 @@ function outageStatus() {
                 }
                 session.accountNum = session.accountNum.slice(0,-1)
             } else {
+                session.phone = data.contactHomeNumber;
+                session.accountNumber = data.accountNumber;
                 session.multipleAcc = "No";
+                data.status = "ACTIVE";
                 if (data.status === "NOT ACTIVE") {
-                    data.outageReported = null;
+                    session.omrStatus = 'No';
                     if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
-                        session.val = data.outageReported;
-                        session.checkString = 'Yes'
+                        session.outageReported = 'Yes'
                     } else {
-                        session.val = 'Power is out at ' + data.address;
-                        session.checkString = 'No'
+                        session.address =  data.address;
+                        session.outageReported = 'No'
                     }
+                } else {
+                    session.omrStatus = 'Yes';
+                    session.address =  data.address;
                 }
             }
         } else {
-            session.val = "Number incorrect please try again.";
+            session.phoneAccCheck = false;
         }
         callback(session)
     };

@@ -9,7 +9,7 @@ function accountBalance() {
     
     this.budgetBilling = function (session, callback) {
         let content = JSON.parse(session.content);
-        content.data.enrolled = true;
+        //content.data.enrolled = true;
         if(content.success){
             session.budgetEligible = content.data.isBudgetBillingAvailable && content.data.enrolled ? 'AlreadyEnrolled' :
             content.data.isBudgetBillingAvailable ? true : false;

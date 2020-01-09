@@ -1,4 +1,8 @@
 'use strict';
+let userLoginController = require("../comed/controller/userLogin");
+
+
+
 
 module.exports = {
     metadata: () => ({
@@ -7,13 +11,13 @@ module.exports = {
            // phonenumber: { required: true, type: 'string' },
            // accountnumber: { required: true, type: 'string' },
         },
-        supportedActions: ['Yes', 'No']
+        supportedActions: ['Success', 'Fail']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
         console.log('Hi')
         let login  = false;
-        login ? conversation.transition('Yes') : conversation.transition('No');
+        login ? conversation.transition('Success') : conversation.transition('Fail');
         done();
     }
 };

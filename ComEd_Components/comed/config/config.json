@@ -1,6 +1,27 @@
 {
   "name": "ComED Services",
   "hostName": "exeloneumobileapptest-a453576.mobileenv.us2.oraclecloud.com",
+  "userLoginSessionGet": {
+    "name": "userLoginSessionGet",
+    "url": "https://d-e-euweb-livechat-comed-ui-01.azurewebsites.net/api/services/myaccountservice.svc/getsession",
+    "method": "Get"
+  },
+  "userLoginPost": {
+    "name": "userLoginPost",
+    "url": "https://d-e-euweb-livechat-comed-ui-01.azurewebsites.net/Pages/Adaptor.aspx",
+    "method": "Post",
+    "postParams": {
+      "USER": "User_4400047005@test.com",
+      "PASSWORD": "Password1",
+      "Target": "https://d-e-euweb-livechat-comed-ui-01.azurewebsites.net/Pages/Adaptor.aspx",
+      "SMAUTHREASON": "0"
+    }
+  },
+  "userLoginGet": {
+    "name": "userLoginGet",
+    "url": "https://d-e-euweb-livechat-comed-ui-01.azurewebsites.net/Pages/Login.aspx",
+    "method": "Get"
+  },
   "findAccountNumberPost": {
     "name": "findAccNum",
     "url": "https://?hostName/mobile/custom/anon/Comed/account/lookup",
