@@ -12,6 +12,7 @@ function accountBalance() {
         if (content.success){
             session.actBalance = content.data.BillingInfo.netDueAmount;
             session.actDueDate =  Utility.dateFormat(content.data.BillingInfo.dueByDate,'YYYY-MM-DD');
+            session.address = content.data.address;
             session.checkString = "success"
         } else {
             session.checkString = "fail"

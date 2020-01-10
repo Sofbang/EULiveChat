@@ -8,6 +8,7 @@ module.exports = {
             actBalance: {required: true, type: 'string'},
             actDueDate: {required: true, type: 'string'},
             accountnumber: {required: true, type: 'string'},
+            address: {require:true, type: 'string'},
             payBillAccountBalanceFlag:  {required: true, type: 'string'}
         },
         supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent']
@@ -25,6 +26,8 @@ module.exports = {
             if(session.checkString == "success"){
                 conversation.variable("actBalance",session.actBalance);
                 conversation.variable("actDueDate",session.actDueDate);
+                conversation.variable("address",session.address);
+                conversation.variable("accountnumber",session.account_num);
                 payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
                 done();
             } else {

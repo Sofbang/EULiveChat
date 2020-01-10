@@ -1,26 +1,31 @@
 {
   "name": "ComED Services",
   "hostName": "exeloneumobileapptest-a453576.mobileenv.us2.oraclecloud.com",
-  "userLoginSessionGet": {
-    "name": "userLoginSessionGet",
-    "url": "https://d-e-euweb-livechat-comed-ui-01.azurewebsites.net/api/services/myaccountservice.svc/getsession",
-    "method": "Get"
-  },
-  "userLoginPost": {
-    "name": "userLoginPost",
-    "url": "https://d-e-euweb-livechat-comed-ui-01.azurewebsites.net/Pages/Adaptor.aspx",
+  "payBillWalletPost": {
+    "name": "payBillWalletPost",
+    "url": "https://?hostName/mobile/custom/auth/wallet/query",
     "method": "Post",
     "postParams": {
-      "USER": "User_4400047005@test.com",
-      "PASSWORD": "Password1",
-      "Target": "https://d-e-euweb-livechat-comed-ui-01.azurewebsites.net/Pages/Adaptor.aspx",
-      "SMAUTHREASON": "0"
+      "auth_session_token": "",
+      "biller_id": "ComEdRegistered"
     }
   },
-  "userLoginGet": {
-    "name": "userLoginGet",
-    "url": "https://d-e-euweb-livechat-comed-ui-01.azurewebsites.net/Pages/Login.aspx",
-    "method": "Get"
+  "payBillCreatePaymentPost": {
+    "name": "payBillCreatePaymentPost",
+    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/payments/schedule",
+    "method": "Post",
+    "postParams": {
+      "auth_session_token": "",
+      "biller_id": "ComEdRegistered",
+      "is_existing_account": "true",
+      "is_save_account": "false",
+      "masked_wallet_item_account_number": "?masked_wallet_item_account_number",
+      "payment_amount": "?payment_amount",
+      "payment_category_type": "?payment_category_type",
+      "payment_date": "?payment_date",
+      "wallet_id": "?wallet_id",
+      "wallet_item_id": "?wallet_item_id"
+    }
   },
   "findAccountNumberPost": {
     "name": "findAccNum",
