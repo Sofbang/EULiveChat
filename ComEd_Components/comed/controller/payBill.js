@@ -11,7 +11,7 @@ function payBill() {
     this.payBillStatus = function (session, callback) {
         let content = JSON.parse(session.content);
         if(content.success){
-            content.data.WalletItems[0].isDefault = true;
+            //content.data.WalletItems[0].isDefault = true;
             let isDefaultData = _.filter(content.data.WalletItems,function(e){
                 return e.isDefault == true;
             })
@@ -26,7 +26,7 @@ function payBill() {
                 callback(session)
             } else {
                 session.userAccountBackendCheck = false;
-                session.payBillwalletResult = "you have multiple accounts and don’t have one identified as the default."
+                session.payBillWalletResult = "you have multiple accounts and don’t have one identified as the default."
                 callback(session)
             }
         }   
