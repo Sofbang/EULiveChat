@@ -14,7 +14,7 @@ module.exports = {
             payBillMaskedAccountNumber: {required: true, type: 'string'},
             accountnumber: {required: true, type: 'string'}
         },
-        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes','PayBillUserActSetupNo', 'Yes', 'No']
+        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes','PayBillUserActSetupNo', 'Yes', 'No', 'Fail']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.

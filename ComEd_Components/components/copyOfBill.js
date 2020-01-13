@@ -1,5 +1,5 @@
 'use strict';
-var OutageController = require("../comed/controller/outageStatus");
+var CopyOfBill = require("../comed/controller/copyOfBill");
 
 
 module.exports = {

@@ -50,6 +50,11 @@
     "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/outage",
     "method": "Get"
   },
+  "copyOfBillGet": {
+    "name": "copyOfBillGetApi",
+    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/billing/?bdate/pdf",
+    "method": "Get"
+  },
   "accountBalancePost": {
     "name": "accountBalanceApi",
     "url": "https://?hostName/mobile/custom/anonbots/Comed/bill/lookup",
