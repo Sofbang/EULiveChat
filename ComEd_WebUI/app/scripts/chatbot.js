@@ -30,6 +30,15 @@ function initbots() {
         }
     }).then(function (res) {
 
+        Bots.updateUser(
+            {
+                "givenName": accountNumber,
+                "surname": accountNumber,
+                "properties": {
+                    "smoochCustomVariable1": sessionId,
+                    "smoochCustomVariable2": token
+                }
+            })
         Bots.on('widget:opened', function () {
             if (Bots.getConversation().messages != null && Bots.getConversation().messages.length < 1) {
                 Bots.setDelegate({
@@ -285,7 +294,31 @@ function getUrlData() {
     return vars["bot"];
 }
 
+function getTokenSession() {
+
+    var request = new XMLHttpRequest();
+    request.open('GET', 'https://d-e-euweb-livechat-comed-ui-01.azurewebsites.net/api/services/myaccountservice.svc/getsession', false);
+    request.send();
+
+
+    if (request.status === 200) {
+        console.log("response" + this.responseText);
+        obj = JSON.parse(request.responseText);
+        token = obj.token;
+        sessionId = obj.id;
+        accountNumber=obj.accountNumber;
+        console.log("token" + token);
+        console.log("session id " + sessionId);
+        console.log("accountNumber"+ accountNumber);
+
+    }
+
+}
+
+
+
 function showChatButton() {
+    getTokenSession();
 
     console.log('Show Bot');
 
