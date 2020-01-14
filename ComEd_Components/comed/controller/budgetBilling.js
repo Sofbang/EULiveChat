@@ -23,17 +23,21 @@ function accountBalance() {
             session.resp = true
             session.enrollVal = "You've successfully enrolled in budget billing! Look for an email to confirm your enrollment soon./n" +
             "Please note the Confirmation NUmber: " + content.data.confirmationNumber + " for future reference.";
+            callback(session) 
         }else{
             session.resp = false
             if(content.meta.code === "FN-NOT-ELIGIBLE"){
                 session.checkString = 'noteligible'
+                callback(session) 
             } else if(content.meta.code === "FN-ALREADY-ENROLLED"){
                 session.checkString = 'enrolled'
+                callback(session) 
             } else {
                 session.checkString = 'unknown'
+                callback(session) 
             }
         }
-        callback(session) 
+        
     };
 
     this.run = function (session, callback) {

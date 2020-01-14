@@ -19,28 +19,34 @@ function outageStatus() {
                     session.accountNum += d + ","
                 }
                 session.accountNum = session.accountNum.slice(0,-1)
+                callback(session)
             } else {
                 session.phone = data.contactHomeNumber;
                 session.accountNumber = data.accountNumber;
                 session.multipleAcc = "No";
-                data.status = "ACTIVE";
+                //data.status = "ACTIVE";
                 if (data.status === "NOT ACTIVE") {
                     session.omrStatus = 'No';
+                    data.outageReported = '';
                     if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
                         session.outageReported = 'Yes'
+                        callback(session)
                     } else {
                         session.address =  data.address;
                         session.outageReported = 'No'
+                        callback(session)
                     }
                 } else {
                     session.omrStatus = 'Yes';
                     session.address =  data.address;
+                    callback(session)
                 }
             }
         } else {
             session.phoneAccCheck = false;
+            callback(session)
         }
-        callback(session)
+        
     };
 
     this.run = function (session, callback) {

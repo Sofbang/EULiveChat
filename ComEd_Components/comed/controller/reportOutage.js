@@ -11,17 +11,20 @@ function reportOutage() {
         if(content.success){
             session.confirmationNumber = content.data.confirmationNumber
             session.success = true
+            callback(session)
         } else {
             session.success = false
             if(content.meta.code === "TC-ACCT-INVALID"){
                 session.checkString = 'Invalid Account Number'
+                callback(session)
             } else if(content.meta.code === "TC-USER-INVALID"){
                 session.checkString = 'UserInvalid'
+                callback(session)
             } else {
                 session.checkString = 'unknown'
+                callback(session)
             }
-        }
-        callback(session)
+        } 
     };
 
     this.run = function (session, callback) {
