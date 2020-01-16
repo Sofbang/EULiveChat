@@ -7,7 +7,6 @@ function reportOutage() {
 
     this.reportStatus = function (session, callback) {
         let content = JSON.parse(session.content)
-        console.log(session.content)
         if(content.success){
             session.confirmationNumber = content.data.confirmationNumber
             session.success = true

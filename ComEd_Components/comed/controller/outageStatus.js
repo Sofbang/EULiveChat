@@ -27,7 +27,7 @@ function outageStatus() {
                 //data.status = "ACTIVE";
                 if (data.status === "NOT ACTIVE") {
                     session.omrStatus = 'No';
-                    data.outageReported = '';
+                    //data.outageReported = '';
                     if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
                         session.outageReported = 'Yes'
                         callback(session)
