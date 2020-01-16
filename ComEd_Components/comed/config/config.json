@@ -1,6 +1,6 @@
 {
   "name": "ComED Services",
-  "hostName": "exeloneumobileapptest-a453576.mobileenv.us2.oraclecloud.com",
+  "hostName": "d-e-euweb-livechat-comed-ui-01.azurewebsites.net/.mcs",
   "payBillWalletPost": {
     "name": "payBillWalletPost",
     "url": "https://?hostName/mobile/custom/auth/wallet/query",

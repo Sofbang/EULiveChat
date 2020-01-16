@@ -11,6 +11,8 @@ module.exports = {
             fanResult: { required: true, type: 'string' },
             loginAuthenticated: { required: true, type: 'string' },
             accountnumber: { required: true, type: 'string' },
+            token: {required: true, type: 'string'},
+            sessionId:  {required: true, type: 'string'}
         },
         supportedActions: ['outageReportResult']
     }),
@@ -23,7 +25,15 @@ module.exports = {
         session.unusual = conversation.properties().noticeOutageUnusual;
         session.account_number = conversation.properties().accountnumber;
         session.loginAuthenticated = conversation.properties().loginAuthenticated;
-        console.log(session.loginAuthenticated)
+        session.token = conversation.properties().token;
+        session.sessionId = conversation.properties().sessionId;
+
+        conversation.logger().info("**************Report Outage Component*****************");
+        conversation.logger().info("Input parameter values: account_num: " + session.account_number);
+        conversation.logger().info("Input parameter values: token: " + session.token);
+        conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
+
+
         new reportOutageController().run(session,function (session) {
             if(session.success){
                 conversation.variable('fanResult',"Success! Your outage report has been recorded.Here is your Confirmation Number: "+session.confirmationNumber)

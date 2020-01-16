@@ -13,7 +13,7 @@ module.exports = {
     invoke: (conversation, done) => {
         // perform conversation tasks.
         console.log('Hi')
-        let login  = false;
+        let login  = true;
         login ? conversation.transition('Success') : conversation.transition('Fail');
         done();
     }

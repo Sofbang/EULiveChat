@@ -25,9 +25,13 @@ module.exports = {
         session.account_num = conversation.properties().accountnumber;
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
-        console.log(session.account_num);
-        console.log(session.token);
-        console.log(session.sessionId);
+        
+        conversation.logger().info("**************Account Balance Component*****************");
+        conversation.logger().info("Input parameter values: account_num: " + session.account_num);
+        conversation.logger().info("Input parameter values: token: " + session.token);
+        conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
+        
+        
         let payBillAccountBalanceFlag = conversation.properties().payBillAccountBalanceFlag;
         
         new accountBalanceController().run(session, function (session) {

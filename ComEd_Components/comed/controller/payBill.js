@@ -45,10 +45,10 @@ function payBill() {
     this.createPayment = function(session,callback){
         let content = JSON.parse(session.content);
         if(content.success){
-            session.paymentSuccess = true;
+            session.paymentSuccess = 'success';
             callback(session)
         } else {
-            session.paymentSuccess = false;
+            session.paymentSuccess = content.meta.code == 'xmlPayment.duplicate' ? 'duplicate' : 'fail';
             callback(session)
         }
        

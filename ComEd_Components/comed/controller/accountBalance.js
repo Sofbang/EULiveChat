@@ -9,7 +9,6 @@ function accountBalance() {
     let meta = JSON.parse(JSON.stringify(metaData))
 
     this.balStatus = function (session, callback) {
-        console.log(session.content)
         let content = JSON.parse(session.content);
         if (content.success){
             session.actBalance = content.data.BillingInfo.netDueAmount;

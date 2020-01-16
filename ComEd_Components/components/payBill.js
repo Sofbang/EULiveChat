@@ -12,9 +12,11 @@ module.exports = {
             payBillWalletItemId: {required: true, type: 'string'},
             payBillPaymentApiFlag: {required: true, type: 'string'},
             payBillMaskedAccountNumber: {required: true, type: 'string'},
-            accountnumber: {required: true, type: 'string'}
+            accountnumber: {required: true, type: 'string'},
+            token: {required: true, type: 'string'},
+            sessionId:  {required: true, type: 'string'}
         },
-        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes','PayBillUserActSetupNo', 'Yes', 'No', 'Fail']
+        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes','PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -29,6 +31,14 @@ module.exports = {
         session.masked_wallet_item_account_number = conversation.properties().payBillMaskedAccountNumber;
         session.payment_date = new Date();
         session.accountNumber =  conversation.properties().accountnumber;
+        session.token = conversation.properties().token;
+        session.sessionId = conversation.properties().sessionId;
+
+
+        conversation.logger().info("**************Pay Bill Component*****************");
+        conversation.logger().info("Input parameter values: account_num: " + session.accountNumber);
+        conversation.logger().info("Input parameter values: token: " + session.token);
+        conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
 
 
         if(session.payBillPaymentApiFlag == "No"){
@@ -47,6 +57,7 @@ module.exports = {
                     conversation.variable('payBillWalletId',session.wallet_id);
                     conversation.variable('payBillWalletItemId',session.wallet_item_id);
                     conversation.variable('payBillMaskedAccountNumber',session.masked_wallet_item_account_number);
+       
                     session.userAccountBackendCheck ? conversation.transition("PayBillUserActSetupYes") : conversation.transition("PayBillUserActSetupNo");
                     done();
                 })
@@ -54,9 +65,18 @@ module.exports = {
         } else {
             new payBillController().run(session,function(session){
                 conversation.variable('actBalance',session.payment_amount)
-                console.log(session.paymentSuccess)
-                session.paymentSuccess ? conversation.transition("Yes") : conversation.transition("No");
-                done();
+    
+                conversation.logger().info(session.content);
+                if(session.paymentSuccess == 'success'){
+                    conversation.transition("Yes");
+                    done()
+                } else if(session.paymentSuccess == 'duplicate'){
+                    conversation.transition("Duplicate");
+                    done();
+                } else {
+                    conversation.transition("No");
+                    done();
+                }
             })
         }
         
