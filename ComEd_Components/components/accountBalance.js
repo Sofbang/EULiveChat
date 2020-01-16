@@ -9,7 +9,10 @@ module.exports = {
             actDueDate: {required: true, type: 'string'},
             accountnumber: {required: true, type: 'string'},
             address: {require:true, type: 'string'},
-            payBillAccountBalanceFlag:  {required: true, type: 'string'}
+            bdate: {require:true, type: 'string'},
+            payBillAccountBalanceFlag:  {required: true, type: 'string'},
+            token: {required: true, type: 'string'},
+            sessionId:  {required: true, type: 'string'}
         },
         supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent']
     }),
@@ -20,6 +23,11 @@ module.exports = {
         session.actBalance = conversation.properties().actBalance;
         session.actDueDate = conversation.properties().actDueDate;
         session.account_num = conversation.properties().accountnumber;
+        session.token = conversation.properties().token;
+        session.sessionId = conversation.properties().sessionId;
+        console.log(session.account_num);
+        console.log(session.token);
+        console.log(session.sessionId);
         let payBillAccountBalanceFlag = conversation.properties().payBillAccountBalanceFlag;
         
         new accountBalanceController().run(session, function (session) {
@@ -28,6 +36,7 @@ module.exports = {
                 conversation.variable("actDueDate",session.actDueDate);
                 conversation.variable("address",session.address);
                 conversation.variable("accountnumber",session.account_num);
+                conversation.variable("bdate",session.bdate);
                 payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
                 done();
             } else {

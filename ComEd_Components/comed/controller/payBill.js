@@ -13,6 +13,7 @@ function payBill() {
         if(content.success){
             session.apiCheck = true;
             if(content.data.WalletItems.length > 0){
+                content.data.WalletItems[0].isDefault = true;
                 let isDefaultData = _.filter(content.data.WalletItems,function(e){
                     return e.isDefault == true;
                 })
