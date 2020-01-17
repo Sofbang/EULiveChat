@@ -5,6 +5,14 @@ function utility(){
         let d = moment(date).format(format);
         return d;
     }
+
+    this.userLoginCheck = function(accountNumber, token, sessionId){
+        if(accountNumber == 'noAccountNumber' && token == 'noToken' && sessionId == 'noSessionId'){
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 
 module.exports = utility;

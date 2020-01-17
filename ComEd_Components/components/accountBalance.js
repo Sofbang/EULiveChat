@@ -1,5 +1,7 @@
 'use strict';
 let accountBalanceController = require("../comed/controller/accountBalance");
+let utility = require("../utilities/utility");
+let Utility = new utility();
 
 module.exports = {
     metadata: () => ({
@@ -14,7 +16,7 @@ module.exports = {
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'}
         },
-        supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent']
+        supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent','UserNotLoggedIn']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -34,27 +36,34 @@ module.exports = {
         
         let payBillAccountBalanceFlag = conversation.properties().payBillAccountBalanceFlag;
         
-        new accountBalanceController().run(session, function (session) {
-            if(session.checkString == "success"){
-                conversation.variable("actBalance",session.actBalance);
-                conversation.variable("actDueDate",session.actDueDate);
-                conversation.variable("address",session.address);
-                conversation.variable("accountnumber",session.account_num);
-                conversation.variable("bdate",session.bdate);
-                payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
-                done();
-            } else {
-                if (session.balance == "MultipleAccounts"){
-                    conversation.transition('MultiAccounts');
-                    done();
-                } else if(session.balance == "closed"){
-                    conversation.transition('WrongInformation');
+        let loginCheck = Utility.userLoginCheck(session.account_num,session.token,session.sessionId);
+        console.log(loginCheck)
+        if(loginCheck){
+            new accountBalanceController().run(session, function (session) {
+                if(session.checkString == "success"){
+                    conversation.variable("actBalance",session.actBalance);
+                    conversation.variable("actDueDate",session.actDueDate);
+                    conversation.variable("address",session.address);
+                    conversation.variable("accountnumber",session.account_num);
+                    conversation.variable("bdate",session.bdate);
+                    payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
                     done();
                 } else {
-                    conversation.reply("Server not responding, Please try again later");
-                    done();
+                    if (session.balance == "MultipleAccounts"){
+                        conversation.transition('MultiAccounts');
+                        done();
+                    } else if(session.balance == "closed"){
+                        conversation.transition('WrongInformation');
+                        done();
+                    } else {
+                        conversation.reply("Server not responding, Please try again later");
+                        done();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            conversation.transition('UserNotLoggedIn');
+            done();
+        }
     }
 };

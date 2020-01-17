@@ -1,5 +1,7 @@
 'use strict';
 let payBillController = require("../comed/controller/payBill");
+let utility = require("../utilities/utility");
+let Utility = new utility();
 
 module.exports = {
     metadata: () => ({
@@ -16,7 +18,7 @@ module.exports = {
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'}
         },
-        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes','PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate']
+        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes','PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate', 'UserNotLoggedIn']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -40,45 +42,50 @@ module.exports = {
         conversation.logger().info("Input parameter values: token: " + session.token);
         conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
 
-
-        if(session.payBillPaymentApiFlag == "No"){
-            if(session.payment_amount == 0){
-                conversation.transition("BalanceZero");
-                done();
-            } else if (session.payment_amount < 5){
-                conversation.transition("Balance<5");
-                done();
-            } else {
-                new payBillController().run(session,function(session){
-                    conversation.variable('actBalance',session.payment_amount);
-                    conversation.variable('accountnumber',session.accountNumber);
-                    conversation.variable('payBillWalletResult',session.payBillWalletResult);
-                    conversation.variable('payBillPaymentCategoryType',session.payment_category_type);
-                    conversation.variable('payBillWalletId',session.wallet_id);
-                    conversation.variable('payBillWalletItemId',session.wallet_item_id);
-                    conversation.variable('payBillMaskedAccountNumber',session.masked_wallet_item_account_number);
-       
-                    session.userAccountBackendCheck ? conversation.transition("PayBillUserActSetupYes") : conversation.transition("PayBillUserActSetupNo");
+        let loginCheck = Utility.userLoginCheck(session.accountNumber,session.token,session.sessionId);
+        
+        if(loginCheck){
+            if(session.payBillPaymentApiFlag == "No"){
+                if(session.payment_amount == 0){
+                    conversation.transition("BalanceZero");
                     done();
-                })
-            } 
-        } else {
-            new payBillController().run(session,function(session){
-                conversation.variable('actBalance',session.payment_amount)
-    
-                conversation.logger().info(session.content);
-                if(session.paymentSuccess == 'success'){
-                    conversation.transition("Yes");
-                    done()
-                } else if(session.paymentSuccess == 'duplicate'){
-                    conversation.transition("Duplicate");
+                } else if (session.payment_amount < 5){
+                    conversation.transition("Balance<5");
                     done();
                 } else {
-                    conversation.transition("No");
-                    done();
-                }
-            })
-        }
+                    new payBillController().run(session,function(session){
+                        conversation.variable('actBalance',session.payment_amount);
+                        conversation.variable('accountnumber',session.accountNumber);
+                        conversation.variable('payBillWalletResult',session.payBillWalletResult);
+                        conversation.variable('payBillPaymentCategoryType',session.payment_category_type);
+                        conversation.variable('payBillWalletId',session.wallet_id);
+                        conversation.variable('payBillWalletItemId',session.wallet_item_id);
+                        conversation.variable('payBillMaskedAccountNumber',session.masked_wallet_item_account_number);
+           
+                        session.userAccountBackendCheck ? conversation.transition("PayBillUserActSetupYes") : conversation.transition("PayBillUserActSetupNo");
+                        done();
+                    })
+                } 
+            } else {
+                new payBillController().run(session,function(session){
+                    conversation.variable('actBalance',session.payment_amount)
         
+                    conversation.logger().info(session.content);
+                    if(session.paymentSuccess == 'success'){
+                        conversation.transition("Yes");
+                        done()
+                    } else if(session.paymentSuccess == 'duplicate'){
+                        conversation.transition("Duplicate");
+                        done();
+                    } else {
+                        conversation.transition("No");
+                        done();
+                    }
+                })
+            }
+        } else {
+            conversation.transition('UserNotLoggedIn');
+            done();
+        }   
     }
 };

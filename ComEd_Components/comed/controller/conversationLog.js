@@ -120,6 +120,7 @@ function outageStatus() {
     
     
     this.sendEmail = function(session,callback){
+        console.log(session.conversationLogResponse)
         converter.json2csv(session.conversationLogResponse,function(err,csv){
             if(err)
                 console.log(err)
