@@ -1,5 +1,5 @@
 'use strict';
-//let userLoginController = require("../comed/controller/userLogin");
+
 let utility = require("../utilities/utility");
 let Utility = new utility();
 
@@ -28,7 +28,7 @@ module.exports = {
 
 
         let loginCheck = Utility.userLoginCheck(session.account_number,session.token,session.sessionId);
-        console.log(loginCheck)
+       
         if(loginCheck){
             conversation.transition('Success');
             done();

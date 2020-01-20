@@ -14,7 +14,8 @@ module.exports = {
             bdate: {require:true, type: 'string'},
             payBillAccountBalanceFlag:  {required: true, type: 'string'},
             token: {required: true, type: 'string'},
-            sessionId:  {required: true, type: 'string'}
+            sessionId:  {required: true, type: 'string'},
+            fanResult:  {required: true, type: 'string'}
         },
         supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent','UserNotLoggedIn']
     }),
@@ -40,28 +41,35 @@ module.exports = {
         console.log(loginCheck)
         if(loginCheck){
             new accountBalanceController().run(session, function (session) {
-                if(session.checkString == "success"){
-                    conversation.variable("actBalance",session.actBalance);
-                    conversation.variable("actDueDate",session.actDueDate);
-                    conversation.variable("address",session.address);
-                    conversation.variable("accountnumber",session.account_num);
-                    conversation.variable("bdate",session.bdate);
-                    payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
+                if(session.statusCode != undefined && session.statusCode == 401){
+                    conversation.variable("fanResult","Your session has been expired");
+                    conversation.transition('UserNotLoggedIn');
                     done();
                 } else {
-                    if (session.balance == "MultipleAccounts"){
-                        conversation.transition('MultiAccounts');
-                        done();
-                    } else if(session.balance == "closed"){
-                        conversation.transition('WrongInformation');
+                    if(session.checkString == "success"){
+                        conversation.variable("actBalance",session.actBalance);
+                        conversation.variable("actDueDate",session.actDueDate);
+                        conversation.variable("address",session.address);
+                        conversation.variable("accountnumber",session.account_num);
+                        conversation.variable("bdate",session.bdate);
+                        payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
                         done();
                     } else {
-                        conversation.reply("Server not responding, Please try again later");
-                        done();
+                        if (session.balance == "MultipleAccounts"){
+                            conversation.transition('MultiAccounts');
+                            done();
+                        } else if(session.balance == "closed"){
+                            conversation.transition('WrongInformation');
+                            done();
+                        } else {
+                            conversation.reply("Server not responding, Please try again later");
+                            done();
+                        }
                     }
                 }
             });
         } else {
+            conversation.variable("fanResult","You are not signed in");
             conversation.transition('UserNotLoggedIn');
             done();
         }

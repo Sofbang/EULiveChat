@@ -6,24 +6,29 @@ function reportOutage() {
     let meta = JSON.parse(JSON.stringify(metaData))
 
     this.reportStatus = function (session, callback) {
-        let content = JSON.parse(session.content)
-        if(content.success){
-            session.confirmationNumber = content.data.confirmationNumber
-            session.success = true
+        if(session.content == 401){
+            session.statusCode = 401;
             callback(session)
         } else {
-            session.success = false
-            if(content.meta.code === "TC-ACCT-INVALID"){
-                session.checkString = 'Invalid Account Number'
-                callback(session)
-            } else if(content.meta.code === "TC-USER-INVALID"){
-                session.checkString = 'UserInvalid'
-                callback(session)
+            let content = JSON.parse(session.content)
+            if(content.success){
+                session.confirmationNumber = content.data.confirmationNumber;
+                session.success = true;
+                callback(session);
             } else {
-                session.checkString = 'unknown'
-                callback(session)
+                session.success = false
+                if(content.meta.code === "TC-ACCT-INVALID"){
+                    session.checkString = 'Invalid Account Number';
+                    callback(session);
+                } else if(content.meta.code === "TC-USER-INVALID"){
+                    session.checkString = 'UserInvalid';
+                    callback(session);
+                } else {
+                    session.checkString = 'unknown';
+                    callback(session);
+                }
             }
-        } 
+        }
     };
 
     this.run = function (session, callback) {
@@ -35,7 +40,6 @@ function reportOutage() {
                 }.bind(this));
             }.bind(this));
         } else {
-            console.log("Hello")
             HttpService.httpRequest(meta.reportOutagePost,meta.hostName, session, function (session) {
                 this.reportStatus(session, function (session) {
                     callback(session)

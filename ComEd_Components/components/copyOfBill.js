@@ -18,9 +18,9 @@ module.exports = {
     invoke: (conversation, done) => {
         // perform conversation tasks.
     
-        let session = {};        
+        let session = {};    
+        session.bdate = conversation.properties().bdate;    
         session.account_number = conversation.properties().accountnumber;
-        session.bdate = conversation.properties().bdate;
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
         
@@ -33,23 +33,30 @@ module.exports = {
 
         if(loginCheck){
             new CopyOfBill().run(session,function(session){
-                if(session.checkApi){
-                    conversation.variable("fanResult",session.pdfBill);
-                    conversation.transition('Success');
+                if(session.statusCode != undefined && session.statusCode == 401){
+                    conversation.variable("fanResult","Your session has been expired");
+                    conversation.transition('UserNotLoggedIn');
                     done();
                 } else {
-                    if(session.pdfBill == "FN-BILL-NOTFOUND"){
-                        conversation.variable("fanResult", "Bill not found");
-                        conversation.transition('Fail');
+                    if(session.checkApi){
+                        conversation.variable("fanResult",session.pdfBill);
+                        conversation.transition('Success');
                         done();
                     } else {
-                        conversation.variable("fanResult", "Server not responding, Please try later.");
-                        conversation.transition('Fail');
-                        done();
+                        if(session.pdfBill == "FN-BILL-NOTFOUND"){
+                            conversation.variable("fanResult", "Bill not found");
+                            conversation.transition('Fail');
+                            done();
+                        } else {
+                            conversation.variable("fanResult", "Server not responding, Please try later.");
+                            conversation.transition('Fail');
+                            done();
+                        }
                     }
                 }
             })
         } else {
+            conversation.variable("fanResult","You are not signed in");
             conversation.transition('UserNotLoggedIn');
             done();
         }

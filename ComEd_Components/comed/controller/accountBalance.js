@@ -9,28 +9,32 @@ function accountBalance() {
     let meta = JSON.parse(JSON.stringify(metaData))
 
     this.balStatus = function (session, callback) {
-        let content = JSON.parse(session.content);
-        if (content.success){
-            session.actBalance = content.data.BillingInfo.netDueAmount;
-            session.actDueDate =  Utility.dateFormat(content.data.BillingInfo.dueByDate,'YYYY-MM-DD');
-            session.address = content.data.address;
-            session.bdate = Utility.dateFormat(content.data.BillingInfo.billDate,'YYYY-MM-DD');
-            session.checkString = "success"
+        if(session.content == 401){
+            session.statusCode = 401;
             callback(session)
         } else {
-            session.checkString = "fail"
-            if (content.meta.code === "FN-MULTIPLE-ACCOUNTS") {
-                session.balance = "MultipleAccounts"
-                callback(session)
-            } else if (content.meta.code === "TC-ACCT-CLOSED"){
-                session.balance = "closed"
+            let content = JSON.parse(session.content);
+            if (content.success){
+                session.actBalance = content.data.BillingInfo.netDueAmount;
+                session.actDueDate =  Utility.dateFormat(content.data.BillingInfo.dueByDate,'YYYY-MM-DD');
+                session.address = content.data.address;
+                session.bdate = Utility.dateFormat(content.data.BillingInfo.billDate,'YYYY-MM-DD');
+                session.checkString = "success"
                 callback(session)
             } else {
-                session.balance = "TC-UNKNOWN"
-                callback(session)
+                session.checkString = "fail"
+                if (content.meta.code === "FN-MULTIPLE-ACCOUNTS") {
+                    session.balance = "MultipleAccounts"
+                    callback(session)
+                } else if (content.meta.code === "TC-ACCT-CLOSED"){
+                    session.balance = "closed"
+                    callback(session)
+                } else {
+                    session.balance = "TC-UNKNOWN"
+                    callback(session)
+                }
             }
-        }
-                
+        }         
     };
 
     this.run = function (session, callback) {

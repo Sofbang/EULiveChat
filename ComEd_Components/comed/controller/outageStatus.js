@@ -6,47 +6,50 @@ function outageStatus() {
     let meta = JSON.parse(JSON.stringify(metaData))
 
     this.omsStatus = function (session, callback) {
-        let content = JSON.parse(session.content)
-        let data = content.meta != undefined && content.meta.code == "FN-ACCT-MULTIPLE" ? content.data : content.data != undefined && content.data.length > 0 ? content.data[0] : content;
-        console.log(data)
-        if(content.success){
-            session.phoneAccCheck = true;
-            if(data.length > 1){
-                session.multipleAcc = "Yes";
-                session.accountNum = "";
-                for (let i in data){
-                    let d = data[i].accountNumber;
-                    session.accountNum += d + ","
-                }
-                session.accountNum = session.accountNum.slice(0,-1)
-                callback(session)
-            } else {
-                session.phone = data.contactHomeNumber;
-                session.accountNumber = data.accountNumber;
-                session.multipleAcc = "No";
-                //data.status = "ACTIVE";
-                if (data.status === "NOT ACTIVE") {
-                    session.omrStatus = 'No';
-                    //data.outageReported = '';
-                    if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
-                        session.outageReported = 'Yes'
-                        callback(session)
+        if(session.content == 401){
+            session.statusCode = 401;
+            callback(session)
+        } else {
+            let content = JSON.parse(session.content)
+            let data = content.meta != undefined && content.meta.code == "FN-ACCT-MULTIPLE" ? content.data : content.data != undefined && content.data.length > 0 ? content.data[0] : content;
+            if(content.success){
+                session.phoneAccCheck = true;
+                if(data.length > 1){
+                    session.multipleAcc = "Yes";
+                    session.accountNum = "";
+                    for (let i in data){
+                        let d = data[i].accountNumber;
+                        session.accountNum += d + ","
+                    }
+                    session.accountNum = session.accountNum.slice(0,-1)
+                    callback(session)
+                } else {
+                    session.phone = data.contactHomeNumber;
+                    session.accountNumber = data.accountNumber;
+                    session.multipleAcc = "No";
+                    //data.status = "ACTIVE";
+                    if (data.status === "NOT ACTIVE") {
+                        session.omrStatus = 'No';
+                        //data.outageReported = '';
+                        if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
+                            session.outageReported = 'Yes'
+                            callback(session)
+                        } else {
+                            session.address =  data.address;
+                            session.outageReported = 'No'
+                            callback(session)
+                        }
                     } else {
+                        session.omrStatus = 'Yes';
                         session.address =  data.address;
-                        session.outageReported = 'No'
                         callback(session)
                     }
-                } else {
-                    session.omrStatus = 'Yes';
-                    session.address =  data.address;
-                    callback(session)
                 }
+            } else {
+                session.phoneAccCheck = false;
+                callback(session)
             }
-        } else {
-            session.phoneAccCheck = false;
-            callback(session)
         }
-        
     };
 
     this.run = function (session, callback) {

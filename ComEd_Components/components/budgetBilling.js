@@ -19,8 +19,8 @@ module.exports = {
          // perform conversation tasks.
 
         let session = {};
-        session.account_num = conversation.properties().accountnumber;
         session.enrollment = conversation.properties().enrollment;
+        session.account_num = conversation.properties().accountnumber;
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
 
@@ -33,35 +33,41 @@ module.exports = {
 
         if(loginCheck){
             new budgetBillingController().run(session, function (session) {
-                if(!session.enrollment){
-                    if(session.budgetEligible == 'AlreadyEnrolled'){
-                        conversation.transition('EnrolledAlready');
-                        done();
-                    } else {
-                        session.budgetEligible ? conversation.transition('Yes') : conversation.transition('No');
-                        done();
-                    }
+                if(session.statusCode != undefined && session.statusCode == 401){
+                    conversation.variable("fanResult","Your session has been expired");
+                    conversation.transition('UserNotLoggedIn');
+                    done();
                 } else {
-                    if(session.resp){
-                        conversation.variable('fanResult',session.enrollVal);
-                        conversation.transition('EnrollSuccess');
-                        done();
-                    } else {
-                        if(session.checkString == 'noteligible'){
-                            conversation.transition('NotEligible');
-                            done();
-                        } else if (session.checkString == 'enrolled'){
+                    if(!session.enrollment){
+                        if(session.budgetEligible == 'AlreadyEnrolled'){
                             conversation.transition('EnrolledAlready');
                             done();
                         } else {
-                            conversation.reply("Server not responding, Please try again later.")
-                            done;
+                            session.budgetEligible ? conversation.transition('Yes') : conversation.transition('No');
+                            done();
+                        }
+                    } else {
+                        if(session.resp){
+                            conversation.variable('fanResult',session.enrollVal);
+                            conversation.transition('EnrollSuccess');
+                            done();
+                        } else {
+                            if(session.checkString == 'noteligible'){
+                                conversation.transition('NotEligible');
+                                done();
+                            } else if (session.checkString == 'enrolled'){
+                                conversation.transition('EnrolledAlready');
+                                done();
+                            } else {
+                                conversation.reply("Server not responding, Please try again later.")
+                                done;
+                            }
                         }
                     }
                 }
-                
             });
         } else {
+            conversation.variable("fanResult","You are not signed in");
             conversation.transition('UserNotLoggedIn');
             done();
         }

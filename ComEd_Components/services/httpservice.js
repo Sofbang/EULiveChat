@@ -22,7 +22,7 @@ function httpservice() {
                     'Content-Type': 'application/json',
                     'oracle-mobile-backend-id': '09282f50-ed11-4d68-b5cb-20bbed263373',
                     'Authorization': 'Bearer ' + session.token,
-                    'Cookie': 'ASP.NET_SessionId='+session.sessionId
+                    'Cookie': 'ASP.NET_SessionId='+ session.sessionId
                 },
             };
 
@@ -34,27 +34,40 @@ function httpservice() {
                     if (err) {
                         console.error(err);
                     }
-                    session.content = responseContent;
-                    callback(session);
+                    if(resp.statusCode == 401){
+                        session.content = 401;
+                        callback(session);
+                    } else {
+                        session.content = responseContent;
+                        callback(session);
+                    }
                 }.bind(this))
             } else if (stepMetadata.method === "Put") {
-                console.log(reqOptions)
                 req.put(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);
                     }
-                    session.content = responseContent;
-                    callback(session);
+                    if(resp.statusCode == 401){
+                        session.content = 401;
+                        callback(session);
+                    } else {
+                        session.content = responseContent;
+                        callback(session);
+                    }
                 }.bind(this))
             } else {
                 this.preparePost(reqOptions, session, stepMetadata);
-                console.log(reqOptions)
                 req.post(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);
                     }
-                    session.content = responseContent;
-                    callback(session);
+                    if(resp.statusCode == 401){
+                        session.content = 401;
+                        callback(session);
+                    } else {
+                        session.content = responseContent;
+                        callback(session);
+                    }
                 }.bind(this));
             }
         } catch (err) {

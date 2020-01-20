@@ -10,19 +10,21 @@ module.exports = {
             loginAuthenticated: { required: true, type: 'string' },
             address: {required:true, type: 'string'},
             token: {required: true, type: 'string'},
-            sessionId:  {required: true, type: 'string'}
+            sessionId:  {required: true, type: 'string'},
+            fanResult: {required: true, type: 'string'},
         },
-        supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive']
+        supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive','UserNotLoggedIn']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
         let session = {};
         session.phone = conversation.properties().phonenumber;
-        session.account_number = conversation.properties().accountnumber;
         session.loginAuthenticated = conversation.properties().loginAuthenticated;
         session.address = conversation.properties().address;
+        session.account_number = conversation.properties().accountnumber;
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
+        
         
         conversation.logger().info("**************Outage Status Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_number);
@@ -30,36 +32,40 @@ module.exports = {
         conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
 
         new OutageController().run(session,function (session) {
-            if(session.phoneAccCheck){
-                if(session.multipleAcc == 'Yes'){
-                    conversation.variable("fanResult",session.accountNum);
-                    conversation.transition('MultipleAccounts');
-                    done();
-                }else{
-                    conversation.variable('address',session.address);
-                    conversation.variable('phonenumber',session.phone);
-                    conversation.variable('accountnumber',session.accountNumber);
-                    conversation.variable('loginAuthenticated',session.loginAuthenticated);
-                    if(session.omrStatus == "Yes"){
-                        conversation.transition("OmrActive");
+            if(session.statusCode != undefined && session.statusCode == 401){
+                conversation.variable("fanResult","Your session has been expired");
+                conversation.transition('UserNotLoggedIn');
+                done();
+            } else {
+                if(session.phoneAccCheck){
+                    if(session.multipleAcc == 'Yes'){
+                        conversation.variable("fanResult",session.accountNum);
+                        conversation.transition('MultipleAccounts');
                         done();
-                    } else {
-                        if(session.outageReported == "Yes"){
-                            conversation.transition("Yes")
+                    }else{
+                        conversation.variable('address',session.address);
+                        conversation.variable('phonenumber',session.phone);
+                        conversation.variable('accountnumber',session.accountNumber);
+                        conversation.variable('loginAuthenticated',session.loginAuthenticated);
+                        if(session.omrStatus == "Yes"){
+                            conversation.transition("OmrActive");
                             done();
                         } else {
-                            conversation.transition("No")
-                            done();
+                            if(session.outageReported == "Yes"){
+                                conversation.transition("Yes")
+                                done();
+                            } else {
+                                conversation.transition("No")
+                                done();
+                            }
                         }
+                    
                     }
-                   
+                } else {
+                    conversation.transition('Invalid');
+                    done();
                 }
-            } else {
-                conversation.transition('Invalid');
-                done();
             }
-            
-            
         });
     }
 };
