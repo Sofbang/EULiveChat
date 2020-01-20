@@ -21,10 +21,12 @@ function httpservice() {
                     'Connection': 'keep-alive',
                     'Content-Type': 'application/json',
                     'oracle-mobile-backend-id': '09282f50-ed11-4d68-b5cb-20bbed263373',
-                    'Authorization': 'Bearer ' + session.token,
+                    'Authorization': session.loginAuthenticated != undefined && session.loginAuthenticated == "No" ? "Basic YW5vbl90c3Q6NkclUXViQGxaQm1vZ09xJFc4Qlg=" : 'Bearer ' + session.token,
                     'Cookie': 'ASP.NET_SessionId='+ session.sessionId
                 },
             };
+
+            session.loginAuthenticated != undefined && session.loginAuthenticated == "No" ? delete reqOptions.headers.Cookie : reqOptions;
 
             this.prepareGet(reqOptions, session, stepMetadata);
 
@@ -57,6 +59,7 @@ function httpservice() {
                 }.bind(this))
             } else {
                 this.preparePost(reqOptions, session, stepMetadata);
+                console.log(reqOptions)    
                 req.post(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);

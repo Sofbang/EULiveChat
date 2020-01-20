@@ -26,11 +26,11 @@ function outageStatus() {
                 } else {
                     session.phone = data.contactHomeNumber;
                     session.accountNumber = data.accountNumber;
+                    session.maskedAccountNumber = data.maskedAccountNumber.slice(-4);
+                    session.maskedAddress = data.maskedAddress;
                     session.multipleAcc = "No";
-                    //data.status = "ACTIVE";
                     if (data.status === "NOT ACTIVE") {
                         session.omrStatus = 'No';
-                        //data.outageReported = '';
                         if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
                             session.outageReported = 'Yes'
                             callback(session)
