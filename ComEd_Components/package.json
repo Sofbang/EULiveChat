@@ -11,6 +11,7 @@
   },
   "repository": {},
   "dependencies": {
+    "base64topdf": "^1.1.8",
     "cheerio": "^1.0.0-rc.3",
     "email-validator": "^2.0.4",
     "json-2-csv": "^3.5.9",
@@ -19,13 +20,15 @@
     "moment": "^2.24.0",
     "nodemailer": "^6.4.2",
     "pdf-image": "^2.0.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "spsave": "^3.1.6"
   },
   "devDependencies": {
     "@oracle/bots-node-sdk": "^2.2.2",
     "express": "^4.16.3"
   },
   "bundledDependencies": [
+    "base64topdf",
     "cheerio",
     "email-validator",
     "json-2-csv",
@@ -34,6 +37,7 @@
     "moment",
     "nodemailer",
     "pdf-image",
-    "request"
+    "request",
+    "spsave"
   ]
 }

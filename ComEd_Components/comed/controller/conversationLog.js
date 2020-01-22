@@ -4,7 +4,7 @@ let transporter = require('../../services/nodemailer').mailConfig();
 const validator = require("email-validator");
 const https = require('https');
 let converter = require('json-2-csv');
-
+const moment = require('moment');
 
 function outageStatus() {
     let HttpService = new httpService();
@@ -120,23 +120,29 @@ function outageStatus() {
     
     
     this.sendEmail = function(session,callback){
-        console.log(session.conversationLogResponse)
+        Object.keys(session.conversationLogResponse).forEach(function (key) {
+            session.conversationLogResponse[key].chatTranscript = session.conversationLogResponse[key].payload;
+            session.conversationLogResponse[key].createdOn = moment(new Date(session.conversationLogResponse[key].createdOn)).format('DD/MM/YYYY HH:mm:ss');
+            delete session.conversationLogResponse[key].payload;
+            delete session.conversationLogResponse[key].id;
+        });
         converter.json2csv(session.conversationLogResponse,function(err,csv){
             if(err)
                 console.log(err)
-            var message = "<BR>Hello<br>";
+            var message = "<br>Hello " + session.email+ "<br><br><br> Please find the attached Chat Transcripts.<br><br>Regards,<br>" + meta.smtpDetails.fromAddress;
             var mailOptions = {
-                from: 'mannavakarthik009@gmail.com',
+                from: meta.smtpDetails.fromAddress,
                 to: session.email,
-                subject: 'Summary of Conversation',
+                subject: 'ComED Chat Transcripts',
                 html : message,
                 attachments: [{
-                    filename: 'conversationLog.csv',
+                    filename: 'ChatTranscripts.csv',
                     content: csv
                 }]
             };
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
+                    console.log(error)
                     error_op = error;
                     session.emailSent = false;
                     callback(session);

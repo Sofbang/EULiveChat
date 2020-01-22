@@ -110,5 +110,16 @@
     "idcsAuthorizationURI" : "/oauth2/v1/token",
     "odaHostName" : "https://sofbangtempoda-sofbangucc.botmxp.ocp.oraclecloud.com",
     "conversationUri": "/api/v1/bots/sessions/?sessionId/log"   
+  },
+  "sharePointCredentials":{
+    "siteUrl": "https://sofbangllc.sharepoint.com/sites/ExelonChatbots",
+    "username": "karthik.mannava@sofbang.com",
+    "password": "1700Summer",
+    "folder": "Shared%20Documents/AI_LiveChat_Pdfs"
+  },
+  "smtpDetails": {
+    "username": "karthik.mannava@sofbang.com",
+    "password": "1700Summer",
+    "fromAddress": "karthik.mannava@sofbang.com"
   }
 }
