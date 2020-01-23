@@ -1,6 +1,10 @@
-!function(e,t,n,r){
-    function s(){try{var e;if((e="string"==typeof this.response?JSON.parse(this.response):this.response).url){var n=t.getElementsByTagName("script")[0],r=t.createElement("script");r.async=!0,r.src=e.url,n.parentNode.insertBefore(r,n)}}catch(e){}}var o,p,a,i=[],c=[];e[n]={init:function(){o=arguments;var e={then:function(t){return c.push({type:"t",next:t}),e},catch:function(t){return c.push({type:"c",next:t}),e}};return e},on:function(){i.push(arguments)},render:function(){p=arguments},destroy:function(){a=arguments}},e.__onWebMessengerHostReady__=function(t){if(delete e.__onWebMessengerHostReady__,e[n]=t,o)for(var r=t.init.apply(t,o),s=0;s<c.length;s++){var u=c[s];r="t"===u.type?r.then(u.next):r.catch(u.next)}p&&t.render.apply(t,p),a&&t.destroy.apply(t,a);for(s=0;s<i.length;s++)t.on.apply(t,i[s])};var u=new XMLHttpRequest;u.addEventListener("load",s),u.open("GET",r+"/loader.json",!0),u.responseType="json",u.send()
-}(window,document,"Bots", "http://localhost:3000/bots-client-sdk-js");
+!function (e, t, n, r) {
+    function s() { try { var e; if ((e = "string" == typeof this.response ? JSON.parse(this.response) : this.response).url) { var n = t.getElementsByTagName("script")[0], r = t.createElement("script"); r.async = !0, r.src = e.url, n.parentNode.insertBefore(r, n) } } catch (e) { } } var o, p, a, i = [], c = []; e[n] = { init: function () { o = arguments; var e = { then: function (t) { return c.push({ type: "t", next: t }), e }, catch: function (t) { return c.push({ type: "c", next: t }), e } }; return e }, on: function () { i.push(arguments) }, render: function () { p = arguments }, destroy: function () { a = arguments } }, e.__onWebMessengerHostReady__ = function (t) { if (delete e.__onWebMessengerHostReady__, e[n] = t, o) for (var r = t.init.apply(t, o), s = 0; s < c.length; s++) { var u = c[s]; r = "t" === u.type ? r.then(u.next) : r.catch(u.next) } p && t.render.apply(t, p), a && t.destroy.apply(t, a); for (s = 0; s < i.length; s++)t.on.apply(t, i[s]) }; var u = new XMLHttpRequest; u.addEventListener("load", s), u.open("GET", r + "/loader.json", !0), u.responseType = "json", u.send()
+}(window, document, "Bots", "http://localhost:3000/bots-client-sdk-js");
+
+var agentAvailable = false;
+var AgentIconUrl = "/images/agent.png";
+var botIconUrl = "/images/Bot_Avatar.svg";
 
 function initbots() {
     var messageBody = {
@@ -33,8 +37,7 @@ function initbots() {
         Bots.on('widget:opened', function () {
             if (Bots.getConversation().messages != null && Bots.getConversation().messages.length < 1) {
                 Bots.setDelegate({
-
-                    beforeDisplay(messageBody) {
+                    beforeDisplay: function (messageBody) {  // Updated by Zohaib
                         if (messageBody.metadata && messageBody.metadata.isHidden) {
                             return null;
                         }
@@ -48,33 +51,40 @@ function initbots() {
         //console.log('calling Bots.on message');
 
         Bots.on('message', function (message) {
-                Bots.setDelegate({
-                    beforeDisplay(message) {
-                        let shouldDisplay = false;
-                        ////console.log('ON message beforeDisplay >>' + JSON.stringify(message));
-                        try {
-                            shouldDisplay = message.metadata.isHidden;
-                            return null;
-                        } catch (error) {
-                            //console.log("ON message message.metadata.isHidden error = " + error);
-                            if (message.text.includes('Ask ComEd')) {
-                                let displayText = message.text.replace('Ask ComEd', '');
-                                message.text = displayText;
-                                return message;
-                            } else {
-                                return message;
-                            }
+            Bots.setDelegate({
+                beforeDisplay: function (message) { // Updated by Zohaib
+                    let shouldDisplay = false;
+                    try {
+                        shouldDisplay = message.metadata.isHidden;
+                        return null;
+                    } catch (error) {
+                        if (message.text.indexOf('Ask ComEd') > -1) {  // Updated by Zohaib
+                            let displayText = message.text.replace('Ask ComEd', '');
+                            message.text = displayText;
+                            return message;
+                        } else {
+                            return message;
                         }
                     }
-                });
-         
-
-            //  console.log("message"+JSON.stringify(Bots.getConversation().messages));
+                }
+            });
+            var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
+            messengerDocument.getElementById("conversation").style.visibility = "visible";
+            this.setAgentAvailability(message.text);
+            var imgTag = messengerDocument.querySelectorAll("[id='avatar']");
+            for (var i = 0; i < imgTag.length; i++) {
+                if (agentAvailable) {
+                    imgTag[imgTag.length - 1].src = AgentIconUrl; // Zohaib Khan: Setting the Agent icon based on Availability.
+                } else {
+                    imgTag[imgTag.length - 1].src = botIconUrl; // Zohaib Khan: Setting the default bot avatar if agent is not available.
+                }
+            }
+            var cdescItems = messengerDocument.querySelectorAll('.carousel-description');
             var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
             messengerDocument.getElementById("conversation").style.visibility = "visible";
             var cdescItems = messengerDocument.querySelectorAll('.carousel-description');
             if (cdescItems != null) {
-                cdescItems.forEach(function (singleCDesc) {
+                $.each(cdescItems, function (singleCDesc) { // Updated by Zohaib
                     singleCDesc.style = "margin: 0px 8px 13px; font-size: 13px; color: rgb(179, 179, 179); white-space: pre-wrap; flex: 2 1";
                 });
             }
@@ -83,10 +93,20 @@ function initbots() {
         /* CUSTOM - END*/
         //});
     }).then(customUI); /* CUSTOM - */
-
 }
 
+// Zohaib Khan -- 01/12/2020 -- Will set the availibility of Agent based on the text coming from OSC.
+function setAgentAvailability(fromMessage) {
+    var agentAvailableText = "I can help you find more information on appliances. What information are you looking for?";
+    var agentLeftText = "Ok, let's pay your bill. Would you like to pay online, sign up for AutoPay, or learn about other payment methods?";
 
+    if (fromMessage == agentAvailableText) {
+        agentAvailable = true;
+    }
+    if (fromMessage == agentLeftText) {
+        agentAvailable = false;
+    }
+}
 
 function clearChat(e) {
     if (e != null) e.preventDefault(); /* CUSTOM - Added if(e != null) */
@@ -212,7 +232,7 @@ function Close() {
 
 function Close() {
     var messengerDocument = document.getElementById('web-messenger-container').contentDocument;
-    messengerDocument.getElementById("prompt").style.display = "grid";
+    messengerDocument.getElementById("prompt").style.display = "inline";
     messengerDocument.getElementById("conversation").style.opacity = "0.2";
     messengerDocument.getElementById("cslider").style.opacity = "0.2";
     messengerDocument.getElementById("footer").style.opacity = "0.2";
