@@ -1,10 +1,6 @@
 "use strict";
 
 var request = require('request');
-var cheerio = require('cheerio');
-
-var log_mode = (process.env.LOG_MODE != null) ? process.env.LOG_MODE : 'debug';
-
 
 function httpservice() {
     var req = request.defaults({
@@ -15,15 +11,17 @@ function httpservice() {
 
         try {
             let form = {};
-            let reqOptions = {
-                url: stepMetadata.url.replace('?hostName',hostName),
-                headers: {
+            let headers = stepMetadata.name != undefined && stepMetadata.name == "chatSurveyApi" ? {
+                'Ocp-Apim-Subscription-Key': stepMetadata["Ocp-Apim-Subscription-Key"]} : {
                     'Connection': 'keep-alive',
                     'Content-Type': 'application/json',
                     'oracle-mobile-backend-id': '09282f50-ed11-4d68-b5cb-20bbed263373',
                     'Authorization': session.loginAuthenticated != undefined && session.loginAuthenticated == "No" ? "Basic YW5vbl90c3Q6NkclUXViQGxaQm1vZ09xJFc4Qlg=" : 'Bearer ' + session.token,
                     'Cookie': 'ASP.NET_SessionId='+ session.sessionId
-                },
+                }
+            let reqOptions = {
+                url: stepMetadata.url.replace('?hostName',hostName),
+                headers: headers
             };
 
             session.loginAuthenticated != undefined && session.loginAuthenticated == "No" ? delete reqOptions.headers.Cookie : reqOptions;
@@ -59,7 +57,7 @@ function httpservice() {
                 }.bind(this))
             } else {
                 this.preparePost(reqOptions, session, stepMetadata);
-                console.log(reqOptions)    
+                console.log(reqOptions)  
                 req.post(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);
@@ -84,7 +82,6 @@ function httpservice() {
         for (var key in getParams) {
             getParams[key] = session[key];
             reqOptions.url += key + '=' + getParams[key] + '&';
-
         }
     };
 
@@ -94,7 +91,11 @@ function httpservice() {
             for (var key in requestParams) {
                 requestParams[key] = requestParams[key].indexOf('?') !== -1 ? session[requestParams[key].replace('?', '')] : requestParams[key];
             }
-            reqOptions.form = requestParams;
+            if(stepMetadata.name != undefined && stepMetadata.name == "chatSurveyApi"){
+                reqOptions.json = requestParams;
+            } else {
+                reqOptions.form = requestParams;
+            }
         }
     };
 }

@@ -121,5 +121,17 @@
     "username": "karthik.mannava@sofbang.com",
     "password": "1700Summer",
     "fromAddress": "karthik.mannava@sofbang.com"
+  },
+  "chatSurveyApi": {
+    "name": "chatSurveyApi",
+    "url": "https://xze-e-n-cosmospoc-d.azure-api.net/gamification/feedback",
+    "method": "Post",
+    "Ocp-Apim-Subscription-Key": "2d20325a8e93420e93512dd738280f73",
+    "postParams": {
+      "userName": "?userName",
+      "source": "Digital Assistant",
+      "rating": "?rating",
+      "comments": "?comments"
+    }
   }
 }
