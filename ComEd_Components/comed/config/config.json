@@ -131,7 +131,8 @@
       "userName": "?userName",
       "source": "Digital Assistant",
       "rating": "?rating",
-      "comments": "?comments"
+      "comments": "?comments",
+      "timestamp": "?timestamp"
     }
   }
 }

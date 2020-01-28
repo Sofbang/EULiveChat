@@ -7,7 +7,8 @@ module.exports = {
         name: 'chatSurvey',
         properties: {
             rating: { required: true, type: 'int' },
-            chatSurveyComments: {required: true, type: 'string'}
+            chatSurveyComments: {required: true, type: 'string'},
+            email: {required: true, type: 'string'}
         },
         supportedActions: ['Success', 'Fail']
     }),
@@ -16,14 +17,18 @@ module.exports = {
 
         let session = {};
         session.rating = conversation.properties().rating;
-        session.comments = conversation.properties().chatSurveyComments;
-        session.userName = ""
-        
+        session.comments = conversation.properties().chatSurveyComments == '${chatSurveyComments.value}' ? "" : conversation.properties().chatSurveyComments;
+        session.userName = conversation.properties().email == 'noemail@test.com' ? "" : conversation.properties().email;
+        session.timestamp = new Date();
+
         conversation.logger().info("**************Chat Survey Component*****************");
         conversation.logger().info("Input parameter values: rating: " + session.rating);
         conversation.logger().info("Input parameter values: comments: " + session.comments);
+        conversation.logger().info("Input parameter values: Email: " + session.userName);
+        conversation.logger().info("Input parameter values: Timestamp: " + session.timestamp);
         
         new ChatSurveyController().run(session,function(session){
+            console.log(session.content)
             if(session.content == "True"){
                 conversation.transition("Success");
                 done();
