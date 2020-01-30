@@ -7,7 +7,7 @@ function httpservice() {
         jar: request.jar(),                // save cookies to jar
         followAllRedirects: true
     });
-    this.httpRequest = function (stepMetadata,hostName, session, callback) {
+    this.httpRequest = function (stepMetadata,hostName, session, conversation, callback) {
 
         try {
             let form = {};
@@ -29,7 +29,7 @@ function httpservice() {
             this.prepareGet(reqOptions, session, stepMetadata);
 
             if (stepMetadata.method === "Get") {
-                console.log(reqOptions)
+                conversation.logger().info("Get Request Options: " + reqOptions);
                 req.get(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);
@@ -43,6 +43,7 @@ function httpservice() {
                     }
                 }.bind(this))
             } else if (stepMetadata.method === "Put") {
+                conversation.logger().info("Put Request Options: " + reqOptions);
                 req.put(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);
@@ -57,7 +58,7 @@ function httpservice() {
                 }.bind(this))
             } else {
                 this.preparePost(reqOptions, session, stepMetadata);
-                console.log(reqOptions)  
+                conversation.logger().info("Post Request Options: " + reqOptions);  
                 req.post(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);
@@ -72,8 +73,7 @@ function httpservice() {
                 }.bind(this));
             }
         } catch (err) {
-            console.log(err)
-            //logger.runTimeException(session, err);
+            conversation.logger().info("Error At HttpService Module: " + err);
         }
     }.bind(this);
 

@@ -31,16 +31,16 @@ function reportOutage() {
         }
     };
 
-    this.run = function (session, callback) {
+    this.run = function (session,conversation, callback) {
         if(session.loginAuthenticated == 'Yes'){
             meta.reportOutageAuthenticatedPost.url = meta.reportOutageAuthenticatedPost.url.replace("?accountNumber",session.account_number);
-            HttpService.httpRequest(meta.reportOutageAuthenticatedPost,meta.hostName, session, function (session) {
+            HttpService.httpRequest(meta.reportOutageAuthenticatedPost,meta.hostName, session, conversation, function (session) {
                 this.reportStatus(session, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
         } else {
-            HttpService.httpRequest(meta.reportOutagePost,meta.hostName, session, function (session) {
+            HttpService.httpRequest(meta.reportOutagePost,meta.hostName, session, conversation, function (session) {
                 this.reportStatus(session, function (session) {
                     callback(session)
                 }.bind(this));

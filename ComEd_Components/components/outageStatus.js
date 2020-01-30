@@ -54,7 +54,7 @@ module.exports = {
                 }
             }
         } else {
-            new OutageController().run(session,function (session) {
+            new OutageController().run(session,conversation,function (session) {
                 if(session.statusCode != undefined && session.statusCode == 401){
                     conversation.variable("fanResult","Your session has been expired");
                     conversation.transition('UserNotLoggedIn');

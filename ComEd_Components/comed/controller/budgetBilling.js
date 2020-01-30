@@ -49,17 +49,17 @@ function accountBalance() {
         }   
     };
 
-    this.run = function (session, callback) {
+    this.run = function (session, conversation, callback) {
         meta.budgetBillingGet.url = meta.budgetBillingGet.url.replace("?accountNumber",session.account_num);
         if(!session.enrollment){
-            HttpService.httpRequest(meta.budgetBillingGet,meta.hostName, session, function (session) {
+            HttpService.httpRequest(meta.budgetBillingGet,meta.hostName, session,conversation, function (session) {
                 this.budgetBilling(session, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
         } else {
             meta.budgetEnrollmentPut.url = meta.budgetEnrollmentPut.url.replace("?accountNumber",session.account_num);
-            HttpService.httpRequest(meta.budgetEnrollmentPut,meta.hostName, session, function (session) {
+            HttpService.httpRequest(meta.budgetEnrollmentPut,meta.hostName, session,conversation, function (session) {
                 this.budgetEnroll(session, function (session) {
                     callback(session)
                 }.bind(this));

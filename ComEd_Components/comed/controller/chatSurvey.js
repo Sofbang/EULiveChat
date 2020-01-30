@@ -7,8 +7,8 @@ function chatSurvey() {
     let HttpService = new httpService();
     let meta = JSON.parse(JSON.stringify(metaData))
 
-    this.run = function (session, callback) {
-        HttpService.httpRequest(meta.chatSurveyApi,meta.hostName, session, function (session) {
+    this.run = function (session, conversation, callback) {
+        HttpService.httpRequest(meta.chatSurveyApi,meta.hostName, session, conversation, function (session) {
            callback(session);
         }.bind(this));
     }

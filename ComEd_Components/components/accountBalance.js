@@ -38,9 +38,9 @@ module.exports = {
         let payBillAccountBalanceFlag = conversation.properties().payBillAccountBalanceFlag;
         
         let loginCheck = Utility.userLoginCheck(session.account_num,session.token,session.sessionId);
-        console.log(loginCheck)
+       
         if(loginCheck){
-            new accountBalanceController().run(session, function (session) {
+            new accountBalanceController().run(session,conversation, function (session) {
                 if(session.statusCode != undefined && session.statusCode == 401){
                     conversation.variable("fanResult","Your session has been expired");
                     conversation.transition('UserNotLoggedIn');
@@ -54,7 +54,7 @@ module.exports = {
                         conversation.variable("bdate",session.bdate);
                         payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
                         done();
-                    } else {
+                    } else if (session.checkString == "fail"){
                         if (session.balance == "MultipleAccounts"){
                             conversation.transition('MultiAccounts');
                             done();
@@ -65,6 +65,9 @@ module.exports = {
                             conversation.reply("Server not responding, Please try again later");
                             done();
                         }
+                    } else {
+                        conversation.reply("Unknown issue occured");
+                        done();
                     }
                 }
             });

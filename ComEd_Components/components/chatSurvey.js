@@ -27,7 +27,7 @@ module.exports = {
         conversation.logger().info("Input parameter values: Email: " + session.userName);
         conversation.logger().info("Input parameter values: Timestamp: " + session.timestamp);
         
-        new ChatSurveyController().run(session,function(session){
+        new ChatSurveyController().run(session,conversation, function(session){
             console.log(session.content)
             if(session.content == "True"){
                 conversation.transition("Success");

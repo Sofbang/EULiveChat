@@ -59,9 +59,9 @@ function payBill() {
        
     }
 
-    this.run = function (session, callback) {
+    this.run = function (session, conversation, callback) {
         if (session.payBillPaymentApiFlag == "No"){
-            HttpService.httpRequest(meta.payBillWalletPost,meta.hostName, session, function (session) {
+            HttpService.httpRequest(meta.payBillWalletPost,meta.hostName, session,conversation, function (session) {
                 this.payBillStatus(session, function (session) {
                     callback(session)
                 }.bind(this));
@@ -69,7 +69,7 @@ function payBill() {
         } else {
             session.payment_category_type = session.payment_category_type == "CREDIT" ? 'Card' : 'Check';
             meta.payBillCreatePaymentPost.url = meta.payBillCreatePaymentPost.url.replace("?accountNumber",session.accountNumber);
-            HttpService.httpRequest(meta.payBillCreatePaymentPost,meta.hostName, session, function (session) {
+            HttpService.httpRequest(meta.payBillCreatePaymentPost,meta.hostName, session,conversation, function (session) {
                 this.createPayment(session, function (session) {
                    callback(session);
                 }.bind(this));

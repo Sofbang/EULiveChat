@@ -16,7 +16,7 @@ function outageStatus() {
         callback(session);
     }
 
-    this.getAccessToken = function(oauthApi,session,callback){
+    this.getAccessToken = function(oauthApi,session, conversation, callback){
      
         let authorizationToken = "Basic " + Buffer.from(oauthApi.clientId + ':' + oauthApi.clientSecret).toString('base64');
         let postData = "grant_type=client_credentials&scope=" + oauthApi.scopeUrl;
@@ -36,7 +36,7 @@ function outageStatus() {
                 "Authorization": authorizationToken
             }
         }
-        console.log(options);
+        conversation.logger().info(options);
 
         let req = https.request(options, (res) => {
             //not authenicated
@@ -62,6 +62,7 @@ function outageStatus() {
         });
         //return from function if things go bad
         req.on('error', (error) => {
+            conversation.logger().info(error);
             session.accessTokenResponse = error;
         });
     
@@ -70,7 +71,7 @@ function outageStatus() {
         req.end(postData);
     }
 
-    this.getConversationLog = function(oauthApi,session,callback){
+    this.getConversationLog = function(oauthApi,session, conversation, callback){
         const conversationUri = oauthApi.conversationUri.replace("?sessionId",session.sessionId);
         let indexOfProtocolEnd = oauthApi.odaHostName.indexOf("://");
         var odaHostName = oauthApi.odaHostName.substring(indexOfProtocolEnd + 3);
@@ -85,8 +86,8 @@ function outageStatus() {
                 "Authorization": session.accessTokenResponse
             }
         }
+        conversation.logger().info(options)
         
-        console.log(options)
         let req = https.request(options, (res) => {
             //The session doesn't exist or conversation logging on the skill is disabled.
         
@@ -112,6 +113,7 @@ function outageStatus() {
         });
     
         req.on('error', (error) => {
+            conversation.logger().info(error);
             session.conversationLogResponse = error;
         });
         //its a GET request, so no data to post with the request body
@@ -119,7 +121,7 @@ function outageStatus() {
     }
     
     
-    this.sendEmail = function(session,callback){
+    this.sendEmail = function(session, conversation, callback){
         Object.keys(session.conversationLogResponse).forEach(function (key) {
             session.conversationLogResponse[key].chatTranscript = session.conversationLogResponse[key].payload;
             session.conversationLogResponse[key].createdOn = moment(new Date(session.conversationLogResponse[key].createdOn)).format('DD/MM/YYYY HH:mm:ss');
@@ -128,7 +130,7 @@ function outageStatus() {
         });
         converter.json2csv(session.conversationLogResponse,function(err,csv){
             if(err)
-                console.log(err)
+                conversation.logger.info(err);
             var message = "<br>Hello " + session.email+ "<br><br><br> Please find the attached Chat Transcripts.<br><br>Regards,<br>" + meta.smtpDetails.fromAddress;
             var mailOptions = {
                 from: meta.smtpDetails.fromAddress,
@@ -142,7 +144,7 @@ function outageStatus() {
             };
             transporter.sendMail(mailOptions, function(error, info){
                 if (error) {
-                    console.log(error)
+                    conversation.logger().info(error);
                     error_op = error;
                     session.emailSent = false;
                     callback(session);
@@ -156,12 +158,12 @@ function outageStatus() {
         });
     }
 
-    this.run = function (session, callback) {
+    this.run = function (session, conversation, callback) {
         this.emailValidation(session,function(session){
             if(session.emailValidation){
-                this.getAccessToken(meta.idcsOauthTokenApi,session,function(session){
-                    this.getConversationLog(meta.idcsOauthTokenApi,session,function(session){
-                        this.sendEmail(session,function(session){
+                this.getAccessToken(meta.idcsOauthTokenApi,session, conversation, function(session){
+                    this.getConversationLog(meta.idcsOauthTokenApi,session, conversation, function(session){
+                        this.sendEmail(session, conversation, function(session){
                             callback(session)
                         }.bind(this));
                     }.bind(this));

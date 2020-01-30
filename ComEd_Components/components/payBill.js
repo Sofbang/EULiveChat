@@ -53,7 +53,7 @@ module.exports = {
                     conversation.transition("Balance<5");
                     done();
                 } else {
-                    new payBillController().run(session,function(session){
+                    new payBillController().run(session, conversation, function(session){
                         if(session.statusCode != undefined && session.statusCode == 401){
                             conversation.variable("fanResult","Your session has been expired");
                             conversation.transition('UserNotLoggedIn');
@@ -78,7 +78,7 @@ module.exports = {
                     })
                 } 
             } else {
-                new payBillController().run(session,function(session){
+                new payBillController().run(session, conversation, function(session){
                     if(session.statusCode != undefined && session.statusCode == 401){
                         conversation.variable("fanResult","Your session has been expired");
                         conversation.transition('UserNotLoggedIn');

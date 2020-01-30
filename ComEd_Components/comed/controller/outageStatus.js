@@ -52,17 +52,17 @@ function outageStatus() {
         }
     };
 
-    this.run = function (session, callback) {
+    this.run = function (session,conversation, callback) {
         if(session.loginAuthenticated == 'Yes'){
             meta.outageAuthenticatedGet.url = meta.outageAuthenticatedGet.url.replace("?accountNumber",session.account_number);
-            HttpService.httpRequest(meta.outageAuthenticatedGet,meta.hostName, session, function (session) {
+            HttpService.httpRequest(meta.outageAuthenticatedGet,meta.hostName, session, conversation, function (session) {
                 this.omsStatus(session, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
         } else {
             session.phone == "" ? delete meta.outagePost.postParams.phone : delete meta.outagePost.postParams.account_number;
-            HttpService.httpRequest(meta.outagePost,meta.hostName, session, function (session) {
+            HttpService.httpRequest(meta.outagePost,meta.hostName, session, conversation, function (session) {
                 this.omsStatus(session, function (session) {
                     callback(session)
                 }.bind(this));

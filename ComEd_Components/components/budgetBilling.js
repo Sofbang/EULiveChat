@@ -32,7 +32,7 @@ module.exports = {
         let loginCheck = Utility.userLoginCheck(session.account_num,session.token,session.sessionId);
 
         if(loginCheck){
-            new budgetBillingController().run(session, function (session) {
+            new budgetBillingController().run(session,conversation, function (session) {
                 if(session.statusCode != undefined && session.statusCode == 401){
                     conversation.variable("fanResult","Your session has been expired");
                     conversation.transition('UserNotLoggedIn');

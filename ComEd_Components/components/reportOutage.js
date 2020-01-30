@@ -34,7 +34,7 @@ module.exports = {
         conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
 
 
-        new reportOutageController().run(session,function (session) {
+        new reportOutageController().run(session, conversation, function (session) {
             if(session.statusCode != undefined && session.statusCode == 401){
                 conversation.variable("fanResult","Your session has been expired");
                 conversation.transition('UserNotLoggedIn');
