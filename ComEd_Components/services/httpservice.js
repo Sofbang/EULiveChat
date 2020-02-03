@@ -74,6 +74,8 @@ function httpservice() {
             }
         } catch (err) {
             conversation.logger().info("Error At HttpService Module: " + err);
+            session.errorResponse = "ApiError";
+            callback(session);
         }
     }.bind(this);
 

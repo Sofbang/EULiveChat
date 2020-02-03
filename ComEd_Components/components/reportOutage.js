@@ -14,7 +14,7 @@ module.exports = {
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'}
         },
-        supportedActions: ['outageReportResult','UserNotLoggedIn']
+        supportedActions: ['outageReportResult','UserNotLoggedIn', 'DefaultErrorHandler']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -29,9 +29,7 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
 
         conversation.logger().info("**************Report Outage Component*****************");
-        conversation.logger().info("Input parameter values: account_num: " + session.account_number);
-        conversation.logger().info("Input parameter values: token: " + session.token);
-        conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
+        conversation.logger().info("Input parameter values: account_num: " + session.account_number, + " ,token: " + session.token + " ,sessionId: " + session.sessionId);
 
 
         new reportOutageController().run(session, conversation, function (session) {

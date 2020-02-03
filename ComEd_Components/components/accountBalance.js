@@ -17,7 +17,7 @@ module.exports = {
             sessionId:  {required: true, type: 'string'},
             fanResult:  {required: true, type: 'string'}
         },
-        supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent','UserNotLoggedIn']
+        supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent','UserNotLoggedIn', 'DefaultErrorHandler']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -30,10 +30,8 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
         
         conversation.logger().info("**************Account Balance Component*****************");
-        conversation.logger().info("Input parameter values: account_num: " + session.account_num);
-        conversation.logger().info("Input parameter values: token: " + session.token);
-        conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
-        
+        conversation.logger().info("Input parameter values: account_num: " + session.account_num, + " ,token: " + session.token + " ,sessionId: " + session.sessionId);
+    
         
         let payBillAccountBalanceFlag = conversation.properties().payBillAccountBalanceFlag;
         
@@ -62,11 +60,11 @@ module.exports = {
                             conversation.transition('WrongInformation');
                             done();
                         } else {
-                            conversation.reply("Server not responding, Please try again later");
+                            conversation.transition('DefaultErrorHandler');
                             done();
                         }
                     } else {
-                        conversation.reply("Unknown issue occured");
+                        conversation.transition('DefaultErrorHandler');
                         done();
                     }
                 }

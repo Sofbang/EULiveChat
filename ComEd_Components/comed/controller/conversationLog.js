@@ -129,32 +129,35 @@ function outageStatus() {
             delete session.conversationLogResponse[key].id;
         });
         converter.json2csv(session.conversationLogResponse,function(err,csv){
-            if(err)
-                conversation.logger.info(err);
-            var message = "<br>Hello " + session.email+ "<br><br><br> Please find the attached Chat Transcripts.<br><br>Regards,<br>" + meta.smtpDetails.fromAddress;
-            var mailOptions = {
-                from: meta.smtpDetails.fromAddress,
-                to: session.email,
-                subject: 'ComED Chat Transcripts',
-                html : message,
-                attachments: [{
-                    filename: 'ChatTranscripts.csv',
-                    content: csv
-                }]
-            };
-            transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                    conversation.logger().info(error);
-                    error_op = error;
-                    session.emailSent = false;
-                    callback(session);
-                } else {
-                    error_op = info.response;
-                    session.emailSent = true;
-                    console.log('Email sent: ' + JSON.stringify(info));
-                    callback(session);
-                }
-            });
+            if(err) {
+                conversation.logger.info("CSV Error: " + err);
+            } else {
+                var message = "<br>Hello " + session.email+ "<br><br><br> Please find the attached Chat Transcripts.<br><br>Regards,<br>" + meta.smtpDetails.fromAddress;
+                var mailOptions = {
+                    from: meta.smtpDetails.fromAddress,
+                    to: session.email,
+                    subject: 'ComED Chat Transcripts',
+                    html : message,
+                    attachments: [{
+                        filename: 'ChatTranscripts.csv',
+                        content: csv
+                    }]
+                };
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                        conversation.logger().info("Email Failed")
+                        conversation.logger().info(error);
+                        error_op = error;
+                        session.emailSent = false;
+                        callback(session);
+                    } else {
+                        error_op = info.response;
+                        session.emailSent = true;
+                        conversation.logger().info('Email sent: ' + JSON.stringify(info));
+                        callback(session);
+                    }
+                });
+            }  
         });
     }
 

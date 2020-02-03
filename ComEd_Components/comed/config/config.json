@@ -124,7 +124,7 @@
   },
   "chatSurveyApi": {
     "name": "chatSurveyApi",
-    "url": "https://xze-e-n-cosmospoc-d.azure-api.net/gamification/feedback",
+    "url": "https://xze-e-n-cosmospoc-d.azure-api.net/chatbot/feedback",
     "method": "Post",
     "Ocp-Apim-Subscription-Key": "2d20325a8e93420e93512dd738280f73",
     "postParams": {

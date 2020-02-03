@@ -19,7 +19,7 @@ module.exports = {
             sessionId:  {required: true, type: 'string'},
             fanResult: {required: true, type: 'string'}
         },
-        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes','PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate', 'UserNotLoggedIn']
+        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes','PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate', 'UserNotLoggedIn', 'DefaultErrorHandler']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -38,9 +38,7 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
         
         conversation.logger().info("**************Pay Bill Component*****************");
-        conversation.logger().info("Input parameter values: account_num: " + session.accountNumber);
-        conversation.logger().info("Input parameter values: token: " + session.token);
-        conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
+        conversation.logger().info("Input parameter values: account_num: " + session.accountNumber, + " ,token: " + session.token + " ,sessionId: " + session.sessionId);
 
         let loginCheck = Utility.userLoginCheck(session.accountNumber,session.token,session.sessionId);
         

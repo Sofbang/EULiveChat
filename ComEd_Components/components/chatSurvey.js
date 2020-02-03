@@ -10,7 +10,7 @@ module.exports = {
             chatSurveyComments: {required: true, type: 'string'},
             email: {required: true, type: 'string'}
         },
-        supportedActions: ['Success', 'Fail']
+        supportedActions: ['Success', 'Fail', 'DefaultErrorHandler']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -22,13 +22,9 @@ module.exports = {
         session.timestamp = new Date();
 
         conversation.logger().info("**************Chat Survey Component*****************");
-        conversation.logger().info("Input parameter values: rating: " + session.rating);
-        conversation.logger().info("Input parameter values: comments: " + session.comments);
-        conversation.logger().info("Input parameter values: Email: " + session.userName);
-        conversation.logger().info("Input parameter values: Timestamp: " + session.timestamp);
+        conversation.logger().info("Input parameter values: rating: " + session.rating + " ,comments: " + session.comments + " ,Email: " + session.userName + " ,Timestamp: " + session.timestamp);
         
         new ChatSurveyController().run(session,conversation, function(session){
-            console.log(session.content)
             if(session.content == "True"){
                 conversation.transition("Success");
                 done();

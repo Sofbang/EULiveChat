@@ -13,7 +13,7 @@ module.exports = {
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'}
         },
-        supportedActions: ['Success', 'Fail', 'UserNotLoggedIn']
+        supportedActions: ['Success', 'Fail', 'UserNotLoggedIn', 'DefaultErrorHandler']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -25,9 +25,7 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
         
         conversation.logger().info("**************Download My Bill Component*****************");
-        conversation.logger().info("Input parameter values: account_num: " + session.account_number);
-        conversation.logger().info("Input parameter values: token: " + session.token);
-        conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
+        conversation.logger().info("Input parameter values: account_num: " + session.account_number, + " ,token: " + session.token + " ,sessionId: " + session.sessionId);
 
         let loginCheck = Utility.userLoginCheck(session.account_number,session.token,session.sessionId);
 

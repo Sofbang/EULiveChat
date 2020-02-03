@@ -13,6 +13,10 @@ function utility(){
             return true;
         }
     }
+
+    this.errorCodeHandler = function(code){
+        
+    }
 }
 
 module.exports = utility;

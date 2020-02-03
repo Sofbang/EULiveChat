@@ -7,15 +7,14 @@ module.exports = {
          properties: {
              email: { required: true, type: 'string' }      
          },
-         supportedActions: ['Success', 'Fail', 'Invalid']
+         supportedActions: ['Success', 'Fail', 'Invalid', 'DefaultErrorHandler']
      }),
      invoke: (conversation, done) => {
          // perform conversation tasks.
          let session = {};
          session.email = conversation.properties().email;
          session.sessionId = conversation.sessionId()
-         conversation.logger().info("Input parameter values: Email: " + session.email);
-         conversation.logger().info("Input parameter values: SessionId: " + session.sessionId);
+         conversation.logger().info("Input parameter values: Email: " + session.email + " ,SessionId: " + session.sessionId);
      
         new ConversationLogController().run(session, conversation, function (session) {
             if(session.emailValidation){

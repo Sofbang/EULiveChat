@@ -13,12 +13,12 @@ function accountBalance() {
             callback(session)
         } else {
             let content = JSON.parse(session.content);
-            //content.data.enrolled = true;
             if(content.success){
+                conversation.logger().info("Budget Billing Api Response Success at Budget Billing Method");
                 session.budgetEligible = content.data.isBudgetBillingAvailable && content.data.enrolled ? 'AlreadyEnrolled' :
                 content.data.isBudgetBillingAvailable ? true : false;
+                callback(session)
             }
-            callback(session)
         }
     };
 
@@ -29,6 +29,7 @@ function accountBalance() {
         } else {
             let content = JSON.parse(session.content);
             if(content.success){
+                conversation.logger().info("Budget Billing Enrollment API Success at Budget Enroll Method");
                 session.resp = true
                 session.enrollVal = "You've successfully enrolled in budget billing! Look for an email to confirm your enrollment soon./n" +
                 "Please note the Confirmation NUmber: " + content.data.confirmationNumber + " for future reference.";
@@ -36,12 +37,15 @@ function accountBalance() {
             }else{
                 session.resp = false
                 if(content.meta.code === "FN-NOT-ELIGIBLE"){
-                    session.checkString = 'noteligible'
+                    conversation.logger().info("Budget Billing Enrollment API Not Eligible exception at Budget Enroll Method");
+                    session.checkString = 'noteligible';
                     callback(session) 
                 } else if(content.meta.code === "FN-ALREADY-ENROLLED"){
-                    session.checkString = 'enrolled'
+                    conversation.logger().info("Budget Billing Enrollment API Already Enrolled exception at Budget Enroll Method");
+                    session.checkString = 'enrolled';
                     callback(session) 
                 } else {
+                    conversation.logger().info("Budget Billing Enrollment API Unknown exception at Budget Enroll Method");
                     session.checkString = 'unknown'
                     callback(session) 
                 }

@@ -22,9 +22,7 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
 
         conversation.logger().info("**************User Login Component*****************");
-        conversation.logger().info("Input parameter values: account_num: " + session.account_number);
-        conversation.logger().info("Input parameter values: token: " + session.token);
-        conversation.logger().info("Input parameter values: sessionId: " + session.sessionId);
+        conversation.logger().info("Input parameter values: account_num: " + session.account_number, + " ,token: " + session.token + " ,sessionId: " + session.sessionId);
 
 
         let loginCheck = Utility.userLoginCheck(session.account_number,session.token,session.sessionId);
