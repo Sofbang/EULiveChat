@@ -12,7 +12,8 @@ module.exports = {
             loginAuthenticated: { required: true, type: 'string' },
             accountnumber: { required: true, type: 'string' },
             token: {required: true, type: 'string'},
-            sessionId:  {required: true, type: 'string'}
+            sessionId:  {required: true, type: 'string'},
+            envirornment: {required: true, type: 'string'}
         },
         supportedActions: ['outageReportResult','UserNotLoggedIn', 'DefaultErrorHandler', 
         'TcUserInvalid', 'Invalid']
@@ -28,10 +29,11 @@ module.exports = {
         session.account_number = conversation.properties().accountnumber;
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
+        session.envirornment = conversation.properties().envirornment;
+        
 
         conversation.logger().info("**************Report Outage Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_number + ", token: " + session.token + ", sessionId: " + session.sessionId);
-
 
         new reportOutageController().run(session, conversation,done, function (session) {
             if(session.statusCode != undefined && session.statusCode == 401){

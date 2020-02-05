@@ -15,7 +15,8 @@ module.exports = {
             payBillAccountBalanceFlag:  {required: true, type: 'string'},
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'},
-            fanResult:  {required: true, type: 'string'}
+            fanResult:  {required: true, type: 'string'},
+            envirornment:  {required: true, type: 'string'}
         },
         supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent',
         'UserNotLoggedIn', 'DefaultErrorHandler', 'FnAccProtected', 'TcUserInvalid']
@@ -29,6 +30,7 @@ module.exports = {
         session.account_num = conversation.properties().accountnumber;
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
+        session.envirornment = conversation.properties().envirornment;
         
         conversation.logger().info("**************Account Balance Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_num + ", token: " + session.token + ", sessionId: " + session.sessionId);

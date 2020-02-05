@@ -15,8 +15,8 @@ module.exports = {
             maskedAddress: {required: true, type: 'string'},
             maskedAccountNumber: {required: true, type: 'string'},
             omrStatus: {required: true, type: 'string'},
-            outageReported: {required: true, type: 'string'}
-
+            outageReported: {required: true, type: 'string'},
+            envirornment: {required: true, type: 'string'}
         },
         supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive',
         'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid']
@@ -34,7 +34,8 @@ module.exports = {
         session.maskedAccountNumber = conversation.properties().maskedAccountNumber;
         session.omrStatus = conversation.properties().omrStatus;
         session.outageReported = conversation.properties().outageReported;
-        
+        session.envirornment = conversation.properties().envirornment;
+
 
         conversation.logger().info("**************Outage Status Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_number + ", token: " + session.token + ", sessionId: " + session.sessionId);

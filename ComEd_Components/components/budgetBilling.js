@@ -11,7 +11,8 @@ module.exports = {
             enrollment: {required:true, type: 'boolean'},
             fanResult: {required: true, type: 'string'},
             token: {required: true, type: 'string'},
-            sessionId:  {required: true, type: 'string'}
+            sessionId:  {required: true, type: 'string'},
+            envirornment: {required: true, type: 'string'}
          },
          supportedActions: ['Yes','No','EnrollSuccess','NotEligible','EnrolledAlready',
          'UserNotLoggedIn', 'DefaultErrorHandler', 'TcUserInvalid']
@@ -24,6 +25,8 @@ module.exports = {
         session.account_num = conversation.properties().accountnumber;
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
+        session.envirornment = conversation.properties().envirornment;
+
 
         conversation.logger().info("**************Budget Billing Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_num + ", token: " + session.token + ", sessionId: " + session.sessionId);

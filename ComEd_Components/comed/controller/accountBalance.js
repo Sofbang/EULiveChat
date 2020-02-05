@@ -6,7 +6,7 @@ let moment = require('moment');
 function accountBalance() {
     let HttpService = new httpService();
     let Utility = new utility();
-    let meta = JSON.parse(JSON.stringify(metaData))
+    let meta = JSON.parse(JSON.stringify(metaData));
 
     this.balStatus = function (session, conversation, callback) {
         if (session.content == 401) {
@@ -43,6 +43,8 @@ function accountBalance() {
     };
 
     this.run = function (session, conversation, done, callback) {
+        meta.hostName = session.envirornment == "production" ? meta.prodHostName : session.envirornment == "stage" ? meta.stageHostName : meta.devHostName;
+        conversation.logger().info("HostName: " + meta.hostName);
         meta.accountBalanceGet.url = meta.accountBalanceGet.url.replace("?accountNumber", session.account_num);
         HttpService.httpRequest(meta.accountBalanceGet, meta.hostName, session, conversation,done, function (session) {
             this.balStatus(session, conversation, function (session) {

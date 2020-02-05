@@ -36,6 +36,8 @@ function reportOutage() {
     };
 
     this.run = function (session, conversation,done, callback) {
+        meta.hostName = session.envirornment == "development" ? meta.devHostName : session.envirornment == "stage" ? meta.stageHostName : meta.prodHostName;
+        conversation.logger().info("HostName: " + meta.hostName);
         if (session.loginAuthenticated == 'Yes') {
             conversation.logger().info("Calling Report Outage Authenticated API.")
             meta.reportOutageAuthenticatedPost.url = meta.reportOutageAuthenticatedPost.url.replace("?accountNumber", session.account_number);

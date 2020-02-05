@@ -1,6 +1,8 @@
 {
   "name": "ComED Services",
-  "hostName": "d-e-euweb-livechat-comed-ui-01.azurewebsites.net/.mcs",
+  "devHostName": "d-e-euweb-livechat-comed-ui-01.azurewebsites.net/.mcs",
+  "stageHostName": "",
+  "prodHostName": "",
   "payBillWalletPost": {
     "name": "payBillWalletPost",
     "url": "https://?hostName/mobile/custom/auth_v6/wallet/query",

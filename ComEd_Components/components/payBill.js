@@ -17,7 +17,8 @@ module.exports = {
             accountnumber: {required: true, type: 'string'},
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'},
-            fanResult: {required: true, type: 'string'}
+            fanResult: {required: true, type: 'string'},
+            envirornment: {required: true, type: 'string'}
         },
         supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes',
         'PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate', 'UserNotLoggedIn', 
@@ -38,7 +39,9 @@ module.exports = {
         session.accountNumber =  conversation.properties().accountnumber;
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
-        
+        session.envirornment = conversation.properties().envirornment;
+
+
         conversation.logger().info("**************Pay Bill Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.accountNumber + ", token: " + session.token + ", sessionId: " + session.sessionId);
 
