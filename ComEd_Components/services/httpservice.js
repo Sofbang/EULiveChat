@@ -7,7 +7,7 @@ function httpservice() {
         jar: request.jar(),                // save cookies to jar
         followAllRedirects: true
     });
-    this.httpRequest = function (stepMetadata,hostName, session, conversation, callback) {
+    this.httpRequest = function (stepMetadata,hostName, session, conversation,done, callback) {
 
         try {
             let form = {};
@@ -29,10 +29,12 @@ function httpservice() {
             this.prepareGet(reqOptions, session, stepMetadata);
 
             if (stepMetadata.method === "Get") {
-                conversation.logger().info("Get Request Options: " + reqOptions);
+                conversation.logger().info("Get Request Options: " + JSON.stringify(reqOptions));
                 req.get(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);
+                        conversation.transition('DefaultErrorHandler');
+                        done();
                     }
                     if(resp.statusCode == 401){
                         session.content = 401;
@@ -43,10 +45,12 @@ function httpservice() {
                     }
                 }.bind(this))
             } else if (stepMetadata.method === "Put") {
-                conversation.logger().info("Put Request Options: " + reqOptions);
+                conversation.logger().info("Put Request Options: " + JSON.stringify(reqOptions));
                 req.put(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);
+                        conversation.transition('DefaultErrorHandler');
+                        done();
                     }
                     if(resp.statusCode == 401){
                         session.content = 401;
@@ -58,10 +62,12 @@ function httpservice() {
                 }.bind(this))
             } else {
                 this.preparePost(reqOptions, session, stepMetadata);
-                conversation.logger().info("Post Request Options: " + reqOptions);  
+                conversation.logger().info("Post Request Options: " + JSON.stringify(reqOptions));  
                 req.post(reqOptions, function (err, resp, responseContent) {
                     if (err) {
                         console.error(err);
+                        conversation.transition('DefaultErrorHandler');
+                        done();
                     }
                     if(resp.statusCode == 401){
                         session.content = 401;
@@ -73,9 +79,10 @@ function httpservice() {
                 }.bind(this));
             }
         } catch (err) {
-            conversation.logger().info("Error At HttpService Module: " + err);
-            session.errorResponse = "ApiError";
-            callback(session);
+            conversation.logger().info("Error At HttpService Module:");
+            conversation.logger().info(err);
+            conversation.transition('DefaultErrorHandler');
+            done();
         }
     }.bind(this);
 

@@ -16,7 +16,7 @@ module.exports = {
          session.sessionId = conversation.sessionId()
          conversation.logger().info("Input parameter values: Email: " + session.email + " ,SessionId: " + session.sessionId);
      
-        new ConversationLogController().run(session, conversation, function (session) {
+        new ConversationLogController().run(session, conversation,done, function (session) {
             if(session.emailValidation){
                 if(session.emailSent){
                     conversation.transition('Success');

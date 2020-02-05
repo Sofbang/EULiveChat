@@ -161,7 +161,7 @@ function outageStatus() {
         });
     }
 
-    this.run = function (session, conversation, callback) {
+    this.run = function (session, conversation,done, callback) {
         this.emailValidation(session,function(session){
             if(session.emailValidation){
                 this.getAccessToken(meta.idcsOauthTokenApi,session, conversation, function(session){

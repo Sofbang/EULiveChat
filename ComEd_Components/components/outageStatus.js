@@ -18,7 +18,8 @@ module.exports = {
             outageReported: {required: true, type: 'string'}
 
         },
-        supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive','UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler']
+        supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive',
+        'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -36,7 +37,7 @@ module.exports = {
         
 
         conversation.logger().info("**************Outage Status Component*****************");
-        conversation.logger().info("Input parameter values: account_num: " + session.account_number, + " ,token: " + session.token + " ,sessionId: " + session.sessionId);
+        conversation.logger().info("Input parameter values: account_num: " + session.account_number + ", token: " + session.token + ", sessionId: " + session.sessionId);
 
         if(session.omrStatus != ""){
             if(session.omrStatus == "Yes"){
@@ -52,13 +53,13 @@ module.exports = {
                 }
             }
         } else {
-            new OutageController().run(session,conversation,function (session) {
+            new OutageController().run(session,conversation,done,function (session) {
                 if(session.statusCode != undefined && session.statusCode == 401){
                     conversation.variable("fanResult","Your session has been expired");
                     conversation.transition('UserNotLoggedIn');
                     done();
                 } else {
-                    if(session.phoneAccCheck){
+                    if(session.checkString == 'success'){
                         if(session.multipleAcc == 'Yes'){
                             conversation.variable("fanResult",session.accountNum);
                             conversation.transition('MultipleAccounts');
@@ -88,11 +89,28 @@ module.exports = {
                             } else {
                                 conversation.transition('ContinueOutage');
                                 done();
-                            }
-                            
+                            }     
                         }
+                    } else if (session.checkString == 'fail'){
+                        if(session.content.meta.code == "TC-ACCT-INVALID"){
+                            conversation.logger().info("Check Outage Status Invalid Account Number")
+                            conversation.transition('Invalid');
+                            done();
+                        } else if (session.content.meta.code == "TC-USER-INVALID"){
+                            conversation.logger().info("Check Outage Status API User Invalid Exception at balStatus method");
+                            conversation.transition('TcUserInvalid');
+                            done();
+                        } else if (session.content.meta.code == "FN-ACCOUNT-FINALED"){
+                            conversation.logger().info("Check Outage Status API Account Finaled Exception at balStatus method");
+                            conversation.transition('TcUserInvalid');
+                            done();
+                        } else {
+                            conversation.logger().info("Check Outage Status API Unknown exception at Budget Enroll Method");
+                            conversation.transition('TcUserInvalid');
+                            done(); 
+                        }   
                     } else {
-                        conversation.transition('Invalid');
+                        conversation.transition('DefaultErrorHandler');
                         done();
                     }
                 }

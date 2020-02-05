@@ -8,53 +8,44 @@ function accountBalance() {
     let Utility = new utility();
     let meta = JSON.parse(JSON.stringify(metaData))
 
-    this.balStatus = function (session, callback) {
-        if(session.errorResponse != undefined && session.errorResponse == "ApiError"){
-            session.checkString = 'runTimeError';
-            callback(session);
+    this.balStatus = function (session, conversation, callback) {
+        if (session.content == 401) {
+            session.statusCode = 401;
+            callback(session)
         } else {
-            if(session.content == 401){
-                session.statusCode = 401;
-                callback(session)
-            } else {
+            try {
                 let content = JSON.parse(session.content);
-                if (content != undefined && content != null && content != "" && content.success){
+                session.content = content;
+                if (content != undefined && content != null && content != "" && content.success) {
                     conversation.logger().info("Account Balance Api Success at balStatus method");
                     session.actBalance = content.data.BillingInfo.netDueAmount;
-                    session.actDueDate =  Utility.dateFormat(content.data.BillingInfo.dueByDate,'YYYY-MM-DD');
+                    session.actDueDate = Utility.dateFormat(content.data.BillingInfo.dueByDate, 'YYYY-MM-DD');
                     session.address = content.data.address;
-                    session.bdate = Utility.dateFormat(content.data.BillingInfo.billDate,'YYYY-MM-DD');
+                    session.bdate = Utility.dateFormat(content.data.BillingInfo.billDate, 'YYYY-MM-DD');
                     session.checkString = "success"
                     callback(session)
-                } else if (content != undefined && content != null && content != "" && content.success == false){
-                    session.checkString = "fail"
-                    if (content.meta.code === "FN-MULTIPLE-ACCOUNTS") {
-                        conversation.logger().info("Account Balance Api Multiple Accounts Exception at balStatus method");
-                        session.balance = "MultipleAccounts"
-                        callback(session)
-                    } else if (content.meta.code === "TC-ACCT-CLOSED"){
-                        conversation.logger().info("Account Balance Api Account Closed Exception at balStatus method");
-                        session.balance = "closed"
-                        callback(session)
-                    } else {
-                        conversation.logger().info("Account Balance Api Unknown Exception at balStatus method");
-                        session.balance = "TC-UNKNOWN"
-                        callback(session)
-                    }
+                } else if (content != undefined && content != null && content != "" && content.success == false) {
+                    session.checkString = "fail";
+                    conversation.logger().info("Account Balance Api Failed at balStatus method");
+                    callback(session);
                 } else {
                     conversation.logger().info("Account Balance Runtime Exception at balStatus method");
                     session.checkString = 'runTimeError';
                     callback(session);
                 }
-            }         
+            } catch (err) {
+                conversation.logger().info("Account Balance Runtime Exception at balStatus method");
+                conversation.logger().info(err);
+                session.checkString = 'runTimeError';
+                callback(session);
+            }
         }
-       
     };
 
-    this.run = function (session,conversation, callback) {
-        meta.accountBalanceGet.url = meta.accountBalanceGet.url.replace("?accountNumber",session.account_num);
-        HttpService.httpRequest(meta.accountBalanceGet,meta.hostName, session,conversation, function (session) {
-            this.balStatus(session, function (session) {
+    this.run = function (session, conversation, done, callback) {
+        meta.accountBalanceGet.url = meta.accountBalanceGet.url.replace("?accountNumber", session.account_num);
+        HttpService.httpRequest(meta.accountBalanceGet, meta.hostName, session, conversation,done, function (session) {
+            this.balStatus(session, conversation, function (session) {
                 callback(session)
             }.bind(this));
         }.bind(this));

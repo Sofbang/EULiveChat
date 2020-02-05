@@ -17,7 +17,8 @@ module.exports = {
             sessionId:  {required: true, type: 'string'},
             fanResult:  {required: true, type: 'string'}
         },
-        supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent','UserNotLoggedIn', 'DefaultErrorHandler']
+        supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent',
+        'UserNotLoggedIn', 'DefaultErrorHandler', 'FnAccProtected', 'TcUserInvalid']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -30,7 +31,7 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
         
         conversation.logger().info("**************Account Balance Component*****************");
-        conversation.logger().info("Input parameter values: account_num: " + session.account_num, + " ,token: " + session.token + " ,sessionId: " + session.sessionId);
+        conversation.logger().info("Input parameter values: account_num: " + session.account_num + ", token: " + session.token + ", sessionId: " + session.sessionId);
     
         
         let payBillAccountBalanceFlag = conversation.properties().payBillAccountBalanceFlag;
@@ -38,7 +39,7 @@ module.exports = {
         let loginCheck = Utility.userLoginCheck(session.account_num,session.token,session.sessionId);
        
         if(loginCheck){
-            new accountBalanceController().run(session,conversation, function (session) {
+            new accountBalanceController().run(session,conversation,done, function (session) {
                 if(session.statusCode != undefined && session.statusCode == 401){
                     conversation.variable("fanResult","Your session has been expired");
                     conversation.transition('UserNotLoggedIn');
@@ -53,14 +54,25 @@ module.exports = {
                         payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
                         done();
                     } else if (session.checkString == "fail"){
-                        if (session.balance == "MultipleAccounts"){
+                        if (session.content.meta.code == "FN-MULTIPLE-ACCOUNTS") {
+                            conversation.logger().info("Account Balance Api Multiple Accounts Exception at balStatus method");
                             conversation.transition('MultiAccounts');
                             done();
-                        } else if(session.balance == "closed"){
+                        } else if (session.content.meta.code == "TC-ACCT-CLOSED"){
+                            conversation.logger().info("Account Balance Api Account Closed Exception at balStatus method");
                             conversation.transition('WrongInformation');
                             done();
+                        } else if (session.content.meta.code == "FN-ACCOUNT-PROTECTED"){
+                            conversation.logger().info("Account Balance Api Account Protected Exception at balStatus method");
+                            conversation.transition('FnAccProtected');
+                            done();
+                        } else if (session.content.meta.code == "TC-USER-INVALID"){
+                            conversation.logger().info("Account Balance Api User Invalid Exception at balStatus method");
+                            conversation.transition('TcUserInvalid');
+                            done();
                         } else {
-                            conversation.transition('DefaultErrorHandler');
+                            conversation.logger().info("Account Balance Api Unknown Exception at balStatus method");
+                            conversation.transition('TcUserInvalid');
                             done();
                         }
                     } else {

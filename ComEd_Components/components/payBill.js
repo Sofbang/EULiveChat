@@ -19,7 +19,9 @@ module.exports = {
             sessionId:  {required: true, type: 'string'},
             fanResult: {required: true, type: 'string'}
         },
-        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes','PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate', 'UserNotLoggedIn', 'DefaultErrorHandler']
+        supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes',
+        'PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate', 'UserNotLoggedIn', 
+        'DefaultErrorHandler', 'TcUserInvalid']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -38,7 +40,7 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
         
         conversation.logger().info("**************Pay Bill Component*****************");
-        conversation.logger().info("Input parameter values: account_num: " + session.accountNumber, + " ,token: " + session.token + " ,sessionId: " + session.sessionId);
+        conversation.logger().info("Input parameter values: account_num: " + session.accountNumber + ", token: " + session.token + ", sessionId: " + session.sessionId);
 
         let loginCheck = Utility.userLoginCheck(session.accountNumber,session.token,session.sessionId);
         
@@ -51,27 +53,46 @@ module.exports = {
                     conversation.transition("Balance<5");
                     done();
                 } else {
-                    new payBillController().run(session, conversation, function(session){
+                    new payBillController().run(session, conversation,done, function(session){
                         if(session.statusCode != undefined && session.statusCode == 401){
                             conversation.variable("fanResult","Your session has been expired");
                             conversation.transition('UserNotLoggedIn');
                             done();
                         } else {
-                            conversation.variable('actBalance',session.payment_amount);
-                            conversation.variable('accountnumber',session.accountNumber);
-                            conversation.variable('payBillWalletResult',session.payBillWalletResult);
-                            conversation.variable('payBillPaymentCategoryType',session.payment_category_type);
-                            conversation.variable('payBillWalletId',session.wallet_id);
-                            conversation.variable('payBillWalletItemId',session.wallet_item_id);
-                            conversation.variable('payBillMaskedAccountNumber',session.masked_wallet_item_account_number);
-            
-                            if(session.userAccountBackendCheck){
-                                conversation.transition("PayBillUserActSetupYes");
-                                done();
+                            if(session.checkString == 'success'){
+                                conversation.variable('actBalance',session.payment_amount);
+                                conversation.variable('accountnumber',session.accountNumber);
+                                conversation.variable('payBillWalletResult',session.payBillWalletResult);
+                                conversation.variable('payBillPaymentCategoryType',session.payment_category_type);
+                                conversation.variable('payBillWalletId',session.wallet_id);
+                                conversation.variable('payBillWalletItemId',session.wallet_item_id);
+                                conversation.variable('payBillMaskedAccountNumber',session.masked_wallet_item_account_number);
+                
+                                if(session.userAccountBackendCheck){
+                                    conversation.transition("PayBillUserActSetupYes");
+                                    done();
+                                } else {
+                                    conversation.transition("PayBillUserActSetupNo");
+                                    done();
+                                }
+                            } else if (session.checkString == 'fail'){
+                                if (session.content.meta.code == "TC-USER-INVALID"){
+                                    conversation.logger().info("Pay Bill Wallet API User Invalid Exception at balStatus method");
+                                    conversation.transition('TcUserInvalid');
+                                    done();
+                                } else if (session.content.meta.code == 'TC-PERSONID-INVALID'){
+                                    conversation.logger().info("Pay Bill Wallet API PersonId Invalid Exception at balStatus method");
+                                    conversation.transition('TcUserInvalid');
+                                    done();
+                                } else {
+                                    conversation.logger().info("Pay Bill Wallet API Unknown Exception at balStatus method");
+                                    conversation.transition('TcUserInvalid');
+                                    done();
+                                }
                             } else {
-                                conversation.transition("PayBillUserActSetupNo");
+                                conversation.transition('DefaultErrorHandler');
                                 done();
-                            }
+                            }      
                         }
                     })
                 } 
@@ -82,17 +103,27 @@ module.exports = {
                         conversation.transition('UserNotLoggedIn');
                         done();
                     } else {
-                        conversation.variable('actBalance',session.payment_amount)
-            
+                        conversation.variable('actBalance',session.payment_amount);
                         conversation.logger().info(session.content);
-                        if(session.paymentSuccess == 'success'){
+                        if(session.checkString == 'success'){
                             conversation.transition("Yes");
                             done()
-                        } else if(session.paymentSuccess == 'duplicate'){
-                            conversation.transition("Duplicate");
-                            done();
+                        } else if (session.checkString == 'fail') {
+                            if(session.content.meta.code == 'xmlPayment.duplicate'){
+                                conversation.logger().info("Duplicate Payment at Create Payment Method")
+                                conversation.transition("Duplicate");
+                                done();
+                            } else if (session.content.meta.code == "TC-USER-INVALID"){
+                                conversation.logger().info("Check Outage Status API User Invalid Exception at balStatus method");
+                                conversation.transition('TcUserInvalid');
+                                done();
+                            } else {
+                                conversation.logger().info("Check Outage Status API Unknown Exception at balStatus method");
+                                conversation.transition('TcUserInvalid');
+                                done();
+                            }
                         } else {
-                            conversation.transition("No");
+                            conversation.transition('DefaultErrorHandler');
                             done();
                         }
                     }

@@ -14,7 +14,8 @@ module.exports = {
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'}
         },
-        supportedActions: ['outageReportResult','UserNotLoggedIn', 'DefaultErrorHandler']
+        supportedActions: ['outageReportResult','UserNotLoggedIn', 'DefaultErrorHandler', 
+        'TcUserInvalid', 'Invalid']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -29,33 +30,36 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
 
         conversation.logger().info("**************Report Outage Component*****************");
-        conversation.logger().info("Input parameter values: account_num: " + session.account_number, + " ,token: " + session.token + " ,sessionId: " + session.sessionId);
+        conversation.logger().info("Input parameter values: account_num: " + session.account_number + ", token: " + session.token + ", sessionId: " + session.sessionId);
 
 
-        new reportOutageController().run(session, conversation, function (session) {
+        new reportOutageController().run(session, conversation,done, function (session) {
             if(session.statusCode != undefined && session.statusCode == 401){
                 conversation.variable("fanResult","Your session has been expired");
                 conversation.transition('UserNotLoggedIn');
                 done();
             } else {
-                if(session.success){
-                    conversation.variable('fanResult',"Success! Your outage report has been recorded.Here is your Confirmation Number: "+session.confirmationNumber)
+                if(session.checkString == "success"){
+                    conversation.variable('fanResult',session.confirmationNumber)
                     conversation.transition('outageReportResult')
                     done();
-                } else {
-                    if(session.checkString == "Invalid Account Number"){
-                        conversation.variable('fanResult',"Invalid Account Number")
-                        conversation.transition('outageReportResult')
+                } else if(session.checkString == 'fail'){
+                    if(session.content.meta.code == "TC-ACCT-INVALID"){
+                        conversation.logger().info("Report Outage Invalid Account Number")
+                        conversation.transition('Invalid');
                         done();
-                    } else if(session.checkString == "UserInvalid"){
-                        conversation.variable('fanResult',"Unable to parse userstring from login service")
-                        conversation.transition('outageReportResult')
+                    } else if(session.content.meta.code == "TC-USER-INVALID"){
+                        conversation.logger().info("Report Outage Status API User Invalid Exception at balStatus method");
+                        conversation.transition('TcUserInvalid');
                         done();
                     } else {
-                        conversation.variable('fanResult','Server not responding, Please try later')
-                        conversation.transition('outageReportResult')
+                        conversation.logger().info("Report Outage Status API Unknown exception at Budget Enroll Method");
+                        conversation.transition('TcUserInvalid');
                         done();
                     }
+                } else {
+                    conversation.transition('DefaultErrorHandler');
+                    done();
                 }
             }
         });

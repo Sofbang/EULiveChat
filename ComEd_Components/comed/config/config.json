@@ -3,7 +3,7 @@
   "hostName": "d-e-euweb-livechat-comed-ui-01.azurewebsites.net/.mcs",
   "payBillWalletPost": {
     "name": "payBillWalletPost",
-    "url": "https://?hostName/mobile/custom/auth/wallet/query",
+    "url": "https://?hostName/mobile/custom/auth_v6/wallet/query",
     "method": "Post",
     "postParams": {
       "auth_session_token": "",
@@ -12,7 +12,7 @@
   },
   "payBillCreatePaymentPost": {
     "name": "payBillCreatePaymentPost",
-    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/payments/schedule",
+    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/payments/schedule",
     "method": "Post",
     "postParams": {
       "auth_session_token": "",
@@ -27,15 +27,6 @@
       "wallet_item_id": "?wallet_item_id"
     }
   },
-  "findAccountNumberPost": {
-    "name": "findAccNum",
-    "url": "https://?hostName/mobile/custom/anon/Comed/account/lookup",
-    "method": "Post",
-    "postParams": {
-      "identifier": "?identifier",
-      "phone": "?phone"
-    }
-  },
   "outagePost": {
     "name": "outageApi",
     "url": "https://?hostName/mobile/custom/anon/ComEd/outage/query",
@@ -47,12 +38,12 @@
   },
   "outageAuthenticatedGet": {
     "name": "outageAuthenticatedGetApi",
-    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/outage",
+    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/outage",
     "method": "Get"
   },
   "copyOfBillGet": {
     "name": "copyOfBillGetApi",
-    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/billing/?bdate/pdf",
+    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/billing/?bdate/pdf",
     "method": "Get"
   },
   "accountBalancePost": {
@@ -67,17 +58,17 @@
   },
   "accountBalanceGet": {
     "name": "accountBalanceGet",
-    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber",
+    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber",
     "method": "Get"
   },
   "budgetBillingGet": {
     "name": "getBudgetBillingApi",
-    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/billing/budget",
+    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/billing/budget",
     "method": "Get"
   },
   "budgetEnrollmentPut": {
     "name": "budgetEnrollmentPutApi",
-    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/billing/budget",
+    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/billing/budget",
     "method": "Put"
   },
   "reportOutagePost": {
@@ -93,7 +84,7 @@
   },
   "reportOutageAuthenticatedPost": {
     "name": "reportOutageAuthenticatedPost",
-    "url": "https://?hostName/mobile/custom/auth/accounts/?accountNumber/outage",
+    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/outage",
     "method": "Post",
     "postParams": {
       "phone": "?phone",
