@@ -93,7 +93,7 @@ module.exports = {
                             }     
                         }
                     } else if (session.checkString == 'fail'){
-                        if(session.content.meta.code == "TC-ACCT-INVALID"){
+                        if(session.content.meta.code == "TC-ACCT-INVALID" || session.content.meta.code == "FN-ACCT-NOTFOUND"){
                             conversation.logger().info("Check Outage Status Invalid Account Number")
                             conversation.transition('Invalid');
                             done();

@@ -31,7 +31,7 @@ function outageStatus() {
                         conversation.logger().info("Outage Check Status Api Single Account at omsStatus method");
                         session.phone = data.contactHomeNumber;
                         session.accountNumber = data.accountNumber;
-                        session.maskedAccountNumber = data.maskedAccountNumber.slice(-4);
+                        session.maskedAccountNumber = data.maskedAccountNumber;
                         session.maskedAddress = data.maskedAddress;
                         session.multipleAcc = "No";
                         if (data.status === "NOT ACTIVE") {
