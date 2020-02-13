@@ -22,6 +22,7 @@ function accountBalance() {
                     session.actDueDate = content.data.BillingInfo.dueByDate != undefined ? Utility.dateFormat(content.data.BillingInfo.dueByDate, 'YYYY-MM-DD') : 'null';
                     session.address = content.data.address;
                     session.bdate = content.data.BillingInfo.billDate != undefined ? Utility.dateFormat(content.data.BillingInfo.billDate, 'YYYY-MM-DD') : 'null';
+                    session.isCashOnly = content.data.isCashOnly;
                     session.checkString = "success"
                     callback(session)
                 } else if (content != undefined && content != null && content != "" && content.success == false) {

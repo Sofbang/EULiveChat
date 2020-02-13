@@ -18,7 +18,8 @@ module.exports = {
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'},
             fanResult: {required: true, type: 'string'},
-            envirornment: {required: true, type: 'string'}
+            envirornment: {required: true, type: 'string'},
+            isCashOnly:  {required: true, type: 'boolean'} 
         },
         supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes',
         'PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate', 'UserNotLoggedIn', 
@@ -40,10 +41,12 @@ module.exports = {
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
         session.envirornment = conversation.properties().envirornment;
+        session.isCashOnly = conversation.properties().isCashOnly;
 
 
         conversation.logger().info("**************Pay Bill Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.accountNumber + ", token: " + session.token + ", sessionId: " + session.sessionId);
+        conversation.logger().info("isCashOnly Value: " + session.isCashOnly);
 
         let loginCheck = Utility.userLoginCheck(session.accountNumber,session.token,session.sessionId);
         
@@ -56,48 +59,54 @@ module.exports = {
                     conversation.transition("Balance<5");
                     done();
                 } else {
-                    new payBillController().run(session, conversation,done, function(session){
-                        if(session.statusCode != undefined && session.statusCode == 401){
-                            conversation.variable("fanResult","Your session has been expired");
-                            conversation.transition('UserNotLoggedIn');
-                            done();
-                        } else {
-                            if(session.checkString == 'success'){
-                                conversation.variable('actBalance',session.payment_amount);
-                                conversation.variable('accountnumber',session.accountNumber);
-                                conversation.variable('payBillWalletResult',session.payBillWalletResult);
-                                conversation.variable('payBillPaymentCategoryType',session.payment_category_type);
-                                conversation.variable('payBillWalletId',session.wallet_id);
-                                conversation.variable('payBillWalletItemId',session.wallet_item_id);
-                                conversation.variable('payBillMaskedAccountNumber',session.masked_wallet_item_account_number);
-                
-                                if(session.userAccountBackendCheck){
-                                    conversation.transition("PayBillUserActSetupYes");
-                                    done();
-                                } else {
-                                    conversation.transition("PayBillUserActSetupNo");
-                                    done();
-                                }
-                            } else if (session.checkString == 'fail'){
-                                if (session.content.meta.code == "TC-USER-INVALID"){
-                                    conversation.logger().info("Pay Bill Wallet API User Invalid Exception at balStatus method");
-                                    conversation.transition('TcUserInvalid');
-                                    done();
-                                } else if (session.content.meta.code == 'TC-PERSONID-INVALID'){
-                                    conversation.logger().info("Pay Bill Wallet API PersonId Invalid Exception at balStatus method");
-                                    conversation.transition('TcUserInvalid');
-                                    done();
-                                } else {
-                                    conversation.logger().info("Pay Bill Wallet API Unknown Exception at balStatus method");
-                                    conversation.transition('TcUserInvalid');
-                                    done();
-                                }
-                            } else {
-                                conversation.transition('DefaultErrorHandler');
+                    if(session.isCashOnly == 'True'){
+                        conversation.variable('payBillWalletResult', "your account doesn’t allow for direct bank debits.");
+                        conversation.transition("PayBillUserActSetupNo");
+                        done();
+                    } else {
+                        new payBillController().run(session, conversation,done, function(session){
+                            if(session.statusCode != undefined && session.statusCode == 401){
+                                conversation.variable("fanResult","Your session has been expired");
+                                conversation.transition('UserNotLoggedIn');
                                 done();
-                            }      
-                        }
-                    })
+                            } else {
+                                if(session.checkString == 'success'){
+                                    conversation.variable('actBalance',session.payment_amount);
+                                    conversation.variable('accountnumber',session.accountNumber);
+                                    conversation.variable('payBillWalletResult',session.payBillWalletResult);
+                                    conversation.variable('payBillPaymentCategoryType',session.payment_category_type);
+                                    conversation.variable('payBillWalletId',session.wallet_id);
+                                    conversation.variable('payBillWalletItemId',session.wallet_item_id);
+                                    conversation.variable('payBillMaskedAccountNumber',session.masked_wallet_item_account_number);
+                    
+                                    if(session.userAccountBackendCheck){
+                                        conversation.transition("PayBillUserActSetupYes");
+                                        done();
+                                    } else {
+                                        conversation.transition("PayBillUserActSetupNo");
+                                        done();
+                                    }
+                                } else if (session.checkString == 'fail'){
+                                    if (session.content.meta.code == "TC-USER-INVALID"){
+                                        conversation.logger().info("Pay Bill Wallet API User Invalid Exception at balStatus method");
+                                        conversation.transition('TcUserInvalid');
+                                        done();
+                                    } else if (session.content.meta.code == 'TC-PERSONID-INVALID'){
+                                        conversation.logger().info("Pay Bill Wallet API PersonId Invalid Exception at balStatus method");
+                                        conversation.transition('TcUserInvalid');
+                                        done();
+                                    } else {
+                                        conversation.logger().info("Pay Bill Wallet API Unknown Exception at balStatus method");
+                                        conversation.transition('TcUserInvalid');
+                                        done();
+                                    }
+                                } else {
+                                    conversation.transition('DefaultErrorHandler');
+                                    done();
+                                }      
+                            }
+                        })
+                    }
                 } 
             } else {
                 new payBillController().run(session, conversation, function(session){

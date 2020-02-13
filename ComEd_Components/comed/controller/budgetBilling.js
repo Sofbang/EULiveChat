@@ -17,9 +17,13 @@ function accountBalance() {
                 session.content = content;
                 if (content != undefined && content != null && content != "" && content.success) {
                     conversation.logger().info("Budget Billing Api Response Success at Budget Billing Method");
-                    session.budgetEligible = content.data.isBudgetBillingAvailable && content.data.enrolled ? 'AlreadyEnrolled' :
-                        content.data.isBudgetBillingAvailable ? true : false;
-                    callback(session)
+                    if (content.data.isBudgetBillEligible && content.data.isBudgetBill) {
+                        session.budgetEligible = 'AlreadyEnrolled';
+                        callback(session)
+                    } else {
+                        session.budgetEligible = content.data.isBudgetBillEligible ? true : false;
+                        callback(session)
+                    }
                 } else {
                     conversation.logger().info("Budget Billing Api Response Failed at Budget Billing Method");
                     callback(session)
@@ -66,9 +70,9 @@ function accountBalance() {
     this.run = function (session, conversation,done, callback) {
         meta.hostName = session.envirornment == "development" ? meta.devHostName : session.envirornment == "stage" ? meta.stageHostName : meta.prodHostName;
         conversation.logger().info("HostName: " + meta.hostName);
-        meta.budgetBillingGet.url = meta.budgetBillingGet.url.replace("?accountNumber", session.account_num);
+        meta.accountBalanceGet.url = meta.accountBalanceGet.url.replace("?accountNumber", session.account_num);
         if (!session.enrollment) {
-            HttpService.httpRequest(meta.budgetBillingGet, meta.hostName, session, conversation,done, function (session) {
+            HttpService.httpRequest(meta.accountBalanceGet, meta.hostName, session, conversation,done, function (session) {
                 this.budgetBilling(session, conversation, function (session) {
                     callback(session)
                 }.bind(this));

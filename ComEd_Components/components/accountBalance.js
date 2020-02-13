@@ -16,7 +16,8 @@ module.exports = {
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'},
             fanResult:  {required: true, type: 'string'},
-            envirornment:  {required: true, type: 'string'}
+            envirornment:  {required: true, type: 'string'},
+            isCashOnly:  {required: true, type: 'boolean'}
         },
         supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent',
         'UserNotLoggedIn', 'DefaultErrorHandler', 'FnAccProtected', 'TcUserInvalid']
@@ -31,10 +32,12 @@ module.exports = {
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
         session.envirornment = conversation.properties().envirornment;
+        session.isCashOnly = conversation.properties().isCashOnly;
+        
         
         conversation.logger().info("**************Account Balance Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_num + ", token: " + session.token + ", sessionId: " + session.sessionId);
-    
+        
         
         let payBillAccountBalanceFlag = conversation.properties().payBillAccountBalanceFlag;
         
@@ -53,6 +56,7 @@ module.exports = {
                         conversation.variable("address",session.address);
                         conversation.variable("accountnumber",session.account_num);
                         conversation.variable("bdate",session.bdate);
+                        conversation.variable("isCashOnly",session.isCashOnly);
                         payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
                         done();
                     } else if (session.checkString == "fail"){

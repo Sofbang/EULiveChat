@@ -130,7 +130,8 @@ function outageStatus() {
         });
         converter.json2csv(session.conversationLogResponse,function(err,csv){
             if(err) {
-                conversation.logger.info("CSV Error: " + err);
+                conversation.logger().info("CSV Error: " + err);
+                
             } else {
                 var message = "<br>Hello " + session.email+ "<br><br><br> Please find the attached Chat Transcripts.<br><br>Regards,<br>" + meta.smtpDetails.fromAddress;
                 var mailOptions = {
