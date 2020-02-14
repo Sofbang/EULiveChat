@@ -17,16 +17,22 @@ function outageStatus() {
                 if (content != undefined && content != null && content != "" && content.success) {
                     conversation.logger().info("Outage Check Status Api Success at omsStatus method");
                     session.checkString = 'success';
-                    if (data.length > 1) {
+                    if (data.length > 1 && data.length < 5) {
                         conversation.logger().info("Outage Check Status Api Multiple Accounts at omsStatus method");
+                        session.storeOutageJson = data;
                         session.multipleAcc = "Yes";
+                        session.multipleAccLessThan4 = "Yes";
                         session.accountNum = "";
                         for (let i in data) {
-                            let d = data[i].accountNumber;
+                            let d = data[i].maskedAccountNumber;
                             session.accountNum += d + ","
                         }
                         session.accountNum = session.accountNum.slice(0, -1)
                         callback(session)
+                    } else if (data.length > 4){
+                        session.multipleAcc = "Yes";
+                        session.multipleAccLessThan4 = "No" ;
+                        callback(session);
                     } else {
                         conversation.logger().info("Outage Check Status Api Single Account at omsStatus method");
                         session.phone = data.contactHomeNumber;

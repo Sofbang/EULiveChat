@@ -1,5 +1,6 @@
 'use strict';
 var OutageController = require("../comed/controller/outageStatus");
+var _ = require('lodash');
 
 module.exports = {
     metadata: () => ({
@@ -16,10 +17,11 @@ module.exports = {
             maskedAccountNumber: {required: true, type: 'string'},
             omrStatus: {required: true, type: 'string'},
             outageReported: {required: true, type: 'string'},
-            envirornment: {required: true, type: 'string'}
+            envirornment: {required: true, type: 'string'},
+            storeOutageJson: {required: true, type: 'list'},
         },
         supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive',
-        'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid']
+        'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>4']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -35,6 +37,16 @@ module.exports = {
         session.omrStatus = conversation.properties().omrStatus;
         session.outageReported = conversation.properties().outageReported;
         session.envirornment = conversation.properties().envirornment;
+        session.storeOutageJson = conversation.properties().storeOutageJson;
+
+        conversation.logger().info("*******storeOutageJson*********");
+        conversation.logger().info(session.storeOutageJson);
+        if (session.storeOutageJson != undefined && session.storeOutageJson != "" && session.storeOutageJson != '${storeOutageJson.value}' && session.storeOutageJson.length > 1) {
+            var filterAccountNumber = _.filter(session.storeOutageJson,function(o){
+                return o.maskedAccountNumber == session.account_number;
+            })
+            session.account_number = filterAccountNumber[0].accountNumber;
+        }
 
 
         conversation.logger().info("**************Outage Status Component*****************");
@@ -62,9 +74,15 @@ module.exports = {
                 } else {
                     if(session.checkString == 'success'){
                         if(session.multipleAcc == 'Yes'){
-                            conversation.variable("fanResult",session.accountNum);
-                            conversation.transition('MultipleAccounts');
-                            done();
+                            if(session.multipleAccLessThan4 == "Yes"){
+                                conversation.variable("fanResult",session.accountNum);
+                                conversation.variable('storeOutageJson',session.storeOutageJson);
+                                conversation.transition('MultipleAccounts');
+                                done();
+                            } else {
+                                conversation.transition('MultipleAccounts>4');
+                                done();
+                            }   
                         }else{
                             conversation.variable('address',session.address);
                             conversation.variable('phonenumber',session.phone);
