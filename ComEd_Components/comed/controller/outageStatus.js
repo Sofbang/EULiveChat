@@ -17,7 +17,7 @@ function outageStatus() {
                 if (content != undefined && content != null && content != "" && content.success) {
                     conversation.logger().info("Outage Check Status Api Success at omsStatus method");
                     session.checkString = 'success';
-                    if (data.length > 1 && data.length < 5) {
+                    if (data.length > 1 && data.length < 6) {
                         conversation.logger().info("Outage Check Status Api Multiple Accounts at omsStatus method");
                         session.storeOutageJson = data;
                         session.multipleAcc = "Yes";
@@ -29,7 +29,7 @@ function outageStatus() {
                         }
                         session.accountNum = session.accountNum.slice(0, -1)
                         callback(session)
-                    } else if (data.length > 4){
+                    } else if (data.length > 5){
                         session.multipleAcc = "Yes";
                         session.multipleAccLessThan4 = "No" ;
                         callback(session);
