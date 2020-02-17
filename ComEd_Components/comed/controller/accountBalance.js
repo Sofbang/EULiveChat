@@ -44,7 +44,7 @@ function accountBalance() {
     };
 
     this.run = function (session, conversation, done, callback) {
-        meta.hostName = session.envirornment == "production" ? meta.prodHostName : session.envirornment == "stage" ? meta.stageHostName : meta.devHostName;
+        meta.hostName = session.envirornment == "production" ? meta.prodHostName : session.envirornment == "stage" ? meta.stageHostName : session.envirornment == "test" ? meta.testHostName : meta.devHostName;
         conversation.logger().info("HostName: " + meta.hostName);
         meta.accountBalanceGet.url = meta.accountBalanceGet.url.replace("?accountNumber", session.account_num);
         HttpService.httpRequest(meta.accountBalanceGet, meta.hostName, session, conversation,done, function (session) {

@@ -89,7 +89,7 @@ function payBill() {
     }
 
     this.run = function (session, conversation,done, callback) {
-        meta.hostName = session.envirornment == "development" ? meta.devHostName : session.envirornment == "stage" ? meta.stageHostName : meta.prodHostName;
+        meta.hostName = session.envirornment == "production" ? meta.prodHostName : session.envirornment == "stage" ? meta.stageHostName : session.envirornment == "test" ? meta.testHostName : meta.devHostName;
         conversation.logger().info("HostName: " + meta.hostName);
         if (session.payBillPaymentApiFlag == "No"){
             conversation.logger().info("Pay Bill Wallet Check API Call");

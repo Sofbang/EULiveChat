@@ -17,10 +17,11 @@ module.exports = {
             sessionId:  {required: true, type: 'string'},
             fanResult:  {required: true, type: 'string'},
             envirornment:  {required: true, type: 'string'},
-            isCashOnly:  {required: true, type: 'boolean'}
+            isCashOnly:  {required: true, type: 'boolean'},
+            getBillBdateFlag: {required: true, type: 'string'}
         },
         supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent',
-        'UserNotLoggedIn', 'DefaultErrorHandler', 'FnAccProtected', 'TcUserInvalid']
+        'UserNotLoggedIn', 'DefaultErrorHandler', 'FnAccProtected', 'TcUserInvalid', 'GetCopyOfBill']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -40,6 +41,7 @@ module.exports = {
         
         
         let payBillAccountBalanceFlag = conversation.properties().payBillAccountBalanceFlag;
+        let getBillBdateFlag = conversation.properties().getBillBdateFlag;
         
         let loginCheck = Utility.userLoginCheck(session.account_num,session.token,session.sessionId);
        
@@ -57,8 +59,16 @@ module.exports = {
                         conversation.variable("accountnumber",session.account_num);
                         conversation.variable("bdate",session.bdate);
                         conversation.variable("isCashOnly",session.isCashOnly);
-                        payBillAccountBalanceFlag === "No" ? conversation.transition('Success') : conversation.transition('PayBillComponent');
-                        done();
+                        if(payBillAccountBalanceFlag == "No" && getBillBdateFlag == "No"){
+                            conversation.transition('Success');
+                            done();
+                        } else if(payBillAccountBalanceFlag == "Yes" && getBillBdateFlag == "No"){
+                            conversation.transition('PayBillComponent');
+                            done();
+                        } else {
+                            conversation.transition('GetCopyOfBill');
+                            done();
+                        }      
                     } else if (session.checkString == "fail"){
                         if (session.content.meta.code == "FN-MULTIPLE-ACCOUNTS") {
                             conversation.logger().info("Account Balance Api Multiple Accounts Exception at balStatus method");
