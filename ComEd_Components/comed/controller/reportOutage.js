@@ -41,7 +41,7 @@ function reportOutage() {
         if (session.loginAuthenticated == 'Yes') {
             conversation.logger().info("Calling Report Outage Authenticated API.")
             meta.reportOutageAuthenticatedPost.url = meta.reportOutageAuthenticatedPost.url.replace("?accountNumber", session.account_number);
-            HttpService.httpRequest(meta.reportOutageAuthenticatedPost, meta.hostName, session, conversation, function (session) {
+            HttpService.httpRequest(meta.reportOutageAuthenticatedPost, meta.hostName, session, conversation, done, function (session) {
                 this.reportStatus(session, conversation, function (session) {
                     callback(session)
                 }.bind(this));

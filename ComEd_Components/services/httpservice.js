@@ -68,8 +68,7 @@ function httpservice() {
                         console.error(err);
                         conversation.transition('DefaultErrorHandler');
                         done();
-                    }
-                    if(resp.statusCode == 401){
+                    } else if(resp.statusCode == 401){
                         session.content = 401;
                         callback(session);
                     } else {

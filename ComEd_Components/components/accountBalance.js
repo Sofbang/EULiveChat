@@ -21,7 +21,7 @@ module.exports = {
             getBillBdateFlag: {required: true, type: 'string'}
         },
         supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent',
-        'UserNotLoggedIn', 'DefaultErrorHandler', 'FnAccProtected', 'TcUserInvalid', 'GetCopyOfBill']
+        'UserNotLoggedIn', 'DefaultErrorHandler', 'FnAccProtected', 'TcUserInvalid', 'GetCopyOfBill', 'DueDateNull']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -60,8 +60,13 @@ module.exports = {
                         conversation.variable("bdate",session.bdate);
                         conversation.variable("isCashOnly",session.isCashOnly);
                         if(payBillAccountBalanceFlag == "No" && getBillBdateFlag == "No"){
-                            conversation.transition('Success');
-                            done();
+                            if(session.actDueDate == "null"){
+                                conversation.transition("DueDateNull");
+                                done();
+                            } else {
+                                conversation.transition('Success');
+                                done();
+                            } 
                         } else if(payBillAccountBalanceFlag == "Yes" && getBillBdateFlag == "No"){
                             conversation.transition('PayBillComponent');
                             done();
@@ -98,7 +103,7 @@ module.exports = {
                 }
             });
         } else {
-            conversation.variable("fanResult","You are not signed in");
+            conversation.variable("fanResult","For your security, you'll need to log in to your My Account to proceed.");
             conversation.transition('UserNotLoggedIn');
             done();
         }

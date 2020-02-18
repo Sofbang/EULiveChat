@@ -48,7 +48,7 @@ module.exports = {
                 done();
             }
         } else {
-            conversation.variable("fanResult", "You are not signed in");
+            conversation.variable("fanResult", "For your security, you'll need to log in to your My Account to proceed.");
             conversation.transition('UserNotLoggedIn');
             done();
         }
