@@ -3,7 +3,7 @@
 }(window,document,"Bots", "/Lib/ChatBot/bots-client-sdk-js");
 
 var agentAvailable = false;
-var agentIconUrl = "/Lib/ChatBot/images/agent.png";
+var agentIconUrl = "/Lib/ChatBot/images/livechat-avatar.svg";
 var botIconUrl = "/Lib/ChatBot/images/Bot_Avatar.svg"; 
 var token='noToken';
 var sessionId='noSessionId';
@@ -309,8 +309,8 @@ function sendEmail(){
 
 //icon change for the Live Chat intent
 function setAgentAvailability(fromMessage) {
-    var agentAvailableText = "Let me connect you with a customer service agent who can further assist you.";
-    var agentLeftText = "Connecting you back to the skill. What do you want to do next?";
+    var agentAvailableText = "Your chat session is being transferred from ComEd’s automated assistant to one of our team members, who will be with you shortly.";
+    var agentLeftText = "Welcome back to ComEd's automated assistant! To chat more, click the Menu above to see the topics I can help with, or just type in your question. If you're finished chatting, please choose one of the options below to end your chat.";
 
     if (fromMessage == agentAvailableText) {
         agentAvailable = true;
