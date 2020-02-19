@@ -19,7 +19,8 @@ module.exports = {
             sessionId:  {required: true, type: 'string'},
             fanResult: {required: true, type: 'string'},
             envirornment: {required: true, type: 'string'},
-            isCashOnly:  {required: true, type: 'boolean'} 
+            isCashOnly:  {required: true, type: 'boolean'},
+            OracleMobileBackendID: {required: true, type: 'string'}
         },
         supportedActions: ['BalanceZero','Balance<5','PayBillUserActSetupYes',
         'PayBillUserActSetupNo', 'Yes', 'No', 'Fail', 'Duplicate', 'UserNotLoggedIn', 
@@ -42,6 +43,7 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
         session.envirornment = conversation.properties().envirornment;
         session.isCashOnly = conversation.properties().isCashOnly;
+        session.OracleMobileBackendID = conversation.properties().OracleMobileBackendID;
 
 
         conversation.logger().info("**************Pay Bill Component*****************");

@@ -11,7 +11,8 @@ module.exports = {
             bdate: { required: true, type: 'string' },
             token: { required: true, type: 'string' },
             sessionId: { required: true, type: 'string' },
-            fanResult: { required: true, type: 'string' }
+            fanResult: { required: true, type: 'string' },
+            OracleMobileBackendID: {required: true, type: 'string'}
         },
         supportedActions: ['Success', 'Fail', 'UserNotLoggedIn', 'DefaultErrorHandler']
     }),
@@ -23,6 +24,8 @@ module.exports = {
         session.account_number = conversation.properties().accountnumber;
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
+        session.OracleMobileBackendID = conversation.properties().OracleMobileBackendID;
+
 
         conversation.logger().info("**************Download My Bill Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_number + " ,token: " + session.token + " ,sessionId: " + session.sessionId);

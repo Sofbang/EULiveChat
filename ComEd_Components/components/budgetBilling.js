@@ -12,7 +12,8 @@ module.exports = {
             fanResult: {required: true, type: 'string'},
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'},
-            envirornment: {required: true, type: 'string'}
+            envirornment: {required: true, type: 'string'},
+            OracleMobileBackendID: {required: true, type: 'string'}
          },
          supportedActions: ['Yes','No','EnrollSuccess','NotEligible','EnrolledAlready',
          'UserNotLoggedIn', 'DefaultErrorHandler', 'TcUserInvalid']
@@ -26,6 +27,7 @@ module.exports = {
         session.token = conversation.properties().token;
         session.sessionId = conversation.properties().sessionId;
         session.envirornment = conversation.properties().envirornment;
+        session.OracleMobileBackendID = conversation.properties().OracleMobileBackendID;
 
 
         conversation.logger().info("**************Budget Billing Component*****************");

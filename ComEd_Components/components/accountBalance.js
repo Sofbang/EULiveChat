@@ -18,7 +18,8 @@ module.exports = {
             fanResult:  {required: true, type: 'string'},
             envirornment:  {required: true, type: 'string'},
             isCashOnly:  {required: true, type: 'boolean'},
-            getBillBdateFlag: {required: true, type: 'string'}
+            getBillBdateFlag: {required: true, type: 'string'},
+            OracleMobileBackendID: {required: true, type: 'string'}
         },
         supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent',
         'UserNotLoggedIn', 'DefaultErrorHandler', 'FnAccProtected', 'TcUserInvalid', 'GetCopyOfBill', 'DueDateNull']
@@ -34,6 +35,7 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
         session.envirornment = conversation.properties().envirornment;
         session.isCashOnly = conversation.properties().isCashOnly;
+        session.OracleMobileBackendID = conversation.properties().OracleMobileBackendID;
         
         
         conversation.logger().info("**************Account Balance Component*****************");

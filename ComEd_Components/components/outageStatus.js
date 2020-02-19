@@ -19,9 +19,10 @@ module.exports = {
             outageReported: {required: true, type: 'string'},
             envirornment: {required: true, type: 'string'},
             storeOutageJson: {required: true, type: 'list'},
+            OracleMobileBackendID: {required: true, type: 'string'}
         },
         supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive',
-        'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>4']
+        'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>5']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -38,6 +39,8 @@ module.exports = {
         session.outageReported = conversation.properties().outageReported;
         session.envirornment = conversation.properties().envirornment;
         session.storeOutageJson = conversation.properties().storeOutageJson;
+        session.OracleMobileBackendID = conversation.properties().OracleMobileBackendID;
+
 
         conversation.logger().info("*******storeOutageJson*********");
         conversation.logger().info(session.storeOutageJson);
@@ -80,7 +83,7 @@ module.exports = {
                                 conversation.transition('MultipleAccounts');
                                 done();
                             } else {
-                                conversation.transition('MultipleAccounts>4');
+                                conversation.transition('MultipleAccounts>5');
                                 done();
                             }   
                         }else{
