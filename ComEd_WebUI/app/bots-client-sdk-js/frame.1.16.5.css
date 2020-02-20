@@ -4248,6 +4248,7 @@
     /* CUSTOM - Padding for the buttons */
     padding-left: 5px;
     padding-bottom: 5px;
+    width: auto !important;
   }
   
   #container #conversation .row.left-row .msg-wrapper .msg-image.msg-carousel,#container #conversation .row.left-row .msg-wrapper .msg.msg-carousel {
