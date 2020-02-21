@@ -10,14 +10,14 @@ function outageStatus() {
     let HttpService = new httpService();
     let meta = JSON.parse(JSON.stringify(metaData))
 
-    this.emailValidation = function(session,callback){
+    this.emailValidation = function (session, callback) {
         let validate = validator.validate(session.email);
         session.emailValidation = validate ? true : false;
         callback(session);
     }
 
-    this.getAccessToken = function(oauthApi,session, conversation, callback){
-     
+    this.getAccessToken = function (oauthApi, session, conversation, callback) {
+
         let authorizationToken = "Basic " + Buffer.from(oauthApi.clientId + ':' + oauthApi.clientSecret).toString('base64');
         let postData = "grant_type=client_credentials&scope=" + oauthApi.scopeUrl;
         let indexOfProtocolEnd = oauthApi.idcsHostName.indexOf("://");
@@ -45,14 +45,14 @@ function outageStatus() {
                 session.accessTokenResponse = "unauthorized";
                 callback(session);
             }
-    
+
             var responseData = "";
-    
+
             //get chunked response data 
             res.on('data', (data) => {
                 responseData = responseData + data;
             })
-    
+
             //finally build authorization token and return from function
             res.on('end', () => {
                 accessToken = JSON.parse(responseData).token_type + " " + JSON.parse(responseData).access_token;
@@ -65,17 +65,17 @@ function outageStatus() {
             conversation.logger().info(error);
             session.accessTokenResponse = error;
         });
-    
+
         //send POST request. This actually initiates the request. Only when this code line gets
         //executed, a request will be sent
         req.end(postData);
     }
 
-    this.getConversationLog = function(oauthApi,session, conversation, callback){
-        const conversationUri = oauthApi.conversationUri.replace("?sessionId",session.sessionId);
+    this.getConversationLog = function (oauthApi, session, conversation, callback) {
+        const conversationUri = oauthApi.conversationUri.replace("?sessionId", session.sessionId);
         let indexOfProtocolEnd = oauthApi.odaHostName.indexOf("://");
         var odaHostName = oauthApi.odaHostName.substring(indexOfProtocolEnd + 3);
-        
+
         let options = {
             hostname: odaHostName,
             port: 443,
@@ -87,17 +87,17 @@ function outageStatus() {
             }
         }
         conversation.logger().info(options)
-        
+
         let req = https.request(options, (res) => {
             //The session doesn't exist or conversation logging on the skill is disabled.
-        
+
             var apiResponse = "";
-    
+
             //get data from response
             res.on('data', (data) => {
                 apiResponse = apiResponse + data;
             })
-    
+
             //do something with the data. Note that if the http request is returned with 404, there is no data
             //portion in the returned sessionConversation object
             res.on('end', () => {
@@ -111,7 +111,7 @@ function outageStatus() {
                 }
             })
         });
-    
+
         req.on('error', (error) => {
             conversation.logger().info(error);
             session.conversationLogResponse = error;
@@ -119,32 +119,33 @@ function outageStatus() {
         //its a GET request, so no data to post with the request body
         req.end();
     }
-    
-    
-    this.sendEmail = function(session, conversation, callback){
+
+
+    this.sendEmail = function (session, conversation, callback) {
         Object.keys(session.conversationLogResponse).forEach(function (key) {
             session.conversationLogResponse[key].chatTranscript = session.conversationLogResponse[key].payload;
             session.conversationLogResponse[key].createdOn = moment(new Date(session.conversationLogResponse[key].createdOn)).format('DD/MM/YYYY HH:mm:ss');
             delete session.conversationLogResponse[key].payload;
             delete session.conversationLogResponse[key].id;
         });
-        converter.json2csv(session.conversationLogResponse,function(err,csv){
-            if(err) {
+        converter.json2csv(session.conversationLogResponse, function (err, csv) {
+            if (err) {
                 conversation.logger().info("CSV Error: " + err);
-                
+                session.emailSent = false;
+                callback(session);
             } else {
-                var message = "<br>Hello " + session.email+ "<br><br><br> Please find the attached Chat Transcripts.<br><br>Regards,<br>" + meta.smtpDetails.fromAddress;
+                var message = "Hi! <br><br>You recently requested a transcript of your chat session with ComEd's automated assistant be sent to this email address. A CSV copy of your chat transcript is attached to this email.<br><br>Thank you for chatting with us!<br><br>This email is generated automatically. Please do not reply to this message.<br><br>This e-mail and any attachments are confidential, may contain legal, professional or other privileged information, and are intended solely for the addressee. If you are not the intended recipient, do not use the information in this e-mail in any way, delete this e-mail and notify the sender.";
                 var mailOptions = {
                     from: meta.smtpDetails.fromAddress,
                     to: session.email,
-                    subject: 'ComED Chat Transcripts',
-                    html : message,
+                    subject: 'Requested Transcript of Your Recent Chat Session with ComEd Attached',
+                    html: message,
                     attachments: [{
                         filename: 'ChatTranscripts.csv',
                         content: csv
                     }]
                 };
-                transporter.sendMail(mailOptions, function(error, info){
+                transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
                         conversation.logger().info("Email Failed")
                         conversation.logger().info(error);
@@ -158,16 +159,16 @@ function outageStatus() {
                         callback(session);
                     }
                 });
-            }  
+            }
         });
     }
 
-    this.run = function (session, conversation,done, callback) {
-        this.emailValidation(session,function(session){
-            if(session.emailValidation){
-                this.getAccessToken(meta.idcsOauthTokenApi,session, conversation, function(session){
-                    this.getConversationLog(meta.idcsOauthTokenApi,session, conversation, function(session){
-                        this.sendEmail(session, conversation, function(session){
+    this.run = function (session, conversation, done, callback) {
+        this.emailValidation(session, function (session) {
+            if (session.emailValidation) {
+                this.getAccessToken(meta.idcsOauthTokenApi, session, conversation, function (session) {
+                    this.getConversationLog(meta.idcsOauthTokenApi, session, conversation, function (session) {
+                        this.sendEmail(session, conversation, function (session) {
                             callback(session)
                         }.bind(this));
                     }.bind(this));

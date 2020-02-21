@@ -22,7 +22,7 @@ module.exports = {
             OracleMobileBackendID: {required: true, type: 'string'}
         },
         supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive',
-        'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>5']
+        'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>5','FnAccProtected']
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -114,9 +114,14 @@ module.exports = {
                             }     
                         }
                     } else if (session.checkString == 'fail'){
+                        console.log(session.content)
                         if(session.content.meta.code == "TC-ACCT-INVALID" || session.content.meta.code == "FN-ACCT-NOTFOUND"){
                             conversation.logger().info("Check Outage Status Invalid Account Number")
                             conversation.transition('Invalid');
+                            done();
+                        } else if (session.content.meta.code == "FN-ACCT-PROTECTED" || session.content.meta.code == "FN-ACCOUNT-PROTECTED"){
+                            conversation.logger().info("Check Outage Status API Account Protected Exception at balStatus method");
+                            conversation.transition('FnAccProtected');
                             done();
                         } else if (session.content.meta.code == "TC-USER-INVALID"){
                             conversation.logger().info("Check Outage Status API User Invalid Exception at balStatus method");
@@ -127,7 +132,7 @@ module.exports = {
                             conversation.transition('TcUserInvalid');
                             done();
                         } else {
-                            conversation.logger().info("Check Outage Status API Unknown exception at Budget Enroll Method");
+                            conversation.logger().info("Check Outage Status API Unknown exception at balstatus Method");
                             conversation.transition('TcUserInvalid');
                             done(); 
                         }   

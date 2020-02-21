@@ -27,7 +27,7 @@ function payBill() {
                             session.userAccountBackendCheck = true; 
                             let defaultData = isDefaultData[0];
                             session.payment_category_type = defaultData.paymentCategoryType;
-                            session.payBillWalletResult = defaultData.paymentMethodType + " " + defaultData.paymentCategoryType + " " + "CARD" + " " + "ending with" + " " + defaultData.maskedWalletItemAccountNumber.slice(-4);
+                            session.payBillWalletResult = defaultData.paymentMethodType + " " + defaultData.paymentCategoryType + " " + "ending with" + " " + defaultData.maskedWalletItemAccountNumber.slice(-4);
                             session.wallet_id = defaultData.walletExternalID;
                             session.wallet_item_id = defaultData.walletItemID;
                             session.masked_wallet_item_account_number = defaultData.maskedWalletItemAccountNumber.slice(-4);
