@@ -191,10 +191,14 @@ function Close() {
 }
 
 function CloseYes() {
+    var isIE = false || !!document.documentMode;
     Bots.destroy();
     clearChat();
      agentAvailable = false;
      showChatButton();
+     if(isIE){
+        location.reload(true);
+    }
 }
 
 function CloseNo() {
