@@ -1,12 +1,9 @@
 {
   "name": "ComED Services",
-  "devHostName": "d-e-euweb-livechat-comed-ui-01.azurewebsites.net/.mcs",
-  "testHostName": "aztst1-secure.comed.com/.mcs",
-  "stageHostName": "azstg-secure.comed.com/.mcs",
-  "prodHostName": "",
+  "hostName": "?envirornmentUrl/.mcs",
   "payBillWalletPost": {
     "name": "payBillWalletPost",
-    "url": "https://?hostName/mobile/custom/auth_v6/wallet/query",
+    "url": "?hostName/mobile/custom/auth_v6/wallet/query",
     "method": "Post",
     "postParams": {
       "auth_session_token": "",
@@ -15,7 +12,7 @@
   },
   "payBillCreatePaymentPost": {
     "name": "payBillCreatePaymentPost",
-    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/payments/schedule",
+    "url": "?hostName/mobile/custom/auth_v6/accounts/?accountNumber/payments/schedule",
     "method": "Post",
     "postParams": {
       "auth_session_token": "",
@@ -32,7 +29,7 @@
   },
   "outagePost": {
     "name": "outageApi",
-    "url": "https://?hostName/mobile/custom/anon/ComEd/outage/query",
+    "url": "?hostName/mobile/custom/anon/ComEd/outage/query",
     "method": "Post",
     "postParams": {
       "phone": "?phone",
@@ -41,17 +38,17 @@
   },
   "outageAuthenticatedGet": {
     "name": "outageAuthenticatedGetApi",
-    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/outage",
+    "url": "?hostName/mobile/custom/auth_v6/accounts/?accountNumber/outage",
     "method": "Get"
   },
   "copyOfBillGet": {
     "name": "copyOfBillGetApi",
-    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/billing/?bdate/pdf",
+    "url": "?hostName/mobile/custom/auth_v6/accounts/?accountNumber/billing/?bdate/pdf",
     "method": "Get"
   },
   "accountBalancePost": {
     "name": "accountBalanceApi",
-    "url": "https://?hostName/mobile/custom/anonbots/Comed/bill/lookup",
+    "url": "?hostName/mobile/custom/anonbots/Comed/bill/lookup",
     "method": "Post",
     "postParams": {
       "phone": "?phone",
@@ -61,22 +58,22 @@
   },
   "accountBalanceGet": {
     "name": "accountBalanceGet",
-    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber",
+    "url": "?hostName/mobile/custom/auth_v6/accounts/?accountNumber",
     "method": "Get"
   },
   "budgetBillingGet": {
     "name": "getBudgetBillingApi",
-    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/billing/budget",
+    "url": "?hostName/mobile/custom/auth_v6/accounts/?accountNumber/billing/budget",
     "method": "Get"
   },
   "budgetEnrollmentPut": {
     "name": "budgetEnrollmentPutApi",
-    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/billing/budget",
+    "url": "?hostName/mobile/custom/auth_v6/accounts/?accountNumber/billing/budget",
     "method": "Put"
   },
   "reportOutagePost": {
     "name": "reportOutagePostApi",
-    "url": "https://?hostName/mobile/custom/anon/ComEd/outage/",
+    "url": "?hostName/mobile/custom/anon/ComEd/outage/",
     "method": "Post",
     "postParams": {
       "outageIssue": "?outageIssue",
@@ -86,7 +83,7 @@
   },
   "reportOutageAuthenticatedPost": {
     "name": "reportOutageAuthenticatedPost",
-    "url": "https://?hostName/mobile/custom/auth_v6/accounts/?accountNumber/outage",
+    "url": "?hostName/mobile/custom/auth_v6/accounts/?accountNumber/outage",
     "method": "Post",
     "postParams": {
       "outageIssue": "?outageIssue",
@@ -110,9 +107,9 @@
     "folder": "Shared%20Documents/AI_LiveChat_Pdfs"
   },
   "smtpDetails": {
-    "username": "karthik.mannava@sofbang.com",
-    "password": "1700Summer",
-    "fromAddress": "karthik.mannava@sofbang.com"
+    "username": "svc_aitc_dev@exelonds.com",
+    "password": "U1!B4@M8#C8$L1%S",
+    "fromAddress": "svc_aitc_dev@exelonds.com"
   },
   "chatSurveyApi": {
     "name": "chatSurveyApi",

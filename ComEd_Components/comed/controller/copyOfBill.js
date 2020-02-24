@@ -42,7 +42,7 @@ function copyOfBill() {
     };
 
     this.run = function (session, conversation, callback) {
-        meta.copyOfBillGet.url = meta.copyOfBillGet.url.replace("?accountNumber",session.account_number).replace("?bdate",session.bdate);
+        meta.hostName = meta.hostName.replace("?envirornmentUrl",session.envirornment);
         HttpService.httpRequest(meta.copyOfBillGet,meta.hostName, session, function (session) {
             this.pdfStatus(session, function (session) {
                 callback(session)
