@@ -1,9 +1,12 @@
 let metaData = require('../config/config');
 let httpService = require('../../services/httpservice');
+var utility = require('../../utilities/utility');
+var moment = require('moment');
 
 function outageStatus() {
     let HttpService = new httpService();
     let meta = JSON.parse(JSON.stringify(metaData))
+    let Utility = new utility();
 
     this.omsStatus = function (session, conversation, callback) {
         if (session.content == 401) {
@@ -40,19 +43,20 @@ function outageStatus() {
                         session.maskedAccountNumber = data.maskedAccountNumber;
                         session.maskedAddress = data.maskedAddress;
                         session.multipleAcc = "No";
-                        if (data.status === "NOT ACTIVE") {
+                        if (data.status === "ACTIVE") {
                             conversation.logger().info("Outage Check Status Api Oms Status Not Active at omsStatus method");
                             session.omrStatus = 'No';
-                            if (data.outageReported !== undefined && data.outageReported !== null && data.outageReported !== "") {
-                                conversation.logger().info("Outage Check Status Api Outage Reported at omsStatus method");
-                                session.outageReported = 'Yes'
-                                callback(session)
-                            } else {
+                            // if (data.status === "ACTIVE") {
+                            //     conversation.logger().info("Outage Check Status Api Outage Reported at omsStatus method");
+                            //     session.outageReported = 'Yes'
+                            //     callback(session)
+                            // } else {
                                 conversation.logger().info("Outage Check Status Api Outage Not Reported at omsStatus method");
                                 session.address = data.address;
+                                session.restorationTime = moment(moment(data.ETR).utcOffset('-06:00')).format("hh:mm:ss a") + ' on ' + moment(data.ETR).format('MM/DD/YYYY');
                                 session.outageReported = 'No'
                                 callback(session)
-                            }
+                            //}
                         } else {
                             conversation.logger().info("Outage Check Status Api Omr Status  Active at omsStatus method");
                             session.omrStatus = 'Yes';

@@ -19,7 +19,8 @@ module.exports = {
             outageReported: {required: true, type: 'string'},
             envirornment: {required: true, type: 'string'},
             storeOutageJson: {required: true, type: 'list'},
-            OracleMobileBackendID: {required: true, type: 'string'}
+            OracleMobileBackendID: {required: true, type: 'string'},
+            restorationTime: {required: true, type: 'string'}
         },
         supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive',
         'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>5','FnAccProtected']
@@ -40,7 +41,7 @@ module.exports = {
         session.envirornment = conversation.properties().envirornment;
         session.storeOutageJson = conversation.properties().storeOutageJson;
         session.OracleMobileBackendID = conversation.properties().OracleMobileBackendID;
-
+        session.restorationTime = conversation.properties().restorationTime;
 
         conversation.logger().info("*******storeOutageJson*********");
         conversation.logger().info(session.storeOutageJson);
@@ -88,6 +89,7 @@ module.exports = {
                             }   
                         }else{
                             conversation.variable('address',session.address);
+                            conversation.variable('restorationTime',session.restorationTime);
                             conversation.variable('phonenumber',session.phone);
                             conversation.variable('accountnumber',session.accountNumber);
                             conversation.variable('loginAuthenticated',session.loginAuthenticated);
