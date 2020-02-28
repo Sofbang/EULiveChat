@@ -1,5 +1,4 @@
 'use strict';
-var CopyOfBill = require("../comed/controller/copyOfBill");
 let utility = require("../utilities/utility");
 let Utility = new utility();
 
