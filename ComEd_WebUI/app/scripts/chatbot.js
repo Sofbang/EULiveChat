@@ -70,14 +70,16 @@ function initbots() {
             Bots.setDelegate({
                 beforeDisplay: function(message) {
                     var shouldDisplay = false;
-
                     try {
                         shouldDisplay = message.metadata.isHidden;
                         return null;
                     } catch (error) {
-
                         if (message.text.includes('Ask ComEd')) {
                             var displayText = message.text.replace('Ask ComEd', '');
+                            message.text = displayText;
+                            return message;
+                        } else if (message.text.toLowerCase().includes('agent rejected')) { // replacing "Agent rejected" message"
+                            var displayText = message.text.toLowerCase().replace('agent rejected', "Live chat with a ComEd team member is available Monday - Friday, 9 a.m. - 5 p.m. For live help outside these hours, you can call ComEd's Customer Service at 1-800-EDISON-1 (1-800-334-7661).");
                             message.text = displayText;
                             return message;
                         } else {
