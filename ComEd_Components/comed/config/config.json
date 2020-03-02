@@ -101,9 +101,9 @@
     "conversationUri": "/api/v1/bots/sessions/?sessionId/log"   
   },
   "smtpDetails": {
-    "username": "svc_aitc_dev@exelonds.com",
+    "username": "svc_aitc_dev@exeloncorp.com",
     "password": "U1!B4@M8#C8$L1%S",
-    "fromAddress": "svc_aitc_dev@exelonds.com"
+    "fromAddress": "svc_aitc_dev@exeloncorp.com"
   },
   "chatSurveyApi": {
     "name": "chatSurveyApi",

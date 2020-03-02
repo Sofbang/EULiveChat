@@ -88,7 +88,7 @@ module.exports = {
                                 done();
                             }   
                         }else{
-                            conversation.variable('address',session.address);
+                            conversation.variable('address',session.loginAuthenticated == 'Yes' ? session.address : session.maskedAddress);
                             conversation.variable('restorationTime',session.restorationTime);
                             conversation.variable('phonenumber',session.phone);
                             conversation.variable('accountnumber',session.accountNumber);
