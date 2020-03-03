@@ -16,7 +16,7 @@ function httpservice() {
                     'Connection': 'keep-alive',
                     'Content-Type': 'application/json',
                     'oracle-mobile-backend-id': session.OracleMobileBackendID,
-                    'Authorization': session.loginAuthenticated != undefined && session.loginAuthenticated == "No" ? "Basic YW5vbl90c3Q6NkclUXViQGxaQm1vZ09xJFc4Qlg=" : 'Bearer ' + session.token,
+                    'Authorization': session.loginAuthenticated != undefined && session.loginAuthenticated == "No" ? "Basic " + session.anonOAuthKey : 'Bearer ' + session.token,
                     'Cookie': 'ASP.NET_SessionId='+ session.sessionId
                 }
             let reqOptions = {

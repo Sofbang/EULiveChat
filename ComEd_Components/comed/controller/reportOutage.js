@@ -40,7 +40,7 @@ function reportOutage() {
         conversation.logger().info("HostName: " + meta.hostName);
         if (session.loginAuthenticated == 'Yes') {
             conversation.logger().info("Calling Report Outage Authenticated API.")
-            meta.reportOutageAuthenticatedPost.url = meta.reportOutageAuthenticatedPost.url.replace("?accountNumber", session.account_number);
+            meta.reportOutageAuthenticatedPost.url = meta.reportOutageAuthenticatedPost.url.replace("?accountNumber", session.account_number).replace("?mcsVersionAuth",session.mcsVersionAuth);
             HttpService.httpRequest(meta.reportOutageAuthenticatedPost, meta.hostName, session, conversation, done, function (session) {
                 this.reportStatus(session, conversation, function (session) {
                     callback(session)
@@ -48,6 +48,7 @@ function reportOutage() {
             }.bind(this));
         } else {
             conversation.logger().info("Calling Report Outage UnAuthenticated API.")
+            meta.reportOutagePost.url = meta.reportOutagePost.url.replace("?mcsVersionAuth",session.mcsVersionAuth);
             HttpService.httpRequest(meta.reportOutagePost, meta.hostName, session, conversation,done, function (session) {
                 this.reportStatus(session, conversation, function (session) {
                     callback(session)

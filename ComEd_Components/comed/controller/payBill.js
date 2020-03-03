@@ -91,6 +91,7 @@ function payBill() {
     this.run = function (session, conversation,done, callback) {
         meta.hostName = meta.hostName.replace("?envirornmentUrl",session.envirornment);
         conversation.logger().info("HostName: " + meta.hostName);
+        meta.payBillWalletPost.url = meta.payBillWalletPost.url.replace("?mcsVersionAuth",session.mcsVersionAuth);
         if (session.payBillPaymentApiFlag == "No"){
             conversation.logger().info("Pay Bill Wallet Check API Call");
             HttpService.httpRequest(meta.payBillWalletPost,meta.hostName, session,conversation,done, function (session) {
@@ -100,7 +101,7 @@ function payBill() {
             }.bind(this));
         } else {
             session.payment_category_type = session.payment_category_type == "CREDIT" ? 'Card' : 'Check';
-            meta.payBillCreatePaymentPost.url = meta.payBillCreatePaymentPost.url.replace("?accountNumber",session.accountNumber);
+            meta.payBillCreatePaymentPost.url = meta.payBillCreatePaymentPost.url.replace("?accountNumber",session.accountNumber).replace("?mcsVersionAuth",session.mcsVersionAuth);
             conversation.logger().info("Pay Bill Create Payment API Call");
             HttpService.httpRequest(meta.payBillCreatePaymentPost,meta.hostName, session,conversation,done, function (session) {
                 this.createPayment(session,conversation, function (session) {

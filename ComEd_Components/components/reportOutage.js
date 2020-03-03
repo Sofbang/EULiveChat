@@ -14,7 +14,10 @@ module.exports = {
             token: {required: true, type: 'string'},
             sessionId:  {required: true, type: 'string'},
             envirornment: {required: true, type: 'string'},
-            OracleMobileBackendID: {required: true, type: 'string'}
+            OracleMobileBackendID: {required: true, type: 'string'},
+            anonOAuthKey: {required: true, type: 'string'},
+            mcsVersionAuth: {required: true, type: 'string'},
+            mcsVersionAnon: {required: true, type: 'string'}
         },
         supportedActions: ['outageReportResult','UserNotLoggedIn', 'DefaultErrorHandler', 
         'TcUserInvalid', 'Invalid']
@@ -32,7 +35,9 @@ module.exports = {
         session.sessionId = conversation.properties().sessionId;
         session.envirornment = conversation.properties().envirornment;
         session.OracleMobileBackendID = conversation.properties().OracleMobileBackendID;
-
+        session.anonOAuthKey = conversation.properties().anonOAuthKey;
+        session.mcsVersionAuth = conversation.properties().mcsVersionAuth;
+        session.mcsVersionAnon = conversation.properties().mcsVersionAnon;
 
         conversation.logger().info("**************Report Outage Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_number + ", token: " + session.token + ", sessionId: " + session.sessionId);

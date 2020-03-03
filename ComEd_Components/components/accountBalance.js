@@ -19,7 +19,9 @@ module.exports = {
             envirornment:  {required: true, type: 'string'},
             isCashOnly:  {required: true, type: 'boolean'},
             getBillBdateFlag: {required: true, type: 'string'},
-            OracleMobileBackendID: {required: true, type: 'string'}
+            OracleMobileBackendID: {required: true, type: 'string'},
+            anonOAuthKey: {required: true, type: 'string'},
+            mcsVersionAuth: {required: true, type: 'string'}
         },
         supportedActions: ['Success','MultiAccounts','WrongInformation','PayBillComponent',
         'UserNotLoggedIn', 'DefaultErrorHandler', 'FnAccProtected', 'TcUserInvalid', 'GetCopyOfBill', 'DueDateNull']
@@ -36,7 +38,8 @@ module.exports = {
         session.envirornment = conversation.properties().envirornment;
         session.isCashOnly = conversation.properties().isCashOnly;
         session.OracleMobileBackendID = conversation.properties().OracleMobileBackendID;
-        
+        session.anonOAuthKey = conversation.properties().anonOAuthKey;
+        session.mcsVersionAuth = conversation.properties().mcsVersionAuth;
         
         conversation.logger().info("**************Account Balance Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_num + ", token: " + session.token + ", sessionId: " + session.sessionId);

@@ -70,7 +70,7 @@ function accountBalance() {
     this.run = function (session, conversation,done, callback) {
         meta.hostName = meta.hostName.replace("?envirornmentUrl",session.envirornment);
         conversation.logger().info("HostName: " + meta.hostName);
-        meta.accountBalanceGet.url = meta.accountBalanceGet.url.replace("?accountNumber", session.account_num);
+        meta.accountBalanceGet.url = meta.accountBalanceGet.url.replace("?accountNumber", session.account_num).replace("?mcsVersionAuth",session.mcsVersionAuth);
         if (!session.enrollment) {
             HttpService.httpRequest(meta.accountBalanceGet, meta.hostName, session, conversation,done, function (session) {
                 this.budgetBilling(session, conversation, function (session) {
@@ -78,7 +78,7 @@ function accountBalance() {
                 }.bind(this));
             }.bind(this));
         } else {
-            meta.budgetEnrollmentPut.url = meta.budgetEnrollmentPut.url.replace("?accountNumber", session.account_num);
+            meta.budgetEnrollmentPut.url = meta.budgetEnrollmentPut.url.replace("?accountNumber", session.account_num).replace("?mcsVersionAuth",session.mcsVersionAuth);
             HttpService.httpRequest(meta.budgetEnrollmentPut, meta.hostName, session, conversation,done, function (session) {
                 this.budgetEnroll(session, conversation, function (session) {
                     callback(session)

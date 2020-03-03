@@ -87,7 +87,7 @@ function outageStatus() {
         conversation.logger().info("HostName: " + meta.hostName);
         if (session.loginAuthenticated == 'Yes') {
             conversation.logger().info("Calling Outage Authenticated API.")
-            meta.outageAuthenticatedGet.url = meta.outageAuthenticatedGet.url.replace("?accountNumber", session.account_number);
+            meta.outageAuthenticatedGet.url = meta.outageAuthenticatedGet.url.replace("?accountNumber", session.account_number).replace("?mcsVersionAuth",session.mcsVersionAuth);
             HttpService.httpRequest(meta.outageAuthenticatedGet, meta.hostName, session, conversation,done, function (session) {
                 this.omsStatus(session, conversation, function (session) {
                     callback(session)
@@ -96,6 +96,7 @@ function outageStatus() {
         } else {
             session.phone == "" ? delete meta.outagePost.postParams.phone : delete meta.outagePost.postParams.account_number;
             conversation.logger().info("Calling Outage UnAuthenticated API.")
+            meta.outagePost.url = meta.outagePost.url.replace("?mcsVersionAnon",session.mcsVersionAnon);
             HttpService.httpRequest(meta.outagePost, meta.hostName, session, conversation,done, function (session) {
                 this.omsStatus(session, conversation, function (session) {
                     callback(session)

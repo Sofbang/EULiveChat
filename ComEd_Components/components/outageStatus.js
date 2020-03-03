@@ -20,7 +20,10 @@ module.exports = {
             envirornment: {required: true, type: 'string'},
             storeOutageJson: {required: true, type: 'list'},
             OracleMobileBackendID: {required: true, type: 'string'},
-            restorationTime: {required: true, type: 'string'}
+            restorationTime: {required: true, type: 'string'},
+            anonOAuthKey: {required: true, type: 'string'},
+            mcsVersionAuth: {required: true, type: 'string'},
+            mcsVersionAnon: {required: true, type: 'string'}
         },
         supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive',
         'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>5','FnAccProtected']
@@ -42,6 +45,10 @@ module.exports = {
         session.storeOutageJson = conversation.properties().storeOutageJson;
         session.OracleMobileBackendID = conversation.properties().OracleMobileBackendID;
         session.restorationTime = conversation.properties().restorationTime;
+        session.anonOAuthKey = conversation.properties().anonOAuthKey;
+        session.mcsVersionAuth = conversation.properties().mcsVersionAuth;
+        session.mcsVersionAnon = conversation.properties().mcsVersionAnon;
+
 
         conversation.logger().info("*******storeOutageJson*********");
         conversation.logger().info(session.storeOutageJson);
