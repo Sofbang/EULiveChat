@@ -95,12 +95,12 @@ module.exports = {
                                 done();
                             }   
                         }else{
-                            conversation.variable('address',session.loginAuthenticated == 'Yes' ? session.address : session.maskedAddress);
+                            conversation.variable('address',session.loginAuthenticated == 'Yes' ? session.address : "***"+session.maskedAddress);
                             conversation.variable('restorationTime',session.restorationTime);
                             conversation.variable('phonenumber',session.phone);
                             conversation.variable('accountnumber',session.accountNumber);
                             conversation.variable('loginAuthenticated',session.loginAuthenticated);
-                            conversation.variable('maskedAddress',session.maskedAddress);
+                            conversation.variable('maskedAddress',"***"+session.maskedAddress);
                             conversation.variable('maskedAccountNumber',session.maskedAccountNumber);
                             conversation.variable('omrStatus',session.omrStatus);
                             conversation.variable('outageReported',session.outageReported);

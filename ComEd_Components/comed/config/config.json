@@ -3,7 +3,7 @@
   "hostName": "?envirornmentUrl/.mcs",
   "payBillWalletPost": {
     "name": "payBillWalletPost",
-    "url": "?hostName/mobile/custom/auth_?mcsVersionAuth/wallet/query",
+    "url": "?hostName/mobile/custom/auth?mcsVersionAuth/wallet/query",
     "method": "Post",
     "postParams": {
       "auth_session_token": "",
@@ -12,7 +12,7 @@
   },
   "payBillCreatePaymentPost": {
     "name": "payBillCreatePaymentPost",
-    "url": "?hostName/mobile/custom/auth_?mcsVersionAuth/accounts/?accountNumber/payments/schedule",
+    "url": "?hostName/mobile/custom/auth?mcsVersionAuth/accounts/?accountNumber/payments/schedule",
     "method": "Post",
     "postParams": {
       "auth_session_token": "",
@@ -29,7 +29,7 @@
   },
   "outagePost": {
     "name": "outageApi",
-    "url": "?hostName/mobile/custom/anon_?mcsVersionAnon/ComEd/outage/query",
+    "url": "?hostName/mobile/custom/anon?mcsVersionAnon/ComEd/outage/query",
     "method": "Post",
     "postParams": {
       "phone": "?phone",
@@ -38,32 +38,32 @@
   },
   "outageAuthenticatedGet": {
     "name": "outageAuthenticatedGetApi",
-    "url": "?hostName/mobile/custom/auth_?mcsVersionAuth/accounts/?accountNumber/outage",
+    "url": "?hostName/mobile/custom/auth?mcsVersionAuth/accounts/?accountNumber/outage",
     "method": "Get"
   },
   "copyOfBillGet": {
     "name": "copyOfBillGetApi",
-    "url": "?hostName/mobile/custom/auth_?mcsVersionAuth/accounts/?accountNumber/billing/?bdate/pdf",
+    "url": "?hostName/mobile/custom/auth?mcsVersionAuth/accounts/?accountNumber/billing/?bdate/pdf",
     "method": "Get"
   },
   "accountBalanceGet": {
     "name": "accountBalanceGet",
-    "url": "?hostName/mobile/custom/auth_?mcsVersionAuth/accounts/?accountNumber",
+    "url": "?hostName/mobile/custom/auth?mcsVersionAuth/accounts/?accountNumber",
     "method": "Get"
   },
   "budgetBillingGet": {
     "name": "getBudgetBillingApi",
-    "url": "?hostName/mobile/custom/auth_?mcsVersionAuth/accounts/?accountNumber/billing/budget",
+    "url": "?hostName/mobile/custom/auth?mcsVersionAuth/accounts/?accountNumber/billing/budget",
     "method": "Get"
   },
   "budgetEnrollmentPut": {
     "name": "budgetEnrollmentPutApi",
-    "url": "?hostName/mobile/custom/auth_?mcsVersionAuth/accounts/?accountNumber/billing/budget",
+    "url": "?hostName/mobile/custom/auth?mcsVersionAuth/accounts/?accountNumber/billing/budget",
     "method": "Put"
   },
   "reportOutagePost": {
     "name": "reportOutagePostApi",
-    "url": "?hostName/mobile/custom/anon_?mcsVersionAnon/ComEd/outage/",
+    "url": "?hostName/mobile/custom/anon?mcsVersionAnon/ComEd/outage/",
     "method": "Post",
     "postParams": {
       "outageIssue": "?outageIssue",
@@ -73,7 +73,7 @@
   },
   "reportOutageAuthenticatedPost": {
     "name": "reportOutageAuthenticatedPost",
-    "url": "?hostName/mobile/custom/auth_?mcsVersionAuth/accounts/?accountNumber/outage",
+    "url": "?hostName/mobile/custom/auth?mcsVersionAuth/accounts/?accountNumber/outage",
     "method": "Post",
     "postParams": {
       "outageIssue": "?outageIssue",

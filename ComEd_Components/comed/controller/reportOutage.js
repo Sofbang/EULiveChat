@@ -48,7 +48,7 @@ function reportOutage() {
             }.bind(this));
         } else {
             conversation.logger().info("Calling Report Outage UnAuthenticated API.")
-            meta.reportOutagePost.url = meta.reportOutagePost.url.replace("?mcsVersionAuth",session.mcsVersionAuth);
+            meta.reportOutagePost.url = meta.reportOutagePost.url.replace("?mcsVersionAnon",session.mcsVersionAnon);
             HttpService.httpRequest(meta.reportOutagePost, meta.hostName, session, conversation,done, function (session) {
                 this.reportStatus(session, conversation, function (session) {
                     callback(session)
