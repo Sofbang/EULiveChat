@@ -26,7 +26,7 @@ module.exports = {
             mcsVersionAnon: {required: true, type: 'string'}
         },
         supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive',
-        'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>5','FnAccProtected']
+        'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>5','FnAccProtected',"FnAccFinaled"]
     }),
     invoke: (conversation, done) => {
         // perform conversation tasks.
@@ -95,12 +95,12 @@ module.exports = {
                                 done();
                             }   
                         }else{
-                            conversation.variable('address',session.loginAuthenticated == 'Yes' ? session.address : "***"+session.maskedAddress);
+                            conversation.variable('address',session.loginAuthenticated == 'Yes' ? session.address : session.maskedAddress + "***");
                             conversation.variable('restorationTime',session.restorationTime);
                             conversation.variable('phonenumber',session.phone);
                             conversation.variable('accountnumber',session.accountNumber);
                             conversation.variable('loginAuthenticated',session.loginAuthenticated);
-                            conversation.variable('maskedAddress',"***"+session.maskedAddress);
+                            conversation.variable('maskedAddress',session.maskedAddress + "***");
                             conversation.variable('maskedAccountNumber',session.maskedAccountNumber);
                             conversation.variable('omrStatus',session.omrStatus);
                             conversation.variable('outageReported',session.outageReported);
@@ -138,7 +138,7 @@ module.exports = {
                             done();
                         } else if (session.content.meta.code == "FN-ACCOUNT-FINALED"){
                             conversation.logger().info("Check Outage Status API Account Finaled Exception at balStatus method");
-                            conversation.transition('TcUserInvalid');
+                            conversation.transition('FnAccFinaled');
                             done();
                         } else {
                             conversation.logger().info("Check Outage Status API Unknown exception at balstatus Method");
