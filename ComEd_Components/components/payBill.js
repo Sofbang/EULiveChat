@@ -32,7 +32,10 @@ module.exports = {
         // perform conversation tasks.
 
         let session = {};
-        session.payment_amount = Number(conversation.properties().actBalance);
+        session.payment_amount = conversation.properties().actBalance;
+        if (session.payment_amount.split(".").length < 2 || session.payment_amount.split(".")[1].length<=2 ){
+            session.payment_amount = (Number(session.payment_amount).toFixed(2)).toString();
+        }
         session.payBillwalletResult = conversation.properties().payBillWalletResult;
         session.payment_category_type = conversation.properties().payBillPaymentCategoryType;
         session.wallet_id = conversation.properties().payBillWalletId;

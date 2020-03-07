@@ -14,8 +14,8 @@ function payBill() {
             callback(session)
         } else {
             try{
-                let content = JSON.parse(session.content);
-                session.content = content;
+                let content = session.content;
+               // session.content = content;
                 if(content != undefined && content != null && content != "" && content.success){
                     session.checkString = "success";
                     conversation.logger().info("Pay Bill Wallet Response Success at payBillStatus method");
@@ -65,8 +65,8 @@ function payBill() {
             callback(session)
         } else {
             try{
-                let content = JSON.parse(session.content);
-                session.content = content;
+                let content = session.content;
+               // session.content = content;
                 if(content != undefined && content != null && content != "" && content.success){
                     session.checkString = 'success';
                     callback(session)
