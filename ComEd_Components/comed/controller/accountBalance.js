@@ -19,7 +19,7 @@ function accountBalance() {
                 if (content != undefined && content != null && content != "" && content.success) {
                     conversation.logger().info("Account Balance Api Success at balStatus method");
                     session.actBalance = content.data.BillingInfo.netDueAmount;
-                    session.actDueDate = content.data.BillingInfo.dueByDate != undefined ? Utility.dateFormat(content.data.BillingInfo.dueByDate, 'MM-DD-YYYY') : 'null';
+                    session.actDueDate = content.data.BillingInfo.dueByDate != undefined ? Utility.dateFormat(content.data.BillingInfo.dueByDate, 'MM/DD/YYYY') : 'null';
                     session.address = content.data.address;
                     session.bdate = content.data.BillingInfo.billDate != undefined ? Utility.dateFormat(content.data.BillingInfo.billDate, 'YYYY-MM-DD') : 'null';
                     session.isCashOnly = content.data.isCashOnly;
