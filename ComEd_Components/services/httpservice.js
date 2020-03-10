@@ -73,13 +73,13 @@ function httpservice() {
                         callback(session);
                     } else {
                         session.content = responseContent;
-                        conversation.logger().info("Responsecontent"+ JSON.stringify(responseContent) );
+                        conversation.logger().info("HTTPSERVICE:: Responsecontent"+ JSON.stringify(responseContent) );
                         callback(session);
                     }
                 }.bind(this));
             }
         } catch (err) {
-            conversation.logger().info("Error At HttpService Module:");
+            conversation.logger().info("HTTPSERVICE:: Error in request");
             conversation.logger().info(err);
             conversation.transition('DefaultErrorHandler');
             done();

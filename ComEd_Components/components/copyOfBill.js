@@ -36,16 +36,16 @@ module.exports = {
 
             console.log(session.bdate)
             if (session.bdate != 'null') {
-                conversation.logger().info("Bill date found and sent to client API to get the PDF Bill");
+                conversation.logger().info("COPY OF BILL COMPONENT::Bill date is present and will be sent to the Download bill API on chatbot.js");
                 conversation.variable("bdate", session.bdate);
                 conversation.transition('Success');
                 done();
             } else if (session.bdate == "null") {
-                conversation.logger().info("Bill date not found");
+                conversation.logger().info("COPY OF BILL COMPONENT::Bill date is not present");
                 conversation.transition('Fail');
                 done();
             } else {
-                conversation.logger().info("Runtime exception at Download my Bill");
+                conversation.logger().info("COPY OF BILL COMPONENT::Runtime exception at Download my Bill");
                 conversation.transition('DefaultErrorHandler');
                 done();
             }

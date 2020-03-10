@@ -54,15 +54,15 @@ module.exports = {
                     done();
                 } else if(session.checkString == 'fail'){
                     if(session.content.meta.code == "TC-ACCT-INVALID"){
-                        conversation.logger().info("Report Outage Invalid Account Number")
+                        conversation.logger().info("REPORT OUTAGE COMPONENT::Exception:: Account is Invalid");
                         conversation.transition('Invalid');
                         done();
                     } else if(session.content.meta.code == "TC-USER-INVALID"){
-                        conversation.logger().info("Report Outage Status API User Invalid Exception at balStatus method");
+                        conversation.logger().info("REPORT OUTAGE COMPONENT::Exception:: User is Invalid");
                         conversation.transition('TcUserInvalid');
                         done();
                     } else {
-                        conversation.logger().info("Report Outage Status API Unknown exception at Budget Enroll Method");
+                        conversation.logger().info("REPORT OUTAGE COMPONENT::Exception:: Unknown exception");
                         conversation.transition('TcUserInvalid');
                         done();
                     }

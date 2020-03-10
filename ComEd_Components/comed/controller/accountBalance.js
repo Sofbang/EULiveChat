@@ -17,7 +17,7 @@ function accountBalance() {
                 let content = JSON.parse(session.content);
                 session.content = content;
                 if (content != undefined && content != null && content != "" && content.success) {
-                    conversation.logger().info("Account Balance Api Success at balStatus method");
+                    conversation.logger().info("ACCOUNT BALANCE CONTROLLER:: API response success is true");
                     session.actBalance = content.data.BillingInfo.netDueAmount;
                     session.actDueDate = content.data.BillingInfo.dueByDate != undefined ? Utility.dateFormat(content.data.BillingInfo.dueByDate, 'MM/DD/YYYY') : 'null';
                     session.address = content.data.address;
@@ -27,15 +27,15 @@ function accountBalance() {
                     callback(session)
                 } else if (content != undefined && content != null && content != "" && content.success == false) {
                     session.checkString = "fail";
-                    conversation.logger().info("Account Balance Api Failed at balStatus method");
+                    conversation.logger().info("ACCOUNT BALANCE CONTROLLER:: API response success is false");
                     callback(session);
                 } else {
-                    conversation.logger().info("Account Balance Runtime Exception at balStatus method");
+                    conversation.logger().info("ACCOUNT BALANCE CONTROLLER:: Runtime exception in else ");
                     session.checkString = 'runTimeError';
                     callback(session);
                 }
             } catch (err) {
-                conversation.logger().info("Account Balance Runtime Exception at balStatus method");
+                conversation.logger().info("ACCOUNT BALANCE CONTROLLER:: Runtime exception in Catch ");
                 conversation.logger().info(err);
                 session.checkString = 'runTimeError';
                 callback(session);

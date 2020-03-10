@@ -70,15 +70,15 @@ module.exports = {
                             done();
                         } else if(session.checkString == 'fail'){
                             if(session.content.meta.code == "FN-NOT-ELIGIBLE"){
-                                conversation.logger().info("Budget Billing Enrollment API Not Eligible exception at Budget Enroll Method");
+                                conversation.logger().info("BUDGET BILLING COMPONENT::Exception:: User is not eligible for Budget billing program.");
                                 conversation.transition('NotEligible');
                                 done(); 
                             } else if(session.content.meta.code == "FN-ALREADY-ENROLLED"){
-                                conversation.logger().info("Budget Billing Enrollment API Already Enrolled exception at Budget Enroll Method");
+                                conversation.logger().info("BUDGET BILLING COMPONENT::Exception:: User is already enrolled for Budget billing program.");
                                 conversation.transition('EnrolledAlready');
                                 done(); 
                             } else {
-                                conversation.logger().info("Budget Billing Enrollment API Unknown exception at Budget Enroll Method");
+                                conversation.logger().info("BUDGET BILLING COMPONENT::Exception:: Unknown exception");
                                 conversation.transition('TcUserInvalid');
                                 done(); 
                             }
