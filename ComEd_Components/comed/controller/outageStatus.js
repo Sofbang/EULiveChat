@@ -8,7 +8,7 @@ function outageStatus() {
     let meta = JSON.parse(JSON.stringify(metaData))
     let Utility = new utility();
 
-    this.omsStatus = function (session, conversation, callback) {
+    this.omrStatus = function (session, conversation, callback) {
         if (session.content == 401) {
             session.statusCode = 401;
             callback(session)
@@ -45,7 +45,7 @@ function outageStatus() {
                         session.multipleAcc = "No";
                         if (data.status === "ACTIVE") {
                             conversation.logger().info("OUTAGE CHECK STATUS CONTROLLER:: The outage is active for the account");
-                            session.omsStatus = 'No';
+                            session.omrStatus = 'No';
                                 session.address = data.address;
                                 session.restorationTime = moment(moment(data.ETR).utcOffset('-06:00')).format("hh:mm:ss a") + ' on ' + moment(data.ETR).format('MM/DD/YYYY');
                                 session.outageReported = 'No'
@@ -53,7 +53,7 @@ function outageStatus() {
                             //}
                         } else {
                             conversation.logger().info("OUTAGE CHECK STATUS CONTROLLER:: The outage is not active for the account");
-                            session.omsStatus = 'Yes';
+                            session.omrStatus = 'Yes';
                             session.address = data.address;
                             callback(session)
                         }
@@ -83,7 +83,7 @@ function outageStatus() {
             conversation.logger().info("OUTAGE STATUS CONTROLLER: :Calling Outage Authenticated API.")
             meta.outageAuthenticatedGet.url = meta.outageAuthenticatedGet.url.replace("?accountNumber", session.account_number).replace("?mcsVersionAuth",session.mcsVersionAuth);
             HttpService.httpRequest(meta.outageAuthenticatedGet, meta.hostName, session, conversation,done, function (session) {
-                this.omsStatus(session, conversation, function (session) {
+                this.omrStatus(session, conversation, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
@@ -92,7 +92,7 @@ function outageStatus() {
             conversation.logger().info("OUTAGE STATUS CONTROLLER:: Calling Outage UnAuthenticated API.")
             meta.outagePost.url = meta.outagePost.url.replace("?mcsVersionAnon",session.mcsVersionAnon);
             HttpService.httpRequest(meta.outagePost, meta.hostName, session, conversation,done, function (session) {
-                this.omsStatus(session, conversation, function (session) {
+                this.omrStatus(session, conversation, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
