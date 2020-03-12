@@ -8,7 +8,9 @@ module.exports = {
         properties: {
             rating: { required: true, type: 'int' },
             chatSurveyComments: {required: true, type: 'string'},
-            email: {required: true, type: 'string'}
+            email: {required: true, type: 'string'},
+            feedBackHostName: {required: true, type: 'string'},
+            ocpApimSubscriptionKey: {required: true, type: 'string'},
         },
         supportedActions: ['Success', 'Fail']
     }),
@@ -20,6 +22,8 @@ module.exports = {
         session.comments = conversation.properties().chatSurveyComments == '${chatSurveyComments.value}' ? "" : conversation.properties().chatSurveyComments;
         session.userName = conversation.properties().email == 'noemail@test.com' ? "" : conversation.properties().email;
         session.timestamp = new Date();
+        session.ocpApimSubscriptionKey = conversation.properties().ocpApimSubscriptionKey;
+        session.feedBackHostName = conversation.properties().feedBackHostName;
 
         conversation.logger().info("**************Chat Survey Component*****************");
         conversation.logger().info("Input parameter values: rating: " + session.rating + " ,comments: " + session.comments + " ,Email: " + session.userName + " ,Timestamp: " + session.timestamp);

@@ -12,7 +12,7 @@ function httpservice() {
         try {
             let form = {};
             let headers = stepMetadata.name != undefined && stepMetadata.name == "chatSurveyApi" ? {
-                'Ocp-Apim-Subscription-Key': stepMetadata["Ocp-Apim-Subscription-Key"]} : {
+                'Ocp-Apim-Subscription-Key': session.ocpApimSubscriptionKey} : {
                     'Connection': 'keep-alive',
                     'Content-Type': 'application/json',
                     'oracle-mobile-backend-id': session.OracleMobileBackendID,
