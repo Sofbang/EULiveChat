@@ -4326,6 +4326,7 @@
     float: right;
     color: #4A4A4A;
     max-width: 70%;
+    width: auto !important;
   }
   
   #container #conversation .row.right-row .msg-wrapper .msg-image:after,#container #conversation .row.right-row .msg-wrapper .msg:after {

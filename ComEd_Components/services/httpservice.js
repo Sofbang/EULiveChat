@@ -73,12 +73,13 @@ function httpservice() {
                         callback(session);
                     } else {
                         session.content = responseContent;
+                        conversation.logger().info("HTTPSERVICE:: Responsecontent"+ JSON.stringify(responseContent) );
                         callback(session);
                     }
                 }.bind(this));
             }
         } catch (err) {
-            conversation.logger().info("Error At HttpService Module:");
+            conversation.logger().info("HTTPSERVICE:: Error in request");
             conversation.logger().info(err);
             conversation.transition('DefaultErrorHandler');
             done();
@@ -97,9 +98,9 @@ function httpservice() {
         if (stepMetadata.hasOwnProperty("postParams")) {
             var requestParams = JSON.parse(JSON.stringify(stepMetadata.postParams));
             for (var key in requestParams) {
-                requestParams[key] = requestParams[key].indexOf('?') !== -1 ? session[requestParams[key].replace('?', '')] : requestParams[key];
+                requestParams[key] = typeof requestParams[key] == "boolean" ? requestParams[key]: requestParams[key].indexOf('?') !== -1 ? session[requestParams[key].replace('?', '')] : requestParams[key];
             }
-            if(stepMetadata.name != undefined && stepMetadata.name == "chatSurveyApi"){
+            if(stepMetadata.name != undefined && (stepMetadata.name == "chatSurveyApi" || stepMetadata.name == "payBillCreatePaymentPost" || stepMetadata.name == "payBillWalletPost" )){
                 reqOptions.json = requestParams;
             } else {
                 reqOptions.form = requestParams;

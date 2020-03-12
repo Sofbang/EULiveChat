@@ -14,21 +14,21 @@ function reportOutage() {
                 let content = JSON.parse(session.content);
                 session.content = content;
                 if (content != undefined && content != null && content != "" && content.success) {
-                    conversation.logger().info("Report Outage Success at reportStatus method");
+                    conversation.logger().info("REPORT OUTAGE CONTROLLER:: API response success is TRUE");
                     session.confirmationNumber = content.data.confirmationNumber;
                     session.checkString = 'success';
                     callback(session);
                 } else if (content != undefined && content != null && content != "" && content.success == false) {
-                    conversation.logger().info("Report Outage Failed at reportStatus method");
+                    conversation.logger().info("REPORT OUTAGE CONTROLLER:: API response success is FALSE");
                     session.checkString = 'fail';
                     callback(session);
                 } else {
-                    conversation.logger().info("Report Outage Runtime Exception at reportStatus method");
+                    conversation.logger().info("REPORT OUTAGE CONTROLLER:: Runtime Exception in else loop");
                     session.checkString = 'runTimeError';
                     callback(session);
                 }
             } catch (err) {
-                conversation.logger().info("Report Outage Runtime Exception at reportStatus method");
+                conversation.logger().info("REPORT OUTAGE CONTROLLER:: Runtime Exception in catch loop");
                 session.checkString = 'runTimeError';
                 callback(session);
             }
@@ -39,7 +39,7 @@ function reportOutage() {
         meta.hostName = meta.hostName.replace("?envirornmentUrl",session.envirornment);
         conversation.logger().info("HostName: " + meta.hostName);
         if (session.loginAuthenticated == 'Yes') {
-            conversation.logger().info("Calling Report Outage Authenticated API.")
+            conversation.logger().info("REPORT OUTAGE CONTROLLER::Calling Report Outage Authenticated API.")
             meta.reportOutageAuthenticatedPost.url = meta.reportOutageAuthenticatedPost.url.replace("?accountNumber", session.account_number).replace("?mcsVersionAuth",session.mcsVersionAuth);
             HttpService.httpRequest(meta.reportOutageAuthenticatedPost, meta.hostName, session, conversation, done, function (session) {
                 this.reportStatus(session, conversation, function (session) {
@@ -47,7 +47,7 @@ function reportOutage() {
                 }.bind(this));
             }.bind(this));
         } else {
-            conversation.logger().info("Calling Report Outage UnAuthenticated API.")
+            conversation.logger().info("REPORT OUTAGE CONTROLLER::Calling Report Outage UnAuthenticated API.")
             meta.reportOutagePost.url = meta.reportOutagePost.url.replace("?mcsVersionAnon",session.mcsVersionAnon);
             HttpService.httpRequest(meta.reportOutagePost, meta.hostName, session, conversation,done, function (session) {
                 this.reportStatus(session, conversation, function (session) {

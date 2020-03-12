@@ -14,8 +14,8 @@ function payBill() {
             callback(session)
         } else {
             try{
-                let content = JSON.parse(session.content);
-                session.content = content;
+                let content = session.content;
+               // session.content = content;
                 if(content != undefined && content != null && content != "" && content.success){
                     session.checkString = "success";
                     conversation.logger().info("Pay Bill Wallet Response Success at payBillStatus method");
@@ -65,22 +65,22 @@ function payBill() {
             callback(session)
         } else {
             try{
-                let content = JSON.parse(session.content);
-                session.content = content;
+                let content = session.content;
                 if(content != undefined && content != null && content != "" && content.success){
+                    conversation.logger().info("PAY BILL CONTROLLER:: API response success is TRUE");
                     session.checkString = 'success';
                     callback(session)
-                } else if (content != undefined && content != null && content != "" && content.success == false){
+                } else if (content != undefined && content != null && content != "" && content.success == false){                    
+                    conversation.logger().info("PAY BILL CONTROLLER:: API response success is FALSE");
                     session.checkString = 'fail';
-                    //session.paymentSuccess = content.meta.code == 'xmlPayment.duplicate' ? 'duplicate' : 'fail';
                     callback(session)
                 } else {
-                    conversation.logger().info("Pay Bill Create Payment Runtime Exception at createPayment method");
+                    conversation.logger().info("Pay Bill Controller:: Create Payment Runtime Exception at createPayment method in else");
                     session.checkString = 'runTimeError';
                     callback(session);
                 }
             } catch (err){
-                conversation.logger().info("Pay Bill Create Payment Runtime Exception at createPayment method");
+                conversation.logger().info("Pay Bill Controller:: Create Payment Runtime Exception at createPayment method in catch method");
                 conversation.logger().info(err);
                 session.checkString = 'runTimeError';
                 callback(session);
@@ -93,7 +93,7 @@ function payBill() {
         conversation.logger().info("HostName: " + meta.hostName);
         meta.payBillWalletPost.url = meta.payBillWalletPost.url.replace("?mcsVersionAuth",session.mcsVersionAuth);
         if (session.payBillPaymentApiFlag == "No"){
-            conversation.logger().info("Pay Bill Wallet Check API Call");
+            conversation.logger().info("Pay Bill Controller:: Wallet Check API Call");
             HttpService.httpRequest(meta.payBillWalletPost,meta.hostName, session,conversation,done, function (session) {
                 this.payBillStatus(session,conversation, function (session) {
                     callback(session)
@@ -102,7 +102,7 @@ function payBill() {
         } else {
             session.payment_category_type = session.payment_category_type == "CREDIT" ? 'Card' : 'Check';
             meta.payBillCreatePaymentPost.url = meta.payBillCreatePaymentPost.url.replace("?accountNumber",session.accountNumber).replace("?mcsVersionAuth",session.mcsVersionAuth);
-            conversation.logger().info("Pay Bill Create Payment API Call");
+            conversation.logger().info("Pay Bill Controller:: Create Payment API Call");
             HttpService.httpRequest(meta.payBillCreatePaymentPost,meta.hostName, session,conversation,done, function (session) {
                 this.createPayment(session,conversation, function (session) {
                    callback(session);

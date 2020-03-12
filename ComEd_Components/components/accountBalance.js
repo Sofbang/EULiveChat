@@ -81,23 +81,23 @@ module.exports = {
                         }      
                     } else if (session.checkString == "fail"){
                         if (session.content.meta.code == "FN-MULTIPLE-ACCOUNTS") {
-                            conversation.logger().info("Account Balance Api Multiple Accounts Exception at balStatus method");
+                            conversation.logger().info("ACCOUNT BALANCE COMPONENT::Exception:: Multiple accounts associated with the user");
                             conversation.transition('MultiAccounts');
                             done();
                         } else if (session.content.meta.code == "TC-ACCT-CLOSED"){
-                            conversation.logger().info("Account Balance Api Account Closed Exception at balStatus method");
+                            conversation.logger().info("ACCOUNT BALANCE COMPONENT::Exception:: Account is Closed");
                             conversation.transition('WrongInformation');
                             done();
                         } else if (session.content.meta.code == "FN-ACCOUNT-PROTECTED"){
-                            conversation.logger().info("Account Balance Api Account Protected Exception at balStatus method");
+                            conversation.logger().info("ACCOUNT BALANCE COMPONENT::Exception:: Account is Password Protected");
                             conversation.transition('FnAccProtected');
                             done();
                         } else if (session.content.meta.code == "TC-USER-INVALID"){
-                            conversation.logger().info("Account Balance Api User Invalid Exception at balStatus method");
+                            conversation.logger().info("ACCOUNT BALANCE COMPONENT::Exception:: User is invalid");
                             conversation.transition('TcUserInvalid');
                             done();
                         } else {
-                            conversation.logger().info("Account Balance Api Unknown Exception at balStatus method");
+                            conversation.logger().info("ACCOUNT BALANCE COMPONENT::Exception:: Unknown exception");
                             conversation.transition('TcUserInvalid');
                             done();
                         }

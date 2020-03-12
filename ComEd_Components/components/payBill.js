@@ -32,7 +32,10 @@ module.exports = {
         // perform conversation tasks.
 
         let session = {};
-        session.payment_amount = Number(conversation.properties().actBalance);
+        session.payment_amount = conversation.properties().actBalance;
+        if (session.payment_amount.split(".").length < 2 || session.payment_amount.split(".")[1].length<=2 ){
+            session.payment_amount = (Number(session.payment_amount).toFixed(2)).toString();
+        }
         session.payBillwalletResult = conversation.properties().payBillWalletResult;
         session.payment_category_type = conversation.properties().payBillPaymentCategoryType;
         session.wallet_id = conversation.properties().payBillWalletId;
@@ -93,15 +96,15 @@ module.exports = {
                                     }
                                 } else if (session.checkString == 'fail'){
                                     if (session.content.meta.code == "TC-USER-INVALID"){
-                                        conversation.logger().info("Pay Bill Wallet API User Invalid Exception at balStatus method");
+                                        conversation.logger().info("PAY BILL COMPONENT::Wallet Exception:: User is Invalid exception");
                                         conversation.transition('TcUserInvalid');
                                         done();
                                     } else if (session.content.meta.code == 'TC-PERSONID-INVALID'){
-                                        conversation.logger().info("Pay Bill Wallet API PersonId Invalid Exception at balStatus method");
+                                        conversation.logger().info("PAY BILL COMPONENT::Wallet Exception:: Person Id is Invalid exception");
                                         conversation.transition('TcUserInvalid');
                                         done();
                                     } else {
-                                        conversation.logger().info("Pay Bill Wallet API Unknown Exception at balStatus method");
+                                        conversation.logger().info("PAY BILL COMPONENT::Wallet Exception:: Unknown exception");
                                         conversation.transition('TcUserInvalid');
                                         done();
                                     }
@@ -127,15 +130,15 @@ module.exports = {
                             done()
                         } else if (session.checkString == 'fail') {
                             if(session.content.meta.code == 'xmlPayment.duplicate'){
-                                conversation.logger().info("Duplicate Payment at Create Payment Method")
+                                conversation.logger().info("PAY BILL COMPONENT::Payment Exception:: Duplicate Payment error");
                                 conversation.transition("Duplicate");
                                 done();
                             } else if (session.content.meta.code == "TC-USER-INVALID"){
-                                conversation.logger().info("Check Outage Status API User Invalid Exception at balStatus method");
+                                conversation.logger().info("PAY BILL COMPONENT::Payment Exception:: User is invalid");
                                 conversation.transition('TcUserInvalid');
                                 done();
                             } else {
-                                conversation.logger().info("Check Outage Status API Unknown Exception at balStatus method");
+                                conversation.logger().info("PAY BILL COMPONENT::Payment Exception:: Unknown Exception");;
                                 conversation.transition('TcUserInvalid');
                                 done();
                             }

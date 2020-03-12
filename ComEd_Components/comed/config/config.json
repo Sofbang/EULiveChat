@@ -17,8 +17,8 @@
     "postParams": {
       "auth_session_token": "",
       "biller_id": "ComEdRegistered",
-      "is_existing_account": "true",
-      "is_save_account": "false",
+      "is_existing_account": true,
+      "is_save_account": false,
       "masked_wallet_item_account_number": "?masked_wallet_item_account_number",
       "payment_amount": "?payment_amount",
       "payment_category_type": "?payment_category_type",

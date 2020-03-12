@@ -125,23 +125,23 @@ module.exports = {
                     } else if (session.checkString == 'fail'){
                         console.log(session.content)
                         if(session.content.meta.code == "TC-ACCT-INVALID" || session.content.meta.code == "FN-ACCT-NOTFOUND"){
-                            conversation.logger().info("Check Outage Status Invalid Account Number")
+                            conversation.logger().info("OUTAGE STATUS COMPONENT::Exception:: USER ACCOUNT IS INVALID OR NOT FOUND");
                             conversation.transition('Invalid');
                             done();
                         } else if (session.content.meta.code == "FN-ACCT-PROTECTED" || session.content.meta.code == "FN-ACCOUNT-PROTECTED"){
-                            conversation.logger().info("Check Outage Status API Account Protected Exception at balStatus method");
+                            conversation.logger().info("OUTAGE STATUS COMPONENT::Exception:: User Account is Password Protected");
                             conversation.transition('FnAccProtected');
                             done();
-                        } else if (session.content.meta.code == "TC-USER-INVALID"){
-                            conversation.logger().info("Check Outage Status API User Invalid Exception at balStatus method");
+                        } else if (session.content.meta.code == "TC-USER-INVALID"){ 
+                            conversation.logger().info("OUTAGE STATUS COMPONENT::Exception:: User is Invalid");
                             conversation.transition('TcUserInvalid');
                             done();
                         } else if (session.content.meta.code == "FN-ACCOUNT-FINALED"){
-                            conversation.logger().info("Check Outage Status API Account Finaled Exception at balStatus method");
+                            conversation.logger().info("OUTAGE STATUS COMPONENT::Exception:: User Account is Finaled");
                             conversation.transition('FnAccFinaled');
                             done();
                         } else {
-                            conversation.logger().info("Check Outage Status API Unknown exception at balstatus Method");
+                            conversation.logger().info("OUTAGE STATUS COMPONENT::Exception:: Unknown exception");
                             conversation.transition('TcUserInvalid');
                             done(); 
                         }   
