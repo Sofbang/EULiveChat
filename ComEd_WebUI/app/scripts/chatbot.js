@@ -337,6 +337,7 @@ function downloadPDF(bdate) {
 
                 if (content.success) {
                     var linkSource = "data:application/pdf;base64," + content.data.billImageData;
+                    var fileName = "BillImage.pdf";
                     let isIOS = (/iPad|iPhone|iPod/.test(navigator.platform) ||
                         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
                         !window.MSStream;
@@ -348,7 +349,6 @@ function downloadPDF(bdate) {
                         });
                     } else {
                         var downloadLink = document.createElement("a");
-                        var fileName = "BillImage.pdf";
                         downloadLink.href = linkSource;
                         downloadLink.download = fileName;
                         downloadLink.click();
