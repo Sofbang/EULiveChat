@@ -5,6 +5,7 @@
 var agentAvailable = false;
 var agentIconUrl = "/Lib/ChatBot/images/livechat-avatar.svg";
 var botIconUrl = "/Lib/ChatBot/images/Bot_Avatar.svg";
+var scriptUrl = "/Lib/ChatBot/services/download.js";
 var token = 'noToken';
 var sessionId = 'noSessionId';
 var accountNumber = 'noAccountNumber';
@@ -13,7 +14,7 @@ var customerName = 'noCustomerName';
 var absoluteUrl = window.location.href;
 var envirornmentUrl = Exelon.Web.Configuration.OpCoConfigurationObject.SecureURLBase;
 
-
+console.log("chatbot feedback"+Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackBaseUrl+ Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackSubscriptionKey );
 
 function initbots() {
     var messageBody = {
@@ -25,7 +26,7 @@ function initbots() {
     };
     return Bots.init({
         appId: Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotAppId, //tst appid
-        // appId: '5e27729ecba73500102d726b', //dev appid
+       // appId: '5e27729ecba73500102d726b', //dev appid
         displayStyle: 'button',
         buttonIconUrl: '/Lib/ChatBot/images/chat-launch.svg',
         buttonWidth: '58px',
@@ -54,7 +55,10 @@ function initbots() {
                     "smoochCustomVariable6": Exelon.Web.Configuration.OpCoConfigurationObject.OracleMobileBackendID,
                     "smoochCustomVariable7": Exelon.Web.Configuration.OpCoConfigurationObject.AnonOAuthKey,
                     "smoochCustomVariable8": Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.auth,
-                    "smoochCustomVariable9": Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.anon
+                    "smoochCustomVariable9": Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.anon,
+                    "smoochCustomVariable10": Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackBaseUrl,
+                    "smoochCustomVariable11": Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackSubscriptionKey
+
                 }
             })
         Bots.on('widget:opened', function () {
@@ -196,9 +200,9 @@ function CloseYes() {
     var isIE = false || !!document.documentMode;
     Bots.destroy();
     clearChat();
-    agentAvailable = false;
-    showChatButton();
-    if (isIE) {
+     agentAvailable = false;
+     showChatButton();
+     if(isIE){
         location.reload(true);
     }
 }
@@ -317,7 +321,7 @@ function setAgentAvailability(fromMessage) {
 function downloadPDF(bdate) {
 
     var request = new XMLHttpRequest();
-    request.open('GET', Exelon.Web.Configuration.OpCoConfigurationObject.SecureURLBase + '/.mcs/mobile/custom/auth_v6/accounts/' + accountNumber + '/billing/' + bdate + '/pdf', true);
+    request.open('GET', Exelon.Web.Configuration.OpCoConfigurationObject.SecureURLBase + '/.mcs/mobile/custom/auth'+Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.auth+'/accounts/' + accountNumber + '/billing/' + bdate + '/pdf', true);
     request.withCredentials = true;
     request.setRequestHeader("Authorization", 'Bearer ' + token);
     request.setRequestHeader("oracle-mobile-backend-id", Exelon.Web.Configuration.OpCoConfigurationObject.OracleMobileBackendID);
@@ -333,18 +337,18 @@ function downloadPDF(bdate) {
 
                 if (content.success) {
                     var linkSource = "data:application/pdf;base64," + content.data.billImageData;
-                    var fileName = "BillImage.pdf";
                     let isIOS = (/iPad|iPhone|iPod/.test(navigator.platform) ||
                         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
                         !window.MSStream;
                     if (isIOS) {
                         openTab(linkSource);
                     } else if (document.documentMode || /Edge/.test(navigator.userAgent)) {
-                        loadScript("http://danml.com/js/download.js", function () {
+                        loadScript(scriptUrl, function () {
                             download(linkSource, fileName, "application/pdf");
                         });
                     } else {
                         var downloadLink = document.createElement("a");
+                        var fileName = "BillImage.pdf";
                         downloadLink.href = linkSource;
                         downloadLink.download = fileName;
                         downloadLink.click();
@@ -361,7 +365,6 @@ function downloadPDF(bdate) {
     };
     request.send(null);
 }
-
 function loadScript(url, callback) {
     var script = document.createElement("script")
     script.type = "text/javascript";
@@ -381,7 +384,6 @@ function loadScript(url, callback) {
     script.src = url;
     document.getElementsByTagName("head")[0].appendChild(script);
 }
-
 function openTab(url) {
     // Create link in memory
     var a = window.document.createElement("a");
