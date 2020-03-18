@@ -5,7 +5,6 @@
 var agentAvailable = false;
 var agentIconUrl = "/Lib/ChatBot/images/livechat-avatar.svg";
 var botIconUrl = "/Lib/ChatBot/images/Bot_Avatar.svg";
-var scriptUrl = "/Lib/ChatBot/services/download.js";
 var token = 'noToken';
 var sessionId = 'noSessionId';
 var accountNumber = 'noAccountNumber';
@@ -14,7 +13,7 @@ var customerName = 'noCustomerName';
 var absoluteUrl = window.location.href;
 var envirornmentUrl = Exelon.Web.Configuration.OpCoConfigurationObject.SecureURLBase;
 
-console.log("chatbot feedback"+Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackBaseUrl+ Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackSubscriptionKey );
+console.log("chatbot feedback" + Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackBaseUrl + Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackSubscriptionKey);
 
 function initbots() {
     var messageBody = {
@@ -26,7 +25,7 @@ function initbots() {
     };
     return Bots.init({
         appId: Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotAppId, //tst appid
-       // appId: '5e27729ecba73500102d726b', //dev appid
+        // appId: '5e27729ecba73500102d726b', //dev appid
         displayStyle: 'button',
         buttonIconUrl: '/Lib/ChatBot/images/chat-launch.svg',
         buttonWidth: '58px',
@@ -200,9 +199,9 @@ function CloseYes() {
     var isIE = false || !!document.documentMode;
     Bots.destroy();
     clearChat();
-     agentAvailable = false;
-     showChatButton();
-     if(isIE){
+    agentAvailable = false;
+    showChatButton();
+    if (isIE) {
         location.reload(true);
     }
 }
@@ -321,7 +320,7 @@ function setAgentAvailability(fromMessage) {
 function downloadPDF(bdate) {
 
     var request = new XMLHttpRequest();
-    request.open('GET', Exelon.Web.Configuration.OpCoConfigurationObject.SecureURLBase + '/.mcs/mobile/custom/auth'+Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.auth+'/accounts/' + accountNumber + '/billing/' + bdate + '/pdf', true);
+    request.open('GET', Exelon.Web.Configuration.OpCoConfigurationObject.SecureURLBase + '/.mcs/mobile/custom/auth' + Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.auth + '/accounts/' + accountNumber + '/billing/' + bdate + '/pdf', true);
     request.withCredentials = true;
     request.setRequestHeader("Authorization", 'Bearer ' + token);
     request.setRequestHeader("oracle-mobile-backend-id", Exelon.Web.Configuration.OpCoConfigurationObject.OracleMobileBackendID);
@@ -344,9 +343,15 @@ function downloadPDF(bdate) {
                     if (isIOS) {
                         openTab(linkSource);
                     } else if (document.documentMode || /Edge/.test(navigator.userAgent)) {
-                        loadScript(scriptUrl, function () {
-                            download(linkSource, fileName, "application/pdf");
-                        });
+                        var byteCharacters = window.atob(content.data.billImageData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/pdf' });
+                        //window.navigator.msSaveOrOpenBlob(blob, fileName); 
+                        window.navigator.msSaveBlob(blob, fileName);
                     } else {
                         var downloadLink = document.createElement("a");
                         downloadLink.href = linkSource;
@@ -365,25 +370,7 @@ function downloadPDF(bdate) {
     };
     request.send(null);
 }
-function loadScript(url, callback) {
-    var script = document.createElement("script")
-    script.type = "text/javascript";
-    if (script.readyState) {  //IE
-        script.onreadystatechange = function () {
-            if (script.readyState == "loaded" ||
-                script.readyState == "complete") {
-                script.onreadystatechange = null;
-                callback();
-            }
-        };
-    } else {  //Others
-        script.onload = function () {
-            callback();
-        };
-    }
-    script.src = url;
-    document.getElementsByTagName("head")[0].appendChild(script);
-}
+
 function openTab(url) {
     // Create link in memory
     var a = window.document.createElement("a");
