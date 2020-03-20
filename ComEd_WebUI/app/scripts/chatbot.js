@@ -13,7 +13,7 @@ var customerName = 'noCustomerName';
 var absoluteUrl = window.location.href;
 var envirornmentUrl = Exelon.Web.Configuration.OpCoConfigurationObject.SecureURLBase;
 
-
+console.log("chatbot feedback" + Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackBaseUrl + Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackSubscriptionKey);
 
 function initbots() {
     var messageBody = {
@@ -54,7 +54,10 @@ function initbots() {
                     "smoochCustomVariable6": Exelon.Web.Configuration.OpCoConfigurationObject.OracleMobileBackendID,
                     "smoochCustomVariable7": Exelon.Web.Configuration.OpCoConfigurationObject.AnonOAuthKey,
                     "smoochCustomVariable8": Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.auth,
-                    "smoochCustomVariable9": Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.anon
+                    "smoochCustomVariable9": Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.anon,
+                    "smoochCustomVariable10": Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackBaseUrl,
+                    "smoochCustomVariable11": Exelon.Web.Configuration.OpCoConfigurationObject.ChatBotFeedbackSubscriptionKey
+
                 }
             })
         Bots.on('widget:opened', function () {
@@ -317,7 +320,7 @@ function setAgentAvailability(fromMessage) {
 function downloadPDF(bdate) {
 
     var request = new XMLHttpRequest();
-    request.open('GET', Exelon.Web.Configuration.OpCoConfigurationObject.SecureURLBase + '/.mcs/mobile/custom/auth_v6/accounts/' + accountNumber + '/billing/' + bdate + '/pdf', true);
+    request.open('GET', Exelon.Web.Configuration.OpCoConfigurationObject.SecureURLBase + '/.mcs/mobile/custom/auth' + Exelon.Web.Configuration.OpCoConfigurationObject.McsVersion.auth + '/accounts/' + accountNumber + '/billing/' + bdate + '/pdf', true);
     request.withCredentials = true;
     request.setRequestHeader("Authorization", 'Bearer ' + token);
     request.setRequestHeader("oracle-mobile-backend-id", Exelon.Web.Configuration.OpCoConfigurationObject.OracleMobileBackendID);
@@ -340,9 +343,15 @@ function downloadPDF(bdate) {
                     if (isIOS) {
                         openTab(linkSource);
                     } else if (document.documentMode || /Edge/.test(navigator.userAgent)) {
-                        loadScript("http://danml.com/js/download.js", function () {
-                            download(linkSource, fileName, "application/pdf");
-                        });
+                        var byteCharacters = window.atob(content.data.billImageData);
+                        var byteNumbers = new Array(byteCharacters.length);
+                        for (var i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        var byteArray = new Uint8Array(byteNumbers);
+                        var blob = new Blob([byteArray], { type: 'application/pdf' });
+                        //window.navigator.msSaveOrOpenBlob(blob, fileName); 
+                        window.navigator.msSaveBlob(blob, fileName);
                     } else {
                         var downloadLink = document.createElement("a");
                         downloadLink.href = linkSource;
@@ -360,26 +369,6 @@ function downloadPDF(bdate) {
         }
     };
     request.send(null);
-}
-
-function loadScript(url, callback) {
-    var script = document.createElement("script")
-    script.type = "text/javascript";
-    if (script.readyState) {  //IE
-        script.onreadystatechange = function () {
-            if (script.readyState == "loaded" ||
-                script.readyState == "complete") {
-                script.onreadystatechange = null;
-                callback();
-            }
-        };
-    } else {  //Others
-        script.onload = function () {
-            callback();
-        };
-    }
-    script.src = url;
-    document.getElementsByTagName("head")[0].appendChild(script);
 }
 
 function openTab(url) {
