@@ -68,7 +68,8 @@
     "postParams": {
       "outageIssue": "?outageIssue",
       "unusual": "?unusual",
-      "account_number": "?account_number"
+      "account_number": "?account_number",
+      "unusual_specify": "?unusual_specify"
     }
   },
   "reportOutageAuthenticatedPost": {
@@ -77,7 +78,8 @@
     "method": "Post",
     "postParams": {
       "outageIssue": "?outageIssue",
-      "unusual": "?unusual"
+      "unusual": "?unusual",
+      "unusual_specify": "?unusual_specify"
     }
   },
   "idcsOauthTokenApi":{

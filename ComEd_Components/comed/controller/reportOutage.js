@@ -5,7 +5,7 @@ function reportOutage() {
     let HttpService = new httpService();
     let meta = JSON.parse(JSON.stringify(metaData))
 
-    this.reportStatus = function (session,conversation, callback) {
+    this.reportStatus = function (session, conversation, callback) {
         if (session.content == 401) {
             session.statusCode = 401;
             callback(session)
@@ -35,21 +35,29 @@ function reportOutage() {
         }
     };
 
-    this.run = function (session, conversation,done, callback) {
-        meta.hostName = meta.hostName.replace("?envirornmentUrl",session.envirornment);
+    this.run = function (session, conversation, done, callback) {
+        meta.hostName = meta.hostName.replace("?envirornmentUrl", session.envirornment);
         conversation.logger().info("HostName: " + meta.hostName);
         if (session.loginAuthenticated == 'Yes') {
             conversation.logger().info("REPORT OUTAGE CONTROLLER::Calling Report Outage Authenticated API.")
-            meta.reportOutageAuthenticatedPost.url = meta.reportOutageAuthenticatedPost.url.replace("?accountNumber", session.account_number).replace("?mcsVersionAuth",session.mcsVersionAuth);
-            HttpService.httpRequest(meta.reportOutageAuthenticatedPost, meta.hostName, session, conversation, done, function (session) {
+            meta.reportOutageAuthenticatedPost.url = meta.reportOutageAuthenticatedPost.url.replace("?accountNumber", session.account_number).replace("?mcsVersionAuth", session.mcsVersionAuth);
+
+            if (session.unusual_specify == "${unusualComments.value}")
+                delete meta.reportOutageAuthenticatedPost.postParams.unusual_specify;
+            
+                HttpService.httpRequest(meta.reportOutageAuthenticatedPost, meta.hostName, session, conversation, done, function (session) {
                 this.reportStatus(session, conversation, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
         } else {
             conversation.logger().info("REPORT OUTAGE CONTROLLER::Calling Report Outage UnAuthenticated API.")
-            meta.reportOutagePost.url = meta.reportOutagePost.url.replace("?mcsVersionAnon",session.mcsVersionAnon);
-            HttpService.httpRequest(meta.reportOutagePost, meta.hostName, session, conversation,done, function (session) {
+            meta.reportOutagePost.url = meta.reportOutagePost.url.replace("?mcsVersionAnon", session.mcsVersionAnon);
+            conversation.logger().info(session.unusual_specify);
+            if (session.unusual_specify == "${unusualComments.value}")
+                delete meta.reportOutagePost.postParams.unusual_specify;
+
+            HttpService.httpRequest(meta.reportOutagePost, meta.hostName, session, conversation, done, function (session) {
                 this.reportStatus(session, conversation, function (session) {
                     callback(session)
                 }.bind(this));

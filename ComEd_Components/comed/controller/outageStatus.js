@@ -80,7 +80,7 @@ function outageStatus() {
         meta.hostName = meta.hostName.replace("?envirornmentUrl",session.envirornment);
         conversation.logger().info("HostName: " + meta.hostName);
         if (session.loginAuthenticated == 'Yes') {
-            conversation.logger().info("OUTAGE STATUS CONTROLLER: :Calling Outage Authenticated API.")
+            conversation.logger().info("OUTAGE STATUS CONTROLLER:: Calling Outage Authenticated API.")
             meta.outageAuthenticatedGet.url = meta.outageAuthenticatedGet.url.replace("?accountNumber", session.account_number).replace("?mcsVersionAuth",session.mcsVersionAuth);
             HttpService.httpRequest(meta.outageAuthenticatedGet, meta.hostName, session, conversation,done, function (session) {
                 this.omrStatus(session, conversation, function (session) {
