@@ -73,7 +73,7 @@ function httpservice() {
                         callback(session);
                     } else {
                         session.content = responseContent;
-                        conversation.logger().info("HTTPSERVICE:: Responsecontent"+ JSON.stringify(responseContent) );
+                        conversation.logger().info("HTTPSERVICE:: Responsecontent"+ JSON.stringify(responseContent) +responseContent  );
                         callback(session);
                     }
                 }.bind(this));

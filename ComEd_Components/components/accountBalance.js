@@ -58,6 +58,9 @@ module.exports = {
                     done();
                 } else {
                     if(session.checkString == "success"){
+                        if (session.actBalance.toString().split(".").length < 2 || session.actBalance.toString().split(".")[1].length<=2 ){
+                            session.actBalance = (Number(session.actBalance).toFixed(2)).toString();
+                        }
                         conversation.variable("actBalance",session.actBalance);
                         conversation.variable("actDueDate",session.actDueDate);
                         conversation.variable("address",session.address);

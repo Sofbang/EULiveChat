@@ -2,7 +2,7 @@ let metaData = require('../config/config');
 let httpService = require('../../services/httpservice');
 let utility = require('../../utilities/utility');
 
-function accountBalance() {
+function budgetBilling() {
     let HttpService = new httpService();
     let Utility = new utility();
     let meta = JSON.parse(JSON.stringify(metaData))
@@ -89,4 +89,4 @@ function accountBalance() {
     }
 }
 
-module.exports = accountBalance;
+module.exports = budgetBilling;

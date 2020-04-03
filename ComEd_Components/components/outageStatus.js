@@ -23,8 +23,7 @@ module.exports = {
             restorationTime: {required: true, type: 'string'},
             anonOAuthKey: {required: true, type: 'string'},
             mcsVersionAuth: {required: true, type: 'string'},
-            mcsVersionAnon: {required: true, type: 'string'},
-            outageReportedSessionFlag: {required: true, type: 'boolean'},
+            mcsVersionAnon: {required: true, type: 'string'}
         },
         supportedActions: ['Yes', 'No', 'MultipleAccounts', 'Invalid', 'OmrActive',
         'UserNotLoggedIn','ContinueOutage', 'DefaultErrorHandler', 'TcUserInvalid','MultipleAccounts>5','FnAccProtected',"FnAccFinaled"]
@@ -49,7 +48,7 @@ module.exports = {
         session.anonOAuthKey = conversation.properties().anonOAuthKey;
         session.mcsVersionAuth = conversation.properties().mcsVersionAuth;
         session.mcsVersionAnon = conversation.properties().mcsVersionAnon;
-        session.outageReportedSessionFlag = conversation.properties().outageReportedSessionFlag;
+
 
         conversation.logger().info("*******storeOutageJson*********");
         conversation.logger().info(session.storeOutageJson);
@@ -69,7 +68,7 @@ module.exports = {
                 conversation.transition("OmrActive");
                 done();
             } else {
-                if(session.outageReportedSessionFlag == "True"){
+                if(session.outageReported == "Yes"){
                     conversation.transition("Yes")
                     done();
                 } else {
@@ -110,7 +109,7 @@ module.exports = {
                                     conversation.transition("OmrActive");
                                     done();
                                 } else {
-                                    if(session.outageReportedSessionFlag == "True"){
+                                    if(session.outageReported == "Yes"){
                                         conversation.transition("Yes")
                                         done();
                                     } else {

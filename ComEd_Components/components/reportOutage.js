@@ -17,9 +17,7 @@ module.exports = {
             OracleMobileBackendID: {required: true, type: 'string'},
             anonOAuthKey: {required: true, type: 'string'},
             mcsVersionAuth: {required: true, type: 'string'},
-            mcsVersionAnon: {required: true, type: 'string'},
-            unusualComments: {required: true, type: 'string'},
-            outageReportedSessionFlag: {required: true, type: 'boolean'}
+            mcsVersionAnon: {required: true, type: 'string'}
         },
         supportedActions: ['outageReportResult','UserNotLoggedIn', 'DefaultErrorHandler', 
         'TcUserInvalid', 'Invalid']
@@ -40,9 +38,7 @@ module.exports = {
         session.anonOAuthKey = conversation.properties().anonOAuthKey;
         session.mcsVersionAuth = conversation.properties().mcsVersionAuth;
         session.mcsVersionAnon = conversation.properties().mcsVersionAnon;
-        session.unusual_specify = conversation.properties().unusualComments;
-        session.outageReportedSessionFlag = conversation.properties().outageReportedSessionFlag;
-       
+
         conversation.logger().info("**************Report Outage Component*****************");
         conversation.logger().info("Input parameter values: account_num: " + session.account_number + ", token: " + session.token + ", sessionId: " + session.sessionId);
 
@@ -54,7 +50,6 @@ module.exports = {
             } else {
                 if(session.checkString == "success"){
                     conversation.variable('fanResult',session.confirmationNumber)
-                    conversation.variable('outageReportedSessionFlag', true)
                     conversation.transition('outageReportResult')
                     done();
                 } else if(session.checkString == 'fail'){

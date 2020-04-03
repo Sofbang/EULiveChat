@@ -8,7 +8,7 @@ function outageStatus() {
     let meta = JSON.parse(JSON.stringify(metaData))
     let Utility = new utility();
 
-    this.omrStatus = function (session, conversation, callback) {
+    this.omsStatus = function (session, conversation, callback) {
         if (session.content == 401) {
             session.statusCode = 401;
             callback(session)
@@ -83,7 +83,7 @@ function outageStatus() {
             conversation.logger().info("OUTAGE STATUS CONTROLLER:: Calling Outage Authenticated API.")
             meta.outageAuthenticatedGet.url = meta.outageAuthenticatedGet.url.replace("?accountNumber", session.account_number).replace("?mcsVersionAuth",session.mcsVersionAuth);
             HttpService.httpRequest(meta.outageAuthenticatedGet, meta.hostName, session, conversation,done, function (session) {
-                this.omrStatus(session, conversation, function (session) {
+                this.omsStatus(session, conversation, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));
@@ -92,7 +92,7 @@ function outageStatus() {
             conversation.logger().info("OUTAGE STATUS CONTROLLER:: Calling Outage UnAuthenticated API.")
             meta.outagePost.url = meta.outagePost.url.replace("?mcsVersionAnon",session.mcsVersionAnon);
             HttpService.httpRequest(meta.outagePost, meta.hostName, session, conversation,done, function (session) {
-                this.omrStatus(session, conversation, function (session) {
+                this.omsStatus(session, conversation, function (session) {
                     callback(session)
                 }.bind(this));
             }.bind(this));

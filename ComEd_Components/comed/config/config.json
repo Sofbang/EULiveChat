@@ -68,8 +68,7 @@
     "postParams": {
       "outageIssue": "?outageIssue",
       "unusual": "?unusual",
-      "account_number": "?account_number",
-      "unusual_specify": "?unusual_specify"
+      "account_number": "?account_number"
     }
   },
   "reportOutageAuthenticatedPost": {
@@ -78,25 +77,14 @@
     "method": "Post",
     "postParams": {
       "outageIssue": "?outageIssue",
-      "unusual": "?unusual",
-      "unusual_specify": "?unusual_specify"
+      "unusual": "?unusual"
     }
   },
   "idcsOauthTokenApi":{
-    "idcsHostName" : "",
-    "clientId" : "",
-    "clientSecret" : "",
     "contentType" : "application/x-www-form-urlencoded; charset=utf-8",
-    "scopeUrl" : "",
     "idcsAuthorizationURI" : "/oauth2/v1/token",
-    "odaHostName" : "",
     "conversationUri": "/api/v1/bots/sessions/?sessionId/log"   
-  },
-  "smtpDetails": {
-    "username": "svc_aitc_dev@exeloncorp.com",
-    "password": "U1!B4@M8#C8$L1%S",
-    "fromAddress": "svc_aitc_dev@exeloncorp.com"
-  },
+  }, 
   "chatSurveyApi": {
     "name": "chatSurveyApi",
     "url": "?feedBackHostName/chatbot/feedback",

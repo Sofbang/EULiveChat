@@ -10,7 +10,7 @@ module.exports = {
             chatSurveyComments: {required: true, type: 'string'},
             email: {required: true, type: 'string'},
             feedBackHostName: {required: true, type: 'string'},
-            ocpApimSubscriptionKey: {required: true, type: 'string'},
+            ocpApimSubscriptionKey: {required: true, type: 'string'}
         },
         supportedActions: ['Success', 'Fail']
     }),

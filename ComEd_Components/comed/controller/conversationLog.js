@@ -1,6 +1,5 @@
 let metaData = require('../config/config');
 let httpService = require('../../services/httpservice');
-let transporter = require('../../services/nodemailer').mailConfig();
 const validator = require("email-validator");
 const https = require('https');
 let converter = require('json-2-csv');
@@ -19,10 +18,10 @@ function outageStatus() {
 
     this.getAccessToken = function (oauthApi, session, conversation, callback) {
 
-        let authorizationToken = "Basic " + Buffer.from(oauthApi.clientId + ':' + oauthApi.clientSecret).toString('base64');
-        let postData = "grant_type=client_credentials&scope=" + oauthApi.scopeUrl;
-        let indexOfProtocolEnd = oauthApi.idcsHostName.indexOf("://");
-        var idcsHostName = oauthApi.idcsHostName.substring(indexOfProtocolEnd + 3);
+        let authorizationToken = "Basic " + Buffer.from(session.clientId + ':' + session.clientSecret).toString('base64');
+        let postData = "grant_type=client_credentials&scope=" + session.scopeUrl;
+        let indexOfProtocolEnd = session.idcsHostName.indexOf("://");
+        var idcsHostName = session.idcsHostName.substring(indexOfProtocolEnd + 3);
 
         var accessToken;
 
@@ -74,8 +73,8 @@ function outageStatus() {
 
     this.getConversationLog = function (oauthApi, session, conversation, callback) {
         const conversationUri = oauthApi.conversationUri.replace("?sessionId", session.sessionId);
-        let indexOfProtocolEnd = oauthApi.odaHostName.indexOf("://");
-        var odaHostName = oauthApi.odaHostName.substring(indexOfProtocolEnd + 3);
+        let indexOfProtocolEnd = session.odaHostName.indexOf("://");
+        var odaHostName = session.odaHostName.substring(indexOfProtocolEnd + 3);
 
         let options = {
             hostname: odaHostName,
@@ -130,14 +129,9 @@ function outageStatus() {
             delete session.conversationLogResponse[key].id;
         });
         converter.json2csv(session.conversationLogResponse, function (err, csv) {
-            // if (err) {
-            //     conversation.logger().info("CSV Error: " + err);
-            //     session.emailSent = false;
-            //     callback(session);
-            // } else {
                 var message = "Hi! <br><br>You recently requested a transcript of your chat session with ComEd's automated assistant be sent to this email address. A CSV copy of your chat transcript is attached to this email.<br><br>Thank you for chatting with us!<br><br>This email is generated automatically. Please do not reply to this message.<br><br>This e-mail and any attachments are confidential, may contain legal, professional or other privileged information, and are intended solely for the addressee. If you are not the intended recipient, do not use the information in this e-mail in any way, delete this e-mail and notify the sender.";
                 nodemailer.default.relay({
-                    from: meta.smtpDetails.fromAddress,
+                    from: session.username,
                     to: session.email,
                     subject: 'Requested Transcript of Your Recent Chat Session with ComEd Attached',
                     html: message,
@@ -147,12 +141,7 @@ function outageStatus() {
                     }]
                 },{
                     "relay.exelonds.com":{
-                        port: 587,
-                        secure: false,
-                        auth: {
-                            user: meta.smtpDetails.username,
-                            password: meta.smtpDetails.password
-                        }
+                        port: 25
                     }
                 },function(error,info){
                     if (error) {
@@ -168,21 +157,6 @@ function outageStatus() {
                         callback(session);
                     }
                 });
-                // transporter.sendMail(mailOptions, function (error, info) {
-                //     if (error) {
-                //         conversation.logger().info("Email Failed")
-                //         conversation.logger().info(error);
-                //         error_op = error;
-                //         session.emailSent = false;
-                //         callback(session);
-                //     } else {
-                //         error_op = info.response;
-                //         session.emailSent = true;
-                //         conversation.logger().info('Email sent: ' + JSON.stringify(info));
-                //         callback(session);
-                //     }
-                // });
-            //}
         });
     }
 
