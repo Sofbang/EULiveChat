@@ -6,7 +6,7 @@ let converter = require('json-2-csv');
 const moment = require('moment');
 var nodemailer = require('nodemailer-relay')
 
-function outageStatus() {
+function conversationLog() {
     let HttpService = new httpService();
     let meta = JSON.parse(JSON.stringify(metaData))
 
@@ -177,4 +177,4 @@ function outageStatus() {
     }
 }
 
-module.exports = outageStatus;
+module.exports = conversationLog;
